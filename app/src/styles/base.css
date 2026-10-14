@@ -1,0 +1,554 @@
+/* Base element styles and generic building blocks: links, scrollbars, utilities (.mono,
+   .truncate, .flex1), icon buttons, filled buttons, chips, toggle switch, radio dot,
+   check box, form fields (components/Field.tsx), strength meter, search box.
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* ------------------------------------------------------------------------ base */
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overscroll-behavior: none;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* A link whose host was shown in punycode, or with a user name before the host. */
+a.link-suspicious {
+  text-decoration: underline wavy var(--danger);
+  text-underline-offset: 3px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: inherit;
+  opacity: 0.5;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.28);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.mono {
+  font-family: var(--mono);
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.flex1 {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Generic icon buttons. */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  transition: background 0.12s;
+}
+
+.icon-btn:hover {
+  background: var(--hover);
+}
+
+.icon-btn[data-size="40"] {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+.icon-btn[data-tone="muted"] {
+  color: var(--muted);
+}
+
+.icon-btn[data-active="true"] {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+.icon-btn:disabled,
+.icon-btn[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Filled buttons used by the design outside of Mantine. */
+.btn {
+  height: 50px;
+  border: 0;
+  border-radius: var(--r-input);
+  font-size: 15.5px;
+  font-weight: 650;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 18px;
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn-primary:disabled {
+  background: var(--sunk);
+  color: var(--faint);
+  cursor: default;
+}
+
+.btn-secondary {
+  background: var(--sunk);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.btn-secondary:disabled {
+  color: var(--faint);
+  cursor: default;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* Destructive but not the suggested choice: red text on a quiet button. */
+.btn-danger-quiet {
+  background: transparent;
+  color: var(--danger);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--danger) 35%, var(--line));
+}
+
+.btn-danger-quiet:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
+}
+
+.btn[data-size="md"] {
+  height: 48px;
+  font-size: 15px;
+}
+
+.btn[data-size="sm"] {
+  height: 44px;
+  font-size: 14px;
+}
+
+.chip-btn {
+  border: 0;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  height: 34px;
+  padding: 0 12px;
+  border-radius: var(--r-chip);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.chip-btn[data-tone="pane"] {
+  background: var(--pane);
+}
+
+.chip-btn[data-tone="sunk"] {
+  background: var(--sunk);
+}
+
+.chip-btn[data-tone="danger"] {
+  background: var(--sunk);
+  color: var(--danger);
+  height: 32px;
+}
+
+.link-btn {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--accent-text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.back-link {
+  align-self: flex-start;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hint {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.error-text {
+  font-size: 13px;
+  color: var(--danger);
+  line-height: 1.45;
+}
+
+.badge-soft {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge-soft[data-tone="danger"] {
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: var(--danger);
+}
+
+.badge-soft[data-tone="muted"] {
+  background: var(--sunk);
+  color: var(--muted);
+}
+
+/* Toggle switch (42x25 track, 19px knob). */
+.switch {
+  width: 42px;
+  height: 25px;
+  border-radius: 999px;
+  padding: 3px;
+  flex-shrink: 0;
+  background: var(--line);
+  transition: background 0.15s;
+}
+
+.switch > span {
+  display: block;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s;
+}
+
+.switch[data-on="true"] {
+  background: var(--accent);
+}
+
+.switch[data-on="true"] > span {
+  transform: translateX(17px);
+}
+
+/* Radio dot (language list, option dialogs). */
+.radio-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.radio-dot > span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.radio-dot[data-on="true"] {
+  border-color: var(--accent);
+}
+
+.radio-dot[data-on="true"] > span {
+  background: var(--accent);
+}
+
+/* Square check box (seed confirmation, pickers). */
+.check-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 1.5px solid var(--faint);
+  background: transparent;
+  color: var(--on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
+}
+
+.check-box[data-on="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.check-box[data-round="true"] {
+  border-radius: 50%;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  background: none;
+  padding: 4px 0;
+  font-size: 14px;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+/* Form fields in the design's style (also used by Field.tsx). */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.field[data-muted-label="true"] .field-label {
+  color: var(--muted);
+}
+
+.field-input {
+  height: 48px;
+  padding: 0 16px;
+  border-radius: var(--r-input);
+  border: 1.5px solid var(--line);
+  background: var(--pane);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  width: 100%;
+  min-width: 0;
+  transition: border-color 0.12s;
+}
+
+.field-input:focus,
+.field-input:focus-within {
+  border-color: var(--accent);
+}
+
+.field-input[data-size="lg"] {
+  height: 50px;
+}
+
+.field-input[data-mono="true"],
+.field-input[data-mono="true"] input {
+  font-family: var(--mono);
+  font-size: 18px;
+  letter-spacing: 0.06em;
+}
+
+.field-input[data-error="true"] {
+  border-color: var(--danger);
+}
+
+.field-input[data-variant="sunk"] {
+  background: var(--sunk);
+  border-color: transparent;
+}
+
+.field-input[data-variant="sunk"]:focus,
+.field-input[data-variant="sunk"]:focus-within {
+  border-color: var(--accent);
+}
+
+textarea.field-input {
+  height: auto;
+  min-height: 48px;
+  padding: 12px 16px;
+  resize: none;
+  line-height: 1.45;
+  border-radius: min(var(--r-input), 18px);
+}
+
+.field-affix {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 6px;
+}
+
+.field-affix input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+  padding: 0;
+}
+
+.field-affix .icon-btn {
+  width: 36px;
+  height: 36px;
+  color: var(--muted);
+  border-radius: min(var(--r-input), 10px);
+}
+
+.field-error {
+  font-size: 12.5px;
+  color: var(--danger);
+}
+
+.field-desc {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.strength {
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.strength i {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--line);
+}
+
+.strength-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 0 14px;
+  border-radius: var(--r-input);
+  background: var(--sunk);
+  color: var(--muted);
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: inherit;
+  font-size: 14.5px;
+  color: var(--ink);
+}
+
+.search-box .icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--muted);
+}

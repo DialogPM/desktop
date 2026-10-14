@@ -1,0 +1,153 @@
+/* Account lookup rows (features/chats/AccountLookupRow.tsx, also .mono-num in
+   settings/BlockedSection.tsx), blocked contacts, username (settings/UsernameCard.tsx,
+   onboarding/SetupScreen.tsx), profile photo from camera (settings/CameraCapture.tsx),
+   text size control (settings/SettingsPage.tsx).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* ------------------------------------------------- account lookup (search by number / username) */
+
+.lookup {
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+}
+
+html[data-direction="B"] .lookup {
+  border-bottom: 0;
+}
+
+.lookup .section-label {
+  padding-top: 8px;
+}
+
+.lookup-row {
+  min-width: 0;
+}
+
+.lookup-row[data-state] {
+  cursor: default;
+}
+
+.lookup-row[data-state]:hover {
+  background: transparent;
+}
+
+.lookup-row .flex1 {
+  min-width: 0;
+}
+
+.lookup-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: var(--r-chip);
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-size: 12.5px;
+  font-weight: 650;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.lookup-row:hover .lookup-go {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.mono-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------- blocked contacts */
+
+.blocked-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 36px 16px;
+  text-align: center;
+  border-radius: var(--r-card);
+  background: var(--sunk);
+}
+
+.blocked-empty .row-icon {
+  margin-bottom: 6px;
+}
+
+/* ---------------------------------------------------------------- username */
+
+.username-prefix {
+  color: var(--muted);
+  font-weight: 650;
+  margin-right: -2px;
+}
+
+.username-value {
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--accent-text);
+  word-break: break-all;
+}
+
+/* ---------------------------------------------------------------- profile photo from camera */
+
+.cam-frame {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: #111;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.cam-frame video,
+.cam-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Mirrored live preview; the captured photo is already mirrored when drawn. */
+.cam-frame video {
+  transform: scaleX(-1);
+}
+
+.cam-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Darkens what falls outside the round avatar crop. */
+.cam-mask {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  box-shadow: 0 0 0 999px rgba(0, 0, 0, 0.42);
+  outline: 2px solid rgba(255, 255, 255, 0.75);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- text size */
+
+.text-size-seg button {
+  gap: 7px;
+  font-variant-numeric: tabular-nums;
+}
+
+.text-size-a {
+  font-weight: 750;
+  line-height: 1;
+  width: 18px;
+  text-align: center;
+}

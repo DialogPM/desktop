@@ -1,0 +1,40 @@
+/* App lock screens (features/lock: LockScreen, DataLockScreen).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* ---------------------------------------------------------------- app lock */
+
+.lock-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  background: var(--canvas);
+  background-image: var(--wall);
+  background-size: 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: auto;
+}
+
+.lock-card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 18px;
+  padding: 32px 28px;
+  border-radius: var(--r-modal);
+  background: var(--pane);
+  box-shadow:
+    0 0 0 1px var(--line),
+    0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.lock-card .logo-tile {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  align-self: center;
+}

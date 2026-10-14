@@ -1,0 +1,84 @@
+/* Phone and narrow-screen overrides of the shell, conversation, settings and info styles
+   (must come after those files); Leaflet stacking context; list-card toggle rows.
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* --------------------------------------------------------------------- phones */
+
+@media (max-width: 767px) {
+  .chat-head {
+    padding: 0 12px 0 6px;
+    padding-top: var(--safe-top);
+    height: calc(66px + var(--safe-top));
+  }
+
+  .pane-head {
+    padding-left: 6px;
+    padding-top: var(--safe-top);
+    height: calc(66px + var(--safe-top));
+  }
+
+  .msg-lane {
+    padding: 0 12px;
+  }
+
+  .bubble-wrap {
+    max-width: 84%;
+  }
+
+  .composer {
+    padding: 10px 10px calc(12px + var(--safe-bottom));
+  }
+
+  .composer-chips {
+    padding: 10px 10px 0;
+  }
+
+  .set-body {
+    padding: 20px 18px calc(20px + var(--safe-bottom));
+  }
+
+  .onb-main {
+    padding: 16px 22px 28px;
+    padding-top: calc(16px + var(--safe-top));
+  }
+
+  .image-grid,
+  .video-inline {
+    width: 260px;
+  }
+
+  .chat-row {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+@media (max-width: 380px) {
+  .seed-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .info-action {
+    width: 78px;
+  }
+}
+
+/* Leaflet panes use z-index up to 1000; keep every map in its own stacking context so it
+   never paints above modals, menus or the header. */
+.leaflet-container {
+  isolation: isolate;
+  z-index: 0;
+  font-family: var(--font);
+}
+
+.list-card .toggle-row {
+  padding: 15px 16px;
+}
+
+.list-card .toggle-label {
+  font-weight: 600;
+}
+
+.list-card .toggle-sub {
+  margin-top: 2px;
+}

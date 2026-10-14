@@ -1,0 +1,38 @@
+/* Avatars and name colors (components/UserAvatar.tsx).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* --------------------------------------------------------------------- avatar */
+
+.avatar {
+  position: relative;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: oklch(0.91 0.045 var(--h));
+  color: oklch(0.43 0.1 var(--h));
+  overflow: hidden;
+  user-select: none;
+}
+
+html[data-theme="dark"] .avatar {
+  background: oklch(0.33 0.055 var(--h));
+  color: oklch(0.87 0.08 var(--h));
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.name-color {
+  color: oklch(0.52 0.13 var(--h));
+}
+
+html[data-theme="dark"] .name-color {
+  color: oklch(0.78 0.11 var(--h));
+}

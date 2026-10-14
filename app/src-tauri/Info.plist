@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Merged by Tauri into the app's Info.plist (macOS). Without these usage descriptions macOS
+     silently denies camera/microphone access to the webview. -->
+<plist version="1.0">
+<dict>
+  <key>NSCameraUsageDescription</key>
+  <string>Dialog uses the camera for video calls and to scan QR codes (adding contacts, linking devices, verifying safety numbers).</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Dialog uses the microphone for calls and voice messages.</string>
+</dict>
+</plist>

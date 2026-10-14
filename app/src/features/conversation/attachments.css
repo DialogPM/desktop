@@ -1,0 +1,296 @@
+/* Attachments inside bubbles (Attachments.tsx, VoicePlayer.tsx, maps.tsx, LocationPicker.tsx):
+   images and videos, file cards, voice messages, location cards and the map picker.
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* images */
+
+.image-grid {
+  display: grid;
+  gap: 3px;
+  border-radius: calc(var(--r-bubble) - 5px);
+  overflow: hidden;
+  width: 300px;
+  max-width: 100%;
+}
+
+.image-grid[data-count="2"],
+.image-grid[data-count="3"],
+.image-grid[data-count="4"],
+.image-grid[data-count="many"] {
+  grid-template-columns: 1fr 1fr;
+}
+
+.image-grid[data-count="3"] > :first-child {
+  grid-column: span 2;
+}
+
+.image-tile {
+  position: relative;
+  overflow: hidden;
+  background: var(--img-ph);
+  cursor: pointer;
+  aspect-ratio: 1;
+}
+
+.image-grid[data-count="1"] .image-tile {
+  aspect-ratio: 3 / 2;
+  max-height: 380px;
+}
+
+.image-tile img,
+.image-tile video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-tile img.blurred {
+  filter: blur(10px);
+  transform: scale(1.1);
+}
+
+.image-tile-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.22);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.image-tile-overlay small {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.dl-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.video-inline {
+  width: 300px;
+  max-width: 100%;
+  max-height: 380px;
+  border-radius: calc(var(--r-bubble) - 5px);
+  display: block;
+  background: #000;
+}
+
+/* files */
+
+.file-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 250px;
+  max-width: 100%;
+  padding: 4px 2px;
+}
+
+.file-icon {
+  width: 42px;
+  height: 48px;
+  border-radius: 9px;
+  background: var(--reply-bg, var(--sunk));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.file-name {
+  font-size: 14.5px;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-sub {
+  font-size: 12px;
+  color: var(--meta, var(--muted));
+}
+
+.file-action {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--reply-bg, var(--sunk));
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* voice */
+
+.voice {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 250px;
+  max-width: 100%;
+}
+
+.voice-play {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 0;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--play-bg, var(--accent));
+  color: var(--play-fg, var(--on-accent));
+}
+
+.voice-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.waveform i {
+  width: 3px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  background: var(--wave-off, var(--faint));
+}
+
+.waveform i[data-played="true"] {
+  background: var(--wave-on, var(--accent));
+}
+
+.voice-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--meta, var(--muted));
+  font-family: var(--mono);
+}
+
+.speed-btn {
+  border: 0;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 7px;
+  background: var(--reply-bg, var(--sunk));
+  color: inherit;
+  cursor: pointer;
+}
+
+/* location */
+
+.location-card {
+  width: 290px;
+  max-width: 100%;
+}
+
+.location-map {
+  position: relative;
+  height: 132px;
+  width: 100%;
+  border-radius: calc(var(--r-bubble) - 5px);
+  background: var(--map-bg);
+  overflow: hidden;
+}
+
+.location-map .leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: var(--map-bg);
+}
+
+.location-map .leaflet-control-attribution {
+  font-size: 8px;
+}
+
+.location-info {
+  padding: 10px 8px 2px;
+}
+
+.location-title {
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.location-sub {
+  font-size: 12.5px;
+  color: var(--meta);
+  margin-top: 2px;
+}
+
+.location-open {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--link);
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.map-pin {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--pane);
+  color: #e24b3b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.picker-map {
+  height: min(52vh, 420px);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: var(--map-bg);
+}

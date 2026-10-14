@@ -1,0 +1,267 @@
+/* Design tokens: structure (A/B directions), colors (light/dark), shared tokens and the
+   mapping of Mantine's variables onto them, phone overrides of the pane tokens.
+   Used everywhere (selected by data-direction / data-theme on <html>, lib/appearance.ts).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* Dialog global styles.
+   Design tokens follow docs/design/ChatApp-Premium.dc.html (TOK and STRUCT): two visual
+   directions (A "classic warm", B "floating panels"), each with light and dark values.
+   The active ones are selected by data-direction / data-theme on <html> (lib/appearance.ts). */
+
+/* ------------------------------------------------------------------ structure */
+
+html[data-direction="A"] {
+  --font: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, sans-serif;
+  --shell-pad: 0px;
+  --pane-gap: 0px;
+  --r-pane: 0px;
+  --divider: 1px solid var(--line);
+  --r-bubble: 14px;
+  --r-card: 14px;
+  --r-input: 12px;
+  --r-chip: 8px;
+  --row-radius: 0px;
+  --row-mx: 0px;
+  --row-px: 20px;
+  --sect-mx: 0px;
+  --sect-r: 0px;
+  --sect-bg: var(--pane);
+  --sect-sep: 8px solid var(--sunk);
+  --rail-bg: var(--pane);
+  --r-modal: 18px;
+  --bubble-shadow: 0 1px 1.5px rgba(40, 30, 10, 0.08);
+  --pane-shadow: none;
+  /* outgoing bubble details */
+  --reply-bar-out: var(--accent-text);
+  --link-out: var(--accent-text);
+  --play-bg-out: var(--accent);
+  --play-fg-out: var(--on-accent);
+  --wave-on-out: var(--accent);
+  --wave-off-out: var(--faint);
+}
+
+html[data-direction="B"] {
+  --font: "Figtree Variable", "Figtree", system-ui, sans-serif;
+  --shell-pad: 12px;
+  --pane-gap: 12px;
+  --r-pane: 22px;
+  --divider: none;
+  --r-bubble: 20px;
+  --r-card: 18px;
+  --r-input: 999px;
+  --r-chip: 999px;
+  --row-radius: 14px;
+  --row-mx: 8px;
+  --row-px: 12px;
+  --sect-mx: 16px;
+  --sect-r: 16px;
+  --sect-bg: var(--sunk);
+  --sect-sep: none;
+  --rail-bg: transparent;
+  --r-modal: 28px;
+  --bubble-shadow: none;
+  --pane-shadow: none;
+  --wall: none;
+  --reply-bar-out: rgba(255, 255, 255, 0.92);
+  --link-out: #ffffff;
+  --play-bg-out: rgba(255, 255, 255, 0.95);
+  --play-fg-out: #0b8597;
+  --wave-on-out: #ffffff;
+  --wave-off-out: rgba(255, 255, 255, 0.42);
+}
+
+/* ---------------------------------------------------------------------- colors */
+
+html[data-direction="A"][data-theme="light"] {
+  --canvas: #eeeae2;
+  --pane: #fbfaf7;
+  --sunk: #f2efe8;
+  --hover: #efebe3;
+  --active: #e3eee7;
+  --line: #e2ddd2;
+  --ink: #1c1b18;
+  --muted: #6b665c;
+  --faint: #9a9488;
+  --accent: #0f7a5e;
+  --accent-hover: #0b684f;
+  --on-accent: #ffffff;
+  --accent-soft: #dcede3;
+  --accent-text: #0b6b52;
+  --chat-bg: #f3efe7;
+  --bubble-in: #ffffff;
+  --bubble-in-fg: #1c1b18;
+  --bubble-out: #d8ebdf;
+  --bubble-out-fg: #14261d;
+  --out-meta: #557062;
+  --in-meta: #8a8479;
+  --tick: #0f7a5e;
+  --reply-in: #f2efe8;
+  --reply-out: rgba(15, 122, 94, 0.1);
+  --sys-bg: #f6ebcb;
+  --sys-fg: #6a5419;
+  --brand-panel: #12382d;
+  --brand-ink: #f3eee3;
+  --brand-muted: #a9c1b5;
+  --danger: #b3261e;
+  --wall: radial-gradient(rgba(70, 55, 20, 0.075) 1px, transparent 1.2px);
+  --map-base: #e6ede4;
+}
+
+html[data-direction="A"][data-theme="dark"] {
+  --canvas: #0e0e0c;
+  --pane: #181715;
+  --sunk: #211f1c;
+  --hover: #23211e;
+  --active: #1c2c25;
+  --line: #2c2a26;
+  --ink: #ede9e1;
+  --muted: #a29c90;
+  --faint: #77726a;
+  --accent: #3dbe92;
+  --accent-hover: #52cca2;
+  --on-accent: #08170f;
+  --accent-soft: #1b3028;
+  --accent-text: #62d4aa;
+  --chat-bg: #12110f;
+  --bubble-in: #22211e;
+  --bubble-in-fg: #ede9e1;
+  --bubble-out: #1b392d;
+  --bubble-out-fg: #e4f2ea;
+  --out-meta: #8db5a2;
+  --in-meta: #8d877c;
+  --tick: #62d4aa;
+  --reply-in: #2b2926;
+  --reply-out: rgba(61, 190, 146, 0.14);
+  --sys-bg: #2a2415;
+  --sys-fg: #d9c58e;
+  --brand-panel: #0b1f18;
+  --brand-ink: #ede9e1;
+  --brand-muted: #8faa9d;
+  --danger: #f07167;
+  --wall: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1.2px);
+  --map-base: #26302c;
+}
+
+html[data-direction="B"][data-theme="light"] {
+  --canvas: #e5e9ed;
+  --pane: #ffffff;
+  --sunk: #f1f4f6;
+  --hover: #eef2f5;
+  --active: #e3f4ee;
+  --line: #e3e8ec;
+  --ink: #0e181d;
+  --muted: #5c6c75;
+  --faint: #93a1a9;
+  --accent: #0a9676;
+  --accent-hover: #088266;
+  --on-accent: #ffffff;
+  --accent-soft: #dbf2ea;
+  --accent-text: #07785f;
+  --chat-bg: #ffffff;
+  --bubble-in: #eef2f5;
+  --bubble-in-fg: #0e181d;
+  --bubble-out: linear-gradient(135deg, #0fa283 0%, #0b8597 100%);
+  --bubble-out-fg: #ffffff;
+  --out-meta: rgba(255, 255, 255, 0.8);
+  --in-meta: #7b8a92;
+  --tick: #ffffff;
+  --reply-in: #e1e8ec;
+  --reply-out: rgba(255, 255, 255, 0.17);
+  --sys-bg: #f1f4f6;
+  --sys-fg: #5c6c75;
+  --brand-panel: #0b1417;
+  --brand-ink: #eaf3f2;
+  --brand-muted: #8fa7a6;
+  --danger: #d93a30;
+  --pane-shadow: 0 1px 2px rgba(15, 30, 40, 0.04), 0 10px 30px rgba(15, 30, 40, 0.06);
+  --map-base: #e6ede4;
+}
+
+html[data-direction="B"][data-theme="dark"] {
+  --canvas: #05080a;
+  --pane: #0f161a;
+  --sunk: #162026;
+  --hover: #18232a;
+  --active: #12302a;
+  --line: #1e2a30;
+  --ink: #e5edef;
+  --muted: #8799a1;
+  --faint: #5e6f77;
+  --accent: #27c99e;
+  --accent-hover: #3ed8ae;
+  --on-accent: #03140f;
+  --accent-soft: #123028;
+  --accent-text: #4adbb3;
+  --chat-bg: #0f161a;
+  --bubble-in: #19242b;
+  --bubble-in-fg: #e5edef;
+  --bubble-out: linear-gradient(135deg, #0e8c72 0%, #0a6c80 100%);
+  --bubble-out-fg: #f2fbf9;
+  --out-meta: rgba(242, 251, 249, 0.74);
+  --in-meta: #7d9099;
+  --tick: #ffffff;
+  --reply-in: #223038;
+  --reply-out: rgba(255, 255, 255, 0.13);
+  --sys-bg: #162026;
+  --sys-fg: #8799a1;
+  --brand-panel: #0a1216;
+  --brand-ink: #e5edef;
+  --brand-muted: #7f979c;
+  --danger: #ff6b61;
+  --map-base: #26302c;
+}
+
+/* Shared tokens and the mapping of Mantine's variables onto the design tokens. */
+html[data-direction][data-theme] {
+  --map-bg:
+    repeating-linear-gradient(0deg, transparent 0 21px, rgba(128, 128, 128, 0.16) 21px 22px),
+    repeating-linear-gradient(90deg, transparent 0 21px, rgba(128, 128, 128, 0.16) 21px 22px), var(--map-base);
+  --img-ph: repeating-linear-gradient(135deg, var(--sunk) 0 11px, var(--line) 11px 12px);
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  --mantine-font-family: var(--font);
+  --mantine-font-family-headings: var(--font);
+  --mantine-font-family-monospace: var(--mono);
+  --mantine-color-body: var(--pane);
+  --mantine-color-text: var(--ink);
+  --mantine-color-dimmed: var(--muted);
+  --mantine-color-placeholder: var(--faint);
+  --mantine-color-anchor: var(--accent-text);
+  --mantine-color-default: var(--sunk);
+  --mantine-color-default-hover: var(--hover);
+  --mantine-color-default-color: var(--ink);
+  --mantine-color-default-border: var(--line);
+  --mantine-color-error: var(--danger);
+  --mantine-primary-color-filled: var(--accent);
+  --mantine-primary-color-filled-hover: var(--accent-hover);
+  --mantine-primary-color-contrast: var(--on-accent);
+  --mantine-primary-color-light: var(--accent-soft);
+  --mantine-primary-color-light-hover: var(--accent-soft);
+  --mantine-primary-color-light-color: var(--accent-text);
+  --mantine-color-brand-filled: var(--accent);
+  --mantine-color-brand-filled-hover: var(--accent-hover);
+  --mantine-color-brand-light: var(--accent-soft);
+  --mantine-color-brand-light-color: var(--accent-text);
+  --mantine-color-brand-text: var(--accent-text);
+  --mantine-color-teal-text: var(--accent-text);
+  --mantine-color-red-text: var(--danger);
+  --mantine-color-red-filled: var(--danger);
+  --mantine-color-red-light-color: var(--danger);
+  --mantine-color-red-6: var(--danger);
+  --mantine-color-orange-text: #c0741a;
+}
+
+/* Phones: panes are flush, whatever the direction (renderVals: mobile overrides). */
+@media (max-width: 767px) {
+  html[data-direction][data-theme] {
+    --shell-pad: 0px;
+    --pane-gap: 0px;
+    --r-pane: 0px;
+    --divider: none;
+    --pane-shadow: none;
+  }
+}

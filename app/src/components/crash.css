@@ -1,0 +1,24 @@
+/* Crash screen (components/CrashBoundary.tsx).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* components/CrashBoundary.tsx */
+.crash-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px;
+  text-align: center;
+  background: var(--canvas, #111);
+  color: var(--ink, #eee);
+}
+.crash-screen h2 {
+  margin: 0;
+  font-size: 20px;
+}
+.crash-screen p {
+  margin: 0 0 8px;
+  color: var(--muted, #aaa);
+}

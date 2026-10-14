@@ -1,0 +1,444 @@
+/* Composer and what sits around it (Composer.tsx, RequestBar.tsx, VoiceRecorder.tsx,
+   components/EmojiPicker.tsx): composer, pasted image chips, message request bar, voice
+   recorder, emoji picker and quick reactions, drag & drop overlay.
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* composer */
+
+.composer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--pane);
+  border-top: 1px solid var(--line);
+}
+
+.composer-round {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.composer-round:hover {
+  background: var(--hover);
+}
+
+.composer-round[data-tone="danger"] {
+  color: var(--danger);
+}
+
+.composer-field {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  padding: 0 6px 0 16px;
+  border-radius: min(var(--r-input), 22px);
+  background: var(--sunk);
+}
+
+.composer-field textarea {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: inherit;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--ink);
+  padding: 11px 0;
+  resize: none;
+  max-height: 154px;
+  display: block;
+}
+
+.composer-emoji {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 5px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.composer-emoji:hover {
+  color: var(--ink);
+}
+
+.composer-send {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  transition: background 0.12s;
+}
+
+.composer-send:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.composer-send:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.composer-panel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 0;
+  background: var(--pane);
+  border-top: 1px solid var(--line);
+}
+
+.composer-panel + .composer {
+  border-top: 0;
+}
+
+.composer-panel .reply-block {
+  flex: 1;
+  margin: 0;
+  background: var(--sunk);
+  border-left-color: var(--accent-text);
+  cursor: default;
+}
+
+.composer-panel .reply-who {
+  color: var(--accent-text);
+}
+
+/* Pasted / dropped images waiting in the composer (Composer.tsx). */
+.composer-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px 0;
+  background: var(--pane);
+  border-top: 1px solid var(--line);
+}
+
+.composer-panel + .composer-chips,
+.composer-chips + .composer {
+  border-top: 0;
+}
+
+.composer-chip {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.composer-chip-img {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--sunk);
+  cursor: zoom-in;
+  display: block;
+}
+
+.composer-chip-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.composer-chip-img:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.composer-chip-x {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--pane);
+  background: var(--ink);
+  color: var(--pane);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.composer-chip-x:hover {
+  background: var(--danger);
+  color: #fff;
+}
+
+/* Message request / group invite from a stranger (features/conversation/RequestBar.tsx). */
+.request-bar {
+  flex-shrink: 0;
+  padding: 14px 16px calc(14px + var(--safe-bottom));
+  background: var(--pane);
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.request-bar-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 560px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.request-bar-text strong {
+  color: var(--ink);
+  font-size: 14.5px;
+}
+
+.request-bar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.request-pill {
+  flex-shrink: 0;
+  margin-right: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: var(--accent-text);
+  background: var(--accent-soft);
+}
+
+.composer-blocked {
+  flex-shrink: 0;
+  padding: 16px 16px calc(16px + var(--safe-bottom));
+  text-align: center;
+  background: var(--pane);
+  border-top: 1px solid var(--line);
+  font-size: 13.5px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.recorder {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  border-radius: min(var(--r-input), 22px);
+  background: var(--sunk);
+}
+
+.rec-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--danger);
+  animation: pulse 1.2s infinite;
+  flex-shrink: 0;
+}
+
+/* The microphone is still starting (VoiceRecorder): not recording yet. */
+.rec-dot[data-waiting] {
+  background: var(--faint);
+}
+
+.rec-time {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 42px;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.live-wave {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  height: 28px;
+  overflow: hidden;
+}
+
+.live-wave i {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* emoji picker and reactions */
+
+.emoji-picker {
+  width: 330px;
+  max-width: calc(100vw - 32px);
+}
+
+.emoji-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.emoji-tabs button {
+  flex: 1;
+  height: 34px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 17px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.emoji-tabs button[data-active="true"] {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+.emoji-cat {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 8px 10px 2px;
+}
+
+.emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+  padding: 4px 6px 8px;
+}
+
+.emoji-cell {
+  font-size: 24px;
+  line-height: 1;
+  height: 36px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.emoji-cell:hover {
+  background: var(--hover);
+}
+
+.quick-reactions {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.quick-reactions button {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.1s;
+  padding: 0;
+}
+
+.quick-reactions button:hover {
+  transform: scale(1.15);
+  background: var(--hover);
+}
+
+.quick-reactions button[data-mine="true"] {
+  background: var(--accent-soft);
+}
+
+.quick-reactions .more {
+  width: 34px;
+  height: 34px;
+  font-size: 0;
+  background: var(--sunk);
+  color: var(--muted);
+}
+
+/* drag & drop */
+
+.drop-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 60vh;
+  pointer-events: none;
+  color: var(--ink);
+  text-align: center;
+}
+
+.drop-inner .logo-tile {
+  width: 64px;
+  height: 64px;
+  border-radius: 19px;
+}

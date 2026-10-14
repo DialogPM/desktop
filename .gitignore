@@ -1,0 +1,22 @@
+/target/
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+._*
+
+# Signing keys and service credentials never go into the repository.
+*.p8
+*.p12
+*.pem
+*.key
+*.jks
+*.keystore
+*service-account*.json
+/secrets/
+
+# Built from crates/voice-fx by `pnpm fx` (app/scripts/build-voice-fx.mjs)
+app/src/lib/voiceFxWasm.gen.ts

@@ -1,0 +1,168 @@
+/* Mantine restyle: Drawer, Modal, Popover, Menu, Input, Tabs, Tooltip, Notification, Alert,
+   Radio, Loader, Chip adjusted to the design tokens.
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* ------------------------------------------------------------ Mantine restyle */
+
+.mantine-Modal-content,
+.mantine-Drawer-content {
+  background: var(--pane);
+  color: var(--ink);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+}
+
+.mantine-Modal-header,
+.mantine-Drawer-header {
+  background: var(--pane);
+}
+
+.mantine-Modal-title,
+.mantine-Drawer-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.mantine-Modal-close,
+.mantine-Drawer-close {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 10px;
+  background: var(--sunk);
+  color: var(--ink);
+}
+
+.mantine-Modal-close:hover,
+.mantine-Drawer-close:hover {
+  background: var(--hover);
+}
+
+.mantine-Modal-body {
+  padding-top: 4px;
+}
+
+.mantine-Menu-dropdown,
+.mantine-Popover-dropdown {
+  background: var(--pane);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.14),
+    0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.mantine-Menu-dropdown {
+  padding: 6px;
+}
+
+.mantine-Menu-item {
+  border-radius: min(var(--r-input), 10px);
+  font-size: 14px;
+  font-weight: 550;
+  padding: 9px 10px;
+  color: var(--ink);
+}
+
+.mantine-Menu-item[data-hovered] {
+  background: var(--hover);
+}
+
+.mantine-Menu-itemSection {
+  color: var(--muted);
+}
+
+.mantine-Menu-item[style*="--menu-item-color"] .mantine-Menu-itemSection,
+.mantine-Menu-item[data-danger="true"] {
+  color: var(--danger);
+}
+
+.mantine-Menu-divider {
+  border-color: var(--line);
+}
+
+.mantine-Input-input {
+  background: var(--pane);
+  border: 1.5px solid var(--line);
+  color: var(--ink);
+}
+
+.mantine-Input-input:focus,
+.mantine-Input-input:focus-within {
+  border-color: var(--accent);
+}
+
+.mantine-Input-input[data-error] {
+  border-color: var(--danger);
+}
+
+.mantine-InputWrapper-label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.mantine-InputWrapper-description {
+  color: var(--muted);
+}
+
+.mantine-Button-root {
+  font-weight: 650;
+}
+
+.mantine-Tabs-tab {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.mantine-Tabs-tab[data-active] {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+
+.mantine-Tabs-list {
+  --tab-border-color: var(--line);
+}
+
+.mantine-Tooltip-tooltip {
+  background: var(--ink);
+  color: var(--pane);
+  font-size: 12.5px;
+  font-weight: 550;
+}
+
+.mantine-Notification-root {
+  background: var(--pane);
+  border: 1px solid var(--line);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+}
+
+.mantine-Notification-description {
+  color: var(--ink);
+}
+
+.mantine-Alert-root[data-variant="light"] {
+  --alert-bg: var(--sunk);
+}
+
+.mantine-Checkbox-input,
+.mantine-Radio-radio {
+  background: var(--pane);
+  border-color: var(--faint);
+}
+
+.mantine-Loader-root {
+  --loader-color: var(--accent);
+}
+
+.mantine-Chip-label[data-checked] {
+  background: var(--accent-soft) !important;
+  color: var(--accent-text) !important;
+}
+
+.mantine-Chip-label {
+  background: var(--sunk);
+  border: 0;
+  color: var(--muted);
+  font-weight: 600;
+}

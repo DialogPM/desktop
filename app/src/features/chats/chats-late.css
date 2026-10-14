@@ -1,0 +1,23 @@
+/* Disappearing-messages timer badge on chat list avatars (features/chats/ChatListItem.tsx).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* Chat list: disappearing-messages badge on the avatar. */
+.chat-row-avatar {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.timer-badge {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--ink, #1b1f1d);
+  color: var(--pane, #fff);
+  border: 2px solid var(--pane, #fff);
+}

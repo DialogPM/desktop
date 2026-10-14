@@ -1,0 +1,109 @@
+/* Action sheet (components/Menus.tsx) and dialog helpers (.dialog-actions, .logout-actions,
+   .option-row: components/OptionsDialog.tsx, PasswordPrompt.tsx and many dialogs).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* ------------------------------------------------------------ action sheet */
+
+.action-sheet {
+  padding-bottom: var(--safe-bottom);
+  border-top-left-radius: var(--r-modal) !important;
+  border-top-right-radius: var(--r-modal) !important;
+}
+
+.sheet-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  margin: 0 auto 12px;
+}
+
+.sheet-title {
+  padding: 0 20px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.sheet-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 52px;
+  padding: 0 20px;
+  font-size: 15.5px;
+  font-weight: 550;
+  width: 100%;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.sheet-item:active,
+.sheet-item:hover {
+  background: var(--hover);
+}
+
+.sheet-item[data-danger="true"] {
+  color: var(--danger);
+}
+
+.sheet-icon {
+  display: inline-flex;
+  width: 22px;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.sheet-item[data-danger="true"] .sheet-icon {
+  color: var(--danger);
+}
+
+/* Dialog helpers */
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.dialog-actions .btn {
+  height: 42px;
+  font-size: 14px;
+  padding: 0 16px;
+}
+
+.logout-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.logout-actions .btn {
+  height: 44px;
+  font-size: 14.5px;
+}
+
+.option-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 4px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-size: 14.5px;
+  font-weight: 550;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 10px;
+}
+
+.option-row:hover {
+  background: var(--hover);
+}

@@ -1,0 +1,376 @@
+/* App shell (features/layout: MainLayout, Rail, PaneResizer): rail, panes, list-pane
+   resizer, pane headers, tab bar, empty main pane, connection banners
+   (components/ConnectionBanner.tsx).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* ---------------------------------------------------------------------- shell */
+
+.app-root {
+  height: calc(100dvh / var(--app-zoom, 1));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+.shell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  padding: var(--shell-pad);
+  gap: var(--pane-gap);
+  background: var(--canvas);
+  position: relative;
+}
+
+.rail {
+  width: 68px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 0;
+  background: var(--rail-bg);
+}
+
+.logo-tile {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rail .logo-tile {
+  margin-bottom: 14px;
+}
+
+.rail-btn {
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: transparent;
+  color: var(--muted);
+  padding: 0;
+  transition: background 0.12s;
+}
+
+.rail-btn:hover {
+  background: var(--hover);
+}
+
+.rail-btn[data-active="true"] {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+.rail-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 10.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px var(--pane);
+}
+
+.rail-me {
+  margin-top: 4px;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--pane);
+  border-radius: var(--r-pane);
+  box-shadow: var(--pane-shadow);
+  border-left: var(--divider);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Width set by the user with the resizer (--list-w on .shell), never so wide that the
+   conversation gets squeezed on small windows. */
+.pane-list {
+  width: min(var(--list-w, 372px), max(280px, calc(100vw / var(--app-zoom, 1) - 500px)));
+  flex-shrink: 0;
+}
+
+/* Draggable divider between the list pane and the main pane. It takes no room: in A it
+   sits on the 1px divider line, in B it fills the 12px gap between the floating panels. */
+.pane-resizer {
+  position: relative;
+  width: 0;
+  flex-shrink: 0;
+  margin-left: calc(-1 * var(--pane-gap));
+  z-index: 6;
+}
+
+.pane-resizer-hit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--pane-gap) / 2 - 5px);
+  width: 10px;
+  cursor: col-resize;
+  touch-action: none;
+  display: flex;
+  justify-content: center;
+  outline: none;
+}
+
+.pane-resizer-hit::after {
+  content: "";
+  width: 2px;
+  height: 100%;
+  border-radius: 2px;
+  background: transparent;
+  transition: background 0.15s 0.05s;
+}
+
+html[data-direction="B"] .pane-resizer-hit::after {
+  width: 4px;
+  height: 56px;
+  margin: auto 0;
+  border-radius: 999px;
+}
+
+.pane-resizer-hit:hover::after,
+.pane-resizer-hit:focus-visible::after {
+  background: var(--line);
+}
+
+html[data-direction="A"] .pane-resizer-hit::after {
+  width: 3px;
+}
+
+html[data-direction="A"] .pane-resizer-hit:hover::after,
+html[data-direction="A"] .pane-resizer-hit:focus-visible::after {
+  background: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+.pane-resizer-hit[data-dragging="true"]::after {
+  background: var(--accent);
+}
+
+html[data-direction="B"] .pane-resizer-hit[data-dragging="true"]::after,
+html[data-direction="B"] .pane-resizer-hit:hover::after {
+  height: 72px;
+}
+
+body[data-resizing="true"],
+body[data-resizing="true"] * {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+.pane-main {
+  flex: 1;
+}
+
+.pane-chat {
+  background: var(--chat-bg);
+}
+
+.pane-info {
+  width: 370px;
+  flex-shrink: 0;
+}
+
+.pane-full {
+  flex: 1;
+  width: 100%;
+}
+
+@media (max-width: 1180px) and (min-width: 768px) {
+  .pane-info {
+    position: absolute;
+    right: var(--shell-pad);
+    top: var(--shell-pad);
+    bottom: var(--shell-pad);
+    z-index: 20;
+    box-shadow: -12px 0 32px rgba(0, 0, 0, 0.16);
+  }
+}
+
+.pane-head {
+  height: 66px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 0 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--pane);
+}
+
+.pane-head[data-compact="true"] {
+  padding: 0 12px;
+}
+
+.pane-head-title {
+  font-size: 17px;
+  font-weight: 700;
+  flex: 1;
+  min-width: 0;
+}
+
+.pane-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.tabbar {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 12px max(14px, calc(var(--safe-bottom) + 8px));
+  background: var(--pane);
+  border-top: 1px solid var(--line);
+}
+
+.tabbar button {
+  flex: 1;
+  border: 0;
+  background: none;
+  font-size: 11.5px;
+  font-weight: 650;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  position: relative;
+}
+
+.tabbar button[data-active="true"] {
+  color: var(--accent-text);
+}
+
+.tabbar-pill {
+  width: 58px;
+  height: 30px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.tabbar button[data-active="true"] .tabbar-pill {
+  background: var(--accent-soft);
+}
+
+.tabbar .rail-badge {
+  top: -3px;
+  right: 8px;
+}
+
+.empty-main {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  background-image: var(--wall);
+  background-size: 20px 20px;
+}
+
+.empty-main .logo-tile {
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+}
+
+.empty-title {
+  font-size: 24px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.empty-sub {
+  font-size: 14.5px;
+  color: var(--muted);
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.lock-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--faint);
+}
+
+/* -------------------------------------------------------------------- banners */
+
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 7px 12px;
+  padding-top: calc(7px + var(--safe-top));
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.banner-offline {
+  background: color-mix(in srgb, var(--danger) 14%, var(--pane));
+  color: var(--danger);
+}
+
+.banner-connecting {
+  background: var(--sys-bg);
+  color: var(--sys-fg);
+}
+
+.banner-sync {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+/* New device joined the account: stays until dismissed. */
+.banner-security {
+  flex-wrap: wrap;
+  text-align: center;
+  background: color-mix(in srgb, var(--danger) 12%, var(--pane));
+  color: var(--danger);
+}

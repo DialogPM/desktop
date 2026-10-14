@@ -1,0 +1,35 @@
+/* Entry point of the app's own styles (imported by main.tsx after the Mantine, Leaflet and
+   font styles).
+   The files below were split out of one stylesheet. Many later rules override earlier ones
+   (phone overrides, :has() rules, Markdown width...), so the order of these imports IS the
+   cascade order: keep it, and add new rules to the file whose position fits. Files named
+   *-late.css hold rules that must stay after the files imported before them. */
+
+@import "./tokens.css";
+@import "./base.css";
+@import "./mantine.css";
+@import "../features/layout/layout.css";
+@import "../components/avatar.css";
+@import "../features/chats/chats.css";
+@import "../features/conversation/conversation.css";
+@import "../features/conversation/attachments.css";
+@import "../features/conversation/composer.css";
+@import "../features/conversation/lightbox.css";
+@import "../features/info/info.css";
+@import "../components/qr.css";
+@import "../features/settings/settings.css";
+@import "../features/onboarding/onboarding.css";
+@import "../components/dialogs.css";
+@import "./phones.css";
+@import "../features/lock/lock.css";
+@import "./utilities-late.css";
+@import "../features/settings/settings-late.css";
+@import "../features/conversation/contact-cards.css";
+@import "../features/calls/calls.css";
+@import "./misc-late.css";
+@import "../features/conversation/conversation-late.css";
+@import "../features/groups/groups.css";
+@import "../features/calls/group-call.css";
+@import "../features/chats/chats-late.css";
+@import "../features/conversation/markdown.css";
+@import "../components/crash.css";

@@ -1,0 +1,77 @@
+/* Shared contact cards in messages (features/conversation/ContactCards.tsx).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* shared contact cards */
+
+.contact-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 270px;
+  max-width: 100%;
+  padding: 4px 4px 0;
+}
+
+.contact-card {
+  border-radius: calc(var(--r-bubble) - 6px);
+  background: color-mix(in oklab, currentColor 6%, transparent);
+  overflow: hidden;
+}
+
+.contact-card-main {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 12px;
+  min-width: 0;
+}
+
+.contact-card-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.contact-card-name {
+  font-weight: 600;
+}
+
+.contact-card-number {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.contact-card-actions {
+  display: flex;
+  border-top: 1px solid color-mix(in oklab, currentColor 12%, transparent);
+}
+
+.contact-card-actions button {
+  flex: 1;
+  padding: 9px 8px;
+  background: none;
+  border: 0;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+.contact-card-actions button + button {
+  border-left: 1px solid color-mix(in oklab, currentColor 12%, transparent);
+}
+
+.contact-card-actions button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.contact-card-actions button:hover:not(:disabled) {
+  background: color-mix(in oklab, currentColor 6%, transparent);
+}
+
+.msg-row[data-out="true"] .contact-card-actions button {
+  color: inherit;
+}

@@ -1,0 +1,35 @@
+/* Late shared rules kept at their original place in the cascade: full-screen Dropzone tint
+   (Mantine Dropzone), status ticks (components/StatusTicks.tsx), and turning off
+   JetBrains Mono ligatures for numbers / URLs across features.
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+.mantine-Dropzone-root[data-fullscreen],
+.mantine-Dropzone-fullScreen {
+  background: color-mix(in srgb, var(--pane) 92%, transparent);
+}
+
+.tick {
+  display: inline-flex;
+  color: var(--faint);
+}
+
+.tick[data-read="true"] {
+  color: var(--accent-text);
+}
+
+/* JetBrains Mono ligatures turn "://" into a spaced glyph; plain characters read better in URLs and numbers. */
+.mono,
+.acct-number,
+.seed-word,
+.safety-grid,
+.voice-foot,
+.onb-version,
+.info-number,
+.rec-time,
+.server-box input,
+.field-input[data-mono="true"],
+.field-input[data-mono="true"] input,
+.image-tile-overlay small {
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0, "liga" 0;
+}

@@ -1,0 +1,79 @@
+/* QR scanner frame (components/QrScanner.tsx).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* ------------------------------------------------------------------ QR modal */
+
+.qr-scan-frame {
+  position: relative;
+  width: 280px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  border-radius: 24px;
+  background: #0b0f10;
+  overflow: hidden;
+}
+
+.qr-scan-frame video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.qr-corner {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border: 0 solid #fff;
+}
+
+.qr-corner[data-c="tl"] {
+  left: 40px;
+  top: 40px;
+  border-left-width: 3px;
+  border-top-width: 3px;
+  border-top-left-radius: 12px;
+}
+
+.qr-corner[data-c="tr"] {
+  right: 40px;
+  top: 40px;
+  border-right-width: 3px;
+  border-top-width: 3px;
+  border-top-right-radius: 12px;
+}
+
+.qr-corner[data-c="bl"] {
+  left: 40px;
+  bottom: 40px;
+  border-left-width: 3px;
+  border-bottom-width: 3px;
+  border-bottom-left-radius: 12px;
+}
+
+.qr-corner[data-c="br"] {
+  right: 40px;
+  bottom: 40px;
+  border-right-width: 3px;
+  border-bottom-width: 3px;
+  border-bottom-right-radius: 12px;
+}
+
+.qr-scan-line {
+  position: absolute;
+  left: 52px;
+  right: 52px;
+  top: 50%;
+  height: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 16px var(--accent);
+}
+
+.qr-scan-cta {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 2;
+}

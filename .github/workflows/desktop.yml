@@ -1,0 +1,106 @@
+name: Desktop builds
+
+# Windows (MSI + NSIS installer) and macOS (universal .app + .dmg) installers of the Tauri app.
+# The default server shown at login comes from the repository variable CHATAPP_DEFAULT_SERVER
+# (Settings → Secrets and variables → Actions → Variables), or from the manual run's input.
+# The builds are not code-signed: macOS gets an ad-hoc signature.
+
+on:
+  workflow_dispatch:
+    inputs:
+      default_server:
+        description: "Default server URL (empty: repository variable or the built-in placeholder)"
+        required: false
+        default: ""
+  push:
+    branches: ["claude/**", "main", "master"]
+    paths:
+      - "app/**"
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/desktop.yml"
+
+# Actions are pinned to commit SHAs where a verified pin was available offline (see ci.yml).
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+            rust_targets: x86_64-pc-windows-msvc
+            bundles: msi,nsis
+          - name: macos
+            os: macos-latest
+            target: universal-apple-darwin
+            rust_targets: aarch64-apple-darwin,x86_64-apple-darwin
+            bundles: app,dmg
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    env:
+      CHATAPP_DEFAULT_SERVER: ${{ inputs.default_server || vars.CHATAPP_DEFAULT_SERVER }}
+      # Ad-hoc signature (no Apple developer certificate).
+      APPLE_SIGNING_IDENTITY: "-"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
+        with:
+          version: 10
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: app/pnpm-lock.yaml
+      # Same toolchain as ci.yml (docs/REPRODUCIBLE-BUILDS.md).
+      - name: Rust toolchain
+        shell: bash
+        run: |
+          rustup toolchain install 1.94.1 --profile minimal --target "${{ matrix.rust_targets }}"
+          rustup default 1.94.1
+      - uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
+        with:
+          key: ${{ matrix.target }}
+      # libsignal generates code from .proto files.
+      # TODO(supply-chain): pin to a commit SHA (no local copy of a pinned arduino/setup-protoc).
+      - uses: arduino/setup-protoc@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      # Fails if Cargo.lock is not up to date, so the build below uses exactly the locked crates.
+      - name: Fetch locked crates
+        shell: bash
+        run: cargo fetch --locked
+      - name: Install frontend dependencies
+        working-directory: app
+        run: pnpm install --frozen-lockfile
+      # pwsh: on Windows, the OpenSSL build needs Strawberry Perl, not Git's perl from bash.
+      - name: Build
+        working-directory: app
+        shell: pwsh
+        run: pnpm tauri build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }}
+      - name: Collect installers
+        shell: bash
+        run: |
+          mkdir -p dist-installers
+          dir=target/${{ matrix.target }}/release/bundle
+          find "$dir" -maxdepth 2 \( -name '*.msi' -o -name '*.exe' -o -name '*.dmg' \) -exec cp {} dist-installers/ \;
+          if [ -d "$dir/macos" ]; then
+            (cd "$dir/macos" && ditto -c -k --keepParent Dialog.app "$GITHUB_WORKSPACE/dist-installers/Dialog-macos-universal.app.zip")
+          fi
+          ls -la dist-installers
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: Dialog-${{ matrix.name }}
+          path: dist-installers/*
+          if-no-files-found: error

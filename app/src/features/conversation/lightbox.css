@@ -1,0 +1,214 @@
+/* Lightbox (Lightbox.tsx) and the image annotation editor (ImageAnnotator.tsx).
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+/* ------------------------------------------------------------------ lightbox */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(8, 10, 10, 0.94);
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  font-family: var(--font);
+}
+
+.lightbox-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: calc(12px + var(--safe-top)) 14px 12px;
+}
+
+.lightbox-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 0;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.lightbox-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.lightbox-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+}
+
+.lightbox-stage img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.12s ease-out;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+}
+
+.lightbox-caption {
+  text-align: center;
+  padding: 10px 16px calc(16px + var(--safe-bottom));
+  font-size: 15px;
+}
+
+/* Preview + annotation editor of an image about to be sent (ImageAnnotator.tsx). */
+.annot:focus {
+  outline: none;
+}
+
+.annot-surface {
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+}
+
+.annot-surface canvas {
+  display: block;
+  touch-action: none;
+}
+
+.annot-text {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 1px dashed rgba(255, 255, 255, 0.75);
+  outline-offset: 3px;
+  background: transparent;
+  line-height: 1;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
+  min-width: 2ch;
+}
+
+.annot-text::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.annot-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 6px 14px calc(16px + var(--safe-bottom));
+}
+
+.annot-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 5px;
+  border-radius: 14px;
+  background: rgba(36, 38, 40, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.annot-btn {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.annot-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.annot-btn[data-active="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.annot-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.annot-swatch {
+  width: 22px;
+  height: 22px;
+  margin: 0 5px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  padding: 0;
+  cursor: pointer;
+}
+
+.annot-swatch[data-active="true"] {
+  box-shadow: 0 0 0 2px rgba(36, 38, 40, 1), 0 0 0 4px #fff;
+}
+
+.annot-sep {
+  width: 1px;
+  height: 22px;
+  margin: 0 6px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.annot-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.annot-action {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 12px;
+  border: 0;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.annot-action:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.annot-action[data-primary] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.annot-action[data-primary]:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.annot-action:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

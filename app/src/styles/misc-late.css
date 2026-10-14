@@ -1,0 +1,138 @@
+/* Small late additions from several features, kept together at their original place in the
+   cascade (they follow calls.css and precede conversation-late.css):
+   - call / alert system notes in the conversation (conversation/MessageBubble.tsx)
+   - TOTP code input (components/TotpInput.tsx)
+   - nudge icon (settings/TwoStepNudge.tsx, WeakPasswordNudge.tsx, AccountSecurity.tsx)
+   - do-not-disturb / temporary pills by the chat list title (chats/Sidebar.tsx)
+   - group rules in the new-group form (chats/NewGroupPane.tsx)
+   - location bubble placeholder before the map loads (conversation/MessageBubble.tsx)
+   - new-password rules (components/PasswordPairFields.tsx)
+   Imported in cascade order by styles/index.css: keep rules in this order. */
+
+.sys-call {
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.sys-call[data-missed="true"] {
+  color: #d64545;
+}
+
+.sys-note[data-alert="true"] {
+  background: color-mix(in oklab, #e5484d 16%, var(--pane));
+  color: #c62f35;
+  font-weight: 600;
+}
+
+.totp-input {
+  height: 56px;
+  text-align: center;
+  font-size: 26px !important;
+  letter-spacing: 0.4em !important;
+}
+
+.nudge-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+}
+
+/* "Temporary" badge next to the chat list title (temporary mode). */
+.dnd-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 10px;
+  padding: 2px 9px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0;
+  vertical-align: middle;
+  color: var(--accent-text);
+  background: var(--accent-soft);
+  cursor: pointer;
+}
+
+.temp-pill {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0;
+  vertical-align: middle;
+  color: var(--danger, #d92d20);
+  background: color-mix(in srgb, var(--danger, #d92d20) 14%, transparent);
+  cursor: pointer;
+}
+
+/* Group rules in the new-group form. */
+.group-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 0 4px;
+}
+.group-rules .sect-label {
+  padding: 0 16px 4px;
+}
+.group-rules-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 16px 12px;
+}
+
+/* Location bubble before the map is loaded (tiles come from a third-party server). */
+.location-map-load {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  cursor: pointer;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--map-bg);
+  background-image: var(--wall);
+  background-size: 22px 22px;
+}
+.location-map-load:hover {
+  color: var(--ink);
+}
+
+/* New-password rules under the field. */
+.password-rules {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.password-rules li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.password-rules li[data-ok="true"] {
+  color: var(--accent-text);
+}
