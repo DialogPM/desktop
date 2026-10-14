@@ -4,7 +4,10 @@ name: Desktop builds
 # installers of the Tauri app.
 # The default server shown at login comes from the repository variable CHATAPP_DEFAULT_SERVER
 # (Settings → Secrets and variables → Actions → Variables), or from the manual run's input.
-# The builds are not code-signed: macOS gets an ad-hoc signature.
+# macOS: signed with the Developer ID certificate and notarized by Apple when the secrets
+# APPLE_CERTIFICATE (base64 .p12), APPLE_CERTIFICATE_PASSWORD, APPLE_API_KEY, APPLE_API_ISSUER
+# and APPLE_API_KEY_P8 (App Store Connect API key) are set; otherwise an ad-hoc signature.
+# Windows and Linux builds are not code-signed.
 
 on:
   workflow_dispatch:
@@ -61,8 +64,6 @@ jobs:
     timeout-minutes: 90
     env:
       CHATAPP_DEFAULT_SERVER: ${{ inputs.default_server || vars.CHATAPP_DEFAULT_SERVER }}
-      # Ad-hoc signature (no Apple developer certificate).
-      APPLE_SIGNING_IDENTITY: "-"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4
@@ -100,10 +101,36 @@ jobs:
       - name: Install frontend dependencies
         working-directory: app
         run: pnpm install --frozen-lockfile
+      # Developer ID signing + notarization (tauri build reads these variables), or ad-hoc.
+      - name: macOS signing
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          CERT: ${{ secrets.APPLE_CERTIFICATE }}
+          API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+          API_KEY: ${{ secrets.APPLE_API_KEY }}
+          API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
+        run: |
+          if [ -n "$CERT" ] && [ -n "$API_KEY_P8" ]; then
+            printf '%s' "$API_KEY_P8" > "$RUNNER_TEMP/AuthKey.p8"
+            {
+              echo "APPLE_SIGNING_IDENTITY=Developer ID Application: Florentin Craciun (3A45UY6T3R)"
+              echo "APPLE_API_KEY_PATH=$RUNNER_TEMP/AuthKey.p8"
+              echo "APPLE_API_KEY=$API_KEY"
+              echo "APPLE_API_ISSUER=$API_ISSUER"
+            } >> "$GITHUB_ENV"
+            echo "Developer ID signing and notarization enabled."
+          else
+            echo "APPLE_SIGNING_IDENTITY=-" >> "$GITHUB_ENV"
+            echo "No signing secrets: ad-hoc signature."
+          fi
       # pwsh: on Windows, the OpenSSL build needs Strawberry Perl, not Git's perl from bash.
       - name: Build
         working-directory: app
         shell: pwsh
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
         run: pnpm tauri build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }}
       - name: Collect installers
         shell: bash
