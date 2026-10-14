@@ -152,6 +152,18 @@ jobs:
           if [ -d "$dir/macos" ]; then
             (cd "$dir/macos" && ditto -c -k --keepParent Dialog.app "$GITHUB_WORKSPACE/dist-installers/Dialog-macos-universal.app.zip")
           fi
+          # Copies under fixed names, for links to the latest release that do not change between
+          # versions (https://github.com/DialogPM/desktop/releases/latest/download/<name>).
+          cd dist-installers
+          for f in *; do
+            case "$f" in
+              *x64-setup.exe) cp "$f" Dialog-windows-x64-setup.exe ;;
+              *universal.dmg) cp "$f" Dialog-macos-universal.dmg ;;
+              *amd64.AppImage) cp "$f" Dialog-linux-x86_64.AppImage ;;
+              *amd64.deb) cp "$f" Dialog-linux-amd64.deb ;;
+            esac
+          done
+          cd ..
           ls -la dist-installers
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
