@@ -1,0 +1,76 @@
+# Microsoft Store package (MSIX) of the desktop app: the files of a release's MSI, repackaged
+# with app/src-tauri/windows/msix/AppxManifest.xml. The package is not signed (the Store signs
+# it); upload the artifact in Partner Center → the app → Submission → Packages.
+# Needs the repository variables MSIX_IDENTITY_NAME, MSIX_PUBLISHER and
+# MSIX_PUBLISHER_DISPLAY_NAME (Partner Center → Product management → Product identity).
+# Triggers: the end of a successful "Desktop builds" run for a version tag, or a manual run.
+name: MSIX
+
+on:
+  workflow_run:
+    workflows: ["Desktop builds"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release to package (v0.1.1, ...); empty = the latest release"
+        required: false
+        default: ""
+
+jobs:
+  msix:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'v'))
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_branch || github.event.inputs.tag }}
+      IDENTITY_NAME: ${{ vars.MSIX_IDENTITY_NAME }}
+      PUBLISHER: ${{ vars.MSIX_PUBLISHER }}
+      PUBLISHER_DISPLAY_NAME: ${{ vars.MSIX_PUBLISHER_DISPLAY_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the MSIX
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          if (-not $env:IDENTITY_NAME -or -not $env:PUBLISHER -or -not $env:PUBLISHER_DISPLAY_NAME) {
+            throw "Set the repository variables MSIX_IDENTITY_NAME, MSIX_PUBLISHER and MSIX_PUBLISHER_DISPLAY_NAME"
+          }
+          if ($env:TAG) { $tag = $env:TAG } else { $tag = gh release view -R $env:GITHUB_REPOSITORY --json tagName -q .tagName }
+          gh release download $tag -R $env:GITHUB_REPOSITORY -p "*_x64_en-US.msi" -O dialog.msi
+
+          # Administrative install: unpacks the MSI's files without installing anything.
+          $unpacked = "$PWD\msi"
+          Start-Process msiexec -ArgumentList "/a", "`"$PWD\dialog.msi`"", "/qn", "TARGETDIR=`"$unpacked`"" -Wait
+          $exe = Get-ChildItem $unpacked -Recurse -Filter *.exe | Where-Object { $_.Name -notmatch "uninstall" } | Select-Object -First 1
+          if (-not $exe) { Get-ChildItem $unpacked -Recurse; throw "no executable in the MSI" }
+
+          $layout = "$PWD\layout"
+          New-Item -ItemType Directory $layout | Out-Null
+          Copy-Item "$($exe.DirectoryName)\*" $layout -Recurse
+          Copy-Item app\src-tauri\windows\msix\Assets "$layout\Assets" -Recurse
+
+          # Store versions have four parts and the last must be 0.
+          $version = ($tag.TrimStart("v") -replace "-.*$", "") + ".0"
+          (Get-Content app\src-tauri\windows\msix\AppxManifest.xml -Raw) `
+            -replace "{{IDENTITY_NAME}}", $env:IDENTITY_NAME `
+            -replace "{{PUBLISHER}}", $env:PUBLISHER `
+            -replace "{{PUBLISHER_DISPLAY_NAME}}", $env:PUBLISHER_DISPLAY_NAME `
+            -replace "{{VERSION}}", $version `
+            -replace "{{EXE}}", $exe.Name |
+            Set-Content "$layout\AppxManifest.xml" -Encoding utf8
+          Get-ChildItem $layout -Recurse | Select-Object FullName, Length
+
+          $makeappx = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\makeappx.exe" | Sort-Object FullName | Select-Object -Last 1
+          & $makeappx.FullName pack /d $layout /p "Dialog_$($version)_x64.msix" /o
+          if ($LASTEXITCODE -ne 0) { throw "makeappx failed" }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dialog-msix
+          path: "*.msix"
+          if-no-files-found: error

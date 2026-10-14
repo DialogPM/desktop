@@ -4,18 +4,33 @@
 name: dialog-pm
 title: Dialog
 adopt-info: dialog
-summary: End-to-end encrypted messenger. No phone number.
+summary: "Private messenger for Linux: no phone number, no email."
 description: |
-  Dialog is a private messenger: messages, photos, voice notes and calls are end-to-end
-  encrypted, so only you and the people in the chat can read them. Not even the server can.
+  Dialog brings encrypted chats to your Linux desktop without asking who you are. Sign-up
+  takes a few seconds: you get a random account number, a password and a recovery phrase.
+  No phone number, no email address, no contact book upload.
 
-  * No phone number and no email: your account is a random number, not your SIM card.
-  * Disappearing messages and view-once photos, with timers you choose.
-  * Groups, voice and video calls, voice notes, file sharing.
-  * The same account on your phone and your computer, in sync.
-  * Open source (AGPL-3.0). The server is in the EU (Germany). No ads, no tracking.
+  Everything you send is encrypted on your computer before it leaves it. The server only
+  relays sealed messages it cannot open, and deletes them once they are delivered.
 
-  Also available for Windows, macOS, Android and iPhone: https://dialog.pm
+  What you can do:
+
+  * Chat one-to-one or in groups, with replies, reactions, mentions and edits
+  * Make voice and video calls, including group calls
+  * Send photos, files, voice notes and your location
+  * Set messages to disappear after a timer, or send a photo that can be viewed only once
+  * Find people by @username, or share your QR code
+  * Use the same account on your phone and your computer, kept in sync
+  * Keep several separate accounts on one computer, each locked with its own password
+  * Add two-step verification and an app lock
+
+  Built in the open: the desktop app, the mobile apps and the server are published under
+  the AGPL-3.0 licence on GitHub. The default server runs in Germany, and you can point the
+  app at your own server if you prefer to host it yourself.
+
+  No ads, no trackers, no selling of data.
+
+  Dialog also runs on Windows, macOS, Android and iPhone: https://dialog.pm
 website: https://dialog.pm
 contact: https://dialog.pm/#contact
 source-code: https://github.com/DialogPM/desktop
