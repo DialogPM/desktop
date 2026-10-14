@@ -1,6 +1,7 @@
 name: Desktop builds
 
-# Windows (MSI + NSIS installer) and macOS (universal .app + .dmg) installers of the Tauri app.
+# Windows (MSI + NSIS installer), macOS (universal .app + .dmg) and Linux (.deb, .rpm, AppImage)
+# installers of the Tauri app.
 # The default server shown at login comes from the repository variable CHATAPP_DEFAULT_SERVER
 # (Settings → Secrets and variables → Actions → Variables), or from the manual run's input.
 # The builds are not code-signed: macOS gets an ad-hoc signature.
@@ -49,6 +50,12 @@ jobs:
             target: universal-apple-darwin
             rust_targets: aarch64-apple-darwin,x86_64-apple-darwin
             bundles: app,dmg
+          # Ubuntu 22.04: the oldest supported glibc, so the packages run on more distributions.
+          - name: linux
+            os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            rust_targets: x86_64-unknown-linux-gnu
+            bundles: deb,rpm,appimage
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 90
@@ -66,6 +73,12 @@ jobs:
           node-version: 22
           cache: pnpm
           cache-dependency-path: app/pnpm-lock.yaml
+      - name: System dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev \
+            libdbus-1-dev libasound2-dev libssl-dev patchelf file
       # Same toolchain as ci.yml (docs/REPRODUCIBLE-BUILDS.md).
       - name: Rust toolchain
         shell: bash
@@ -97,7 +110,7 @@ jobs:
         run: |
           mkdir -p dist-installers
           dir=target/${{ matrix.target }}/release/bundle
-          find "$dir" -maxdepth 2 \( -name '*.msi' -o -name '*.exe' -o -name '*.dmg' \) -exec cp {} dist-installers/ \;
+          find "$dir" -maxdepth 2 \( -name '*.msi' -o -name '*.exe' -o -name '*.dmg' -o -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' \) -exec cp {} dist-installers/ \;
           if [ -d "$dir/macos" ]; then
             (cd "$dir/macos" && ditto -c -k --keepParent Dialog.app "$GITHUB_WORKSPACE/dist-installers/Dialog-macos-universal.app.zip")
           fi
