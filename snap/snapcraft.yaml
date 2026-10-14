@@ -1,0 +1,84 @@
+# Snap of the desktop app for the Snap Store (https://snapcraft.io/dialog-pm). It repackages
+# the .deb of a GitHub release (built on Ubuntu 22.04 by .github/workflows/desktop.yml), which
+# .github/workflows/snap.yml downloads as dialog.deb next to this folder before the build.
+name: dialog-pm
+title: Dialog
+adopt-info: dialog
+summary: End-to-end encrypted messenger. No phone number.
+description: |
+  Dialog is a private messenger: messages, photos, voice notes and calls are end-to-end
+  encrypted, so only you and the people in the chat can read them. Not even the server can.
+
+  * No phone number and no email: your account is a random number, not your SIM card.
+  * Disappearing messages and view-once photos, with timers you choose.
+  * Groups, voice and video calls, voice notes, file sharing.
+  * The same account on your phone and your computer, in sync.
+  * Open source (AGPL-3.0). The server is in the EU (Germany). No ads, no tracking.
+
+  Also available for Windows, macOS, Android and iPhone: https://dialog.pm
+website: https://dialog.pm
+contact: https://dialog.pm/#contact
+source-code: https://github.com/DialogPM/desktop
+issues: https://github.com/DialogPM/desktop/issues
+license: AGPL-3.0-only
+icon: snap/gui/dialog-pm.png
+grade: stable
+confinement: strict
+base: core22
+compression: lzo
+architectures:
+  - build-on: amd64
+
+apps:
+  dialog-pm:
+    command: usr/bin/chatapp
+    desktop: usr/share/applications/dialog-pm.desktop
+    extensions: [gnome]
+    plugs:
+      - network
+      - home
+      - removable-media
+      - audio-playback
+      - audio-record
+      - camera
+      - opengl
+    environment:
+      ALSA_CONFIG_PATH: $SNAP/etc/asound.conf
+
+# ALSA looks for its configuration and the PulseAudio plugin at fixed paths.
+layout:
+  /usr/lib/x86_64-linux-gnu/alsa-lib:
+    bind: $SNAP/usr/lib/x86_64-linux-gnu/alsa-lib
+  /usr/share/alsa:
+    bind: $SNAP/usr/share/alsa
+
+parts:
+  dialog:
+    plugin: dump
+    source: dialog.deb
+    source-type: deb
+    stage-packages:
+      - libwebkit2gtk-4.1-0
+      - libasound2
+      - libasound2-plugins
+    override-pull: |
+      craftctl default
+      craftctl set version="$(dpkg-deb -f "$CRAFT_PROJECT_DIR/dialog.deb" Version)"
+    override-build: |
+      craftctl default
+      # The desktop entry under the snap's name, pointing at the icon inside the snap.
+      APPS="$CRAFT_PART_INSTALL/usr/share/applications"
+      mv "$APPS/Dialog.desktop" "$APPS/dialog-pm.desktop"
+      sed -i -e 's|^Icon=.*|Icon=${SNAP}/usr/share/icons/hicolor/128x128/apps/chatapp.png|' \
+             -e 's|^Exec=.*|Exec=dialog-pm %U|' \
+             -e 's|^Categories=.*|Categories=Network;InstantMessaging;Chat;|' \
+             "$APPS/dialog-pm.desktop"
+      cat "$APPS/dialog-pm.desktop"
+
+  alsa-config:
+    plugin: dump
+    source: snap/local
+    organize:
+      asound.conf: etc/asound.conf
+    prime:
+      - etc/asound.conf

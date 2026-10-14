@@ -20,3 +20,6 @@ dist/
 
 # Built from crates/voice-fx by `pnpm fx` (app/scripts/build-voice-fx.mjs)
 app/src/lib/voiceFxWasm.gen.ts
+
+/dialog.deb
+*.snap

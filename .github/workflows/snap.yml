@@ -1,0 +1,66 @@
+# Publishes the Linux app to the Snap Store (https://snapcraft.io/dialog-pm): the .deb of a
+# GitHub release, repackaged by snap/snapcraft.yaml.
+# Needs the secret SNAPCRAFT_STORE_CREDENTIALS (output of `snapcraft export-login --snaps
+# dialog-pm --acls package_access,package_push,package_update,package_release -`).
+# Triggers: the end of a successful "Desktop builds" run for a version tag (→ stable), or a
+# manual run with a release tag and a channel.
+name: Snap
+
+on:
+  workflow_run:
+    workflows: ["Desktop builds"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release to package (v0.1.1, ...); empty = the latest release"
+        required: false
+        default: ""
+      channel:
+        description: "Snap Store channel (edge, beta, candidate, stable); empty = only build"
+        required: false
+        default: "edge"
+
+jobs:
+  snap:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'v'))
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    env:
+      SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download the .deb of the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_branch || github.event.inputs.tag }}
+        run: |
+          gh release download $TAG -R ${{ github.repository }} -p Dialog-linux-amd64.deb -O dialog.deb
+          dpkg-deb -f dialog.deb Package Version
+
+      - name: Build snap
+        id: build
+        uses: snapcore/action-build@v1
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dialog-snap
+          path: ${{ steps.build.outputs.snap }}
+          if-no-files-found: error
+
+      - name: Decide channel
+        id: channel
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then echo "value=stable" >> "$GITHUB_OUTPUT";
+          else echo "value=${{ github.event.inputs.channel }}" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Publish to Snap Store
+        if: ${{ env.SNAPCRAFT_STORE_CREDENTIALS != '' && steps.channel.outputs.value != '' }}
+        uses: snapcore/action-publish@v1
+        with:
+          snap: ${{ steps.build.outputs.snap }}
+          release: ${{ steps.channel.outputs.value }}
