@@ -132,6 +132,17 @@ jobs:
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
         run: pnpm tauri build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }}
+      # tauri notarizes the .app; the .dmg around it is notarized and stapled here, so Gatekeeper
+      # also accepts the downloaded disk image.
+      - name: Notarize the disk image
+        if: runner.os == 'macOS' && env.APPLE_API_KEY_PATH != ''
+        shell: bash
+        run: |
+          for dmg in target/${{ matrix.target }}/release/bundle/dmg/*.dmg; do
+            xcrun notarytool submit "$dmg" --key "$APPLE_API_KEY_PATH" --key-id "$APPLE_API_KEY" \
+              --issuer "$APPLE_API_ISSUER" --wait
+            xcrun stapler staple "$dmg"
+          done
       - name: Collect installers
         shell: bash
         run: |
