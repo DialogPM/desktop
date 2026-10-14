@@ -14,6 +14,9 @@ on:
         default: ""
   push:
     branches: ["claude/**", "main", "master"]
+    # A version tag (v0.1.0, ...) also publishes the installers as a GitHub release (job
+    # `release` below). Path filters do not apply to tags.
+    tags: ["v*"]
     paths:
       - "app/**"
       - "crates/**"
@@ -104,3 +107,23 @@ jobs:
           name: Dialog-${{ matrix.name }}
           path: dist-installers/*
           if-no-files-found: error
+
+  # Version tags only: the installers of both builds become a GitHub release.
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download ${{ github.run_id }} -R ${{ github.repository }} -D dist
+          ls -laR dist
+          if gh release view "${{ github.ref_name }}" -R ${{ github.repository }} >/dev/null 2>&1; then
+            gh release upload "${{ github.ref_name }}" -R ${{ github.repository }} --clobber dist/*/*
+          else
+            gh release create "${{ github.ref_name }}" -R ${{ github.repository }} --title "Dialog ${{ github.ref_name }}" --generate-notes dist/*/*
+          fi
