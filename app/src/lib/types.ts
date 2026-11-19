@@ -32,6 +32,8 @@ export interface AppState {
   pending_mnemonic?: string[] | null;
   /** The local database is locked with the account password. */
   local_protected: boolean;
+  /** "Remember the password on this device" is on: the data opens at startup without it. */
+  auto_unlock?: boolean;
 }
 
 export interface RegisterResult {
@@ -618,6 +620,8 @@ export interface ProfileCard {
   last_used: number;
   /** Opened with its password since the app started: switching to it needs no password. */
   unlocked?: boolean;
+  /** "Remember the password on this computer" is on: opens without a password. */
+  auto_unlock?: boolean;
   /** The account in use now. */
   active?: boolean;
 }

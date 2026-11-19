@@ -507,6 +507,12 @@ export const mockBackend: Backend = {
   async switchProfile() {
     fail("password_required", "open this account with its password first");
   },
+  async openProfileAuto() {
+    fail("password_required", "this account asks for its password");
+  },
+  async autoOpenProfiles() {
+    return { opened: false };
+  },
   async checkRevoked() {
     return { wiped: [] };
   },
@@ -1130,6 +1136,9 @@ export const mockBackend: Backend = {
     await latency();
   },
   async protectLocalData() {
+    await latency();
+  },
+  async setAutoUnlock() {
     await latency();
   },
   async resetLocalData() {

@@ -11,6 +11,7 @@ import { initAppLock } from "../../lib/appLock";
 import { errorText, loadSession } from "../../store/actions";
 import { setApp } from "../../store/app";
 import { confirmLogout } from "../settings/logoutDialog";
+import { RememberPasswordCheck } from "./RememberPassword";
 
 /**
  * The local database is encrypted with a key that only the account password unlocks.
@@ -20,6 +21,7 @@ import { confirmLogout } from "../settings/logoutDialog";
 export function DataLockScreen({ mode }: { mode: "unlock" | "protect" }) {
   const { t } = useTranslation();
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,6 +32,8 @@ export function DataLockScreen({ mode }: { mode: "unlock" | "protect" }) {
     try {
       if (mode === "unlock") await api.unlock({ password });
       else await api.protectLocalData({ password });
+      // "Remember the password on this computer": the password just entered is the proof.
+      if (remember) await api.setAutoUnlock({ enabled: true, password }).catch((e) => console.error("auto unlock", e));
       const appState = await api.getState();
       // The password was just entered: the app lock must not ask for it again now.
       initAppLock(appState.account?.account_id, false);
@@ -71,6 +75,7 @@ export function DataLockScreen({ mode }: { mode: "unlock" | "protect" }) {
           size="lg"
           error={error}
         />
+        <RememberPasswordCheck on={remember} onChange={setRemember} zIndex={400} />
         <button type="submit" className="btn btn-primary" disabled={!password || busy}>
           {busy ? t("dataLock.working") : t(mode === "unlock" ? "lock.unlock" : "dataLock.protect")}
         </button>

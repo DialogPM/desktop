@@ -725,7 +725,12 @@
       "approvalLabel": "Require approval for new logins",
       "approvalHint": "A login with your password must be approved on one of your devices. Logging in with your recovery phrase still works (it signs out all other devices).",
       "sessions_one": "{{count}} active session",
-      "sessions_other": "{{count}} active sessions"
+      "sessions_other": "{{count}} active sessions",
+      "staleTitle_one": "“{{name}}” hasn't connected for {{count}} day",
+      "staleTitle_other": "“{{name}}” hasn't connected for {{count}} days",
+      "staleText": "Your messages are kept on the server for this device until it connects again. If you no longer use it, remove it from your account. Otherwise it is unlinked automatically after 30 days.",
+      "staleUnlink": "Remove the device",
+      "staleKeep": "I still use it"
     },
     "chats": {
       "title": "Chats",
@@ -762,7 +767,24 @@
       "names": {
         "ro": "Romanian",
         "en": "English",
-        "it": "Italian"
+        "it": "Italian",
+        "es": "Spanish",
+        "de": "German",
+        "fr": "French",
+        "pt": "Portuguese",
+        "ru": "Russian",
+        "uk": "Ukrainian",
+        "pl": "Polish",
+        "tr": "Turkish",
+        "ar": "Arabic",
+        "fa": "Persian",
+        "nl": "Dutch",
+        "hi": "Hindi",
+        "id": "Indonesian",
+        "vi": "Vietnamese",
+        "zh": "Chinese (Simplified)",
+        "ja": "Japanese",
+        "ko": "Korean"
       }
     },
     "about": {
@@ -942,6 +964,18 @@
     "callsOffHint": "Turn on calls in Settings → Privacy",
     "callsOffBanner": "Calls are turned off in Settings",
     "relayUnavailable": "Relay calls are not available on this server",
+    "shareScreen": "Share screen",
+    "stopSharing": "Stop sharing",
+    "askScreen": "Ask for screen",
+    "askedScreen": "Asked {{name}} to share their screen…",
+    "screenRequest": "{{name}} asks to see your screen",
+    "screenRequestShare": "Share",
+    "screenRequestNo": "Not now",
+    "screenDeclined": "{{name}} didn't share the screen",
+    "screenUnsupported": "{{name}}'s device can't share its screen (only computers can)",
+    "sharingScreen": "You are sharing your screen",
+    "peerScreen": "{{name}}'s screen",
+    "screenError": "Screen sharing is not available",
     "quality": {
       "weak": "Weak connection",
       "mine": "Your connection is weak: your voice may break up",
@@ -1069,6 +1103,18 @@
     "disable": "Turn off",
     "enabled": "Temporary mode is on",
     "disabled": "Temporary mode is off"
+  },
+  "autoUnlock": {
+    "remember": "Remember the password on this device",
+    "rememberHint": "Opens this account at startup without asking for the password.",
+    "warnTitle": "Remember the password on this device?",
+    "warnBody": "The key of your chats will be stored on this device in clear. Anyone with access to this device's files can read your messages, without a password. This does not replace your 24-word recovery phrase: keep it safe, it is the only way to get the account back if you forget the password.",
+    "warnConfirm": "I understand, remember it",
+    "enableLead": "Confirm your account password to turn this on.",
+    "enabled": "The password is remembered on this device",
+    "disabled": "The password will be asked again at startup",
+    "hintOn": "This account opens at startup without the password. Anyone with this device's files can read your messages.",
+    "hintOff": "Off: the password is asked every time the app starts (recommended)."
   },
   "dataLock": {
     "unlockTitle": "Unlock {{appName}}",

@@ -15,6 +15,7 @@ import { api, parseError } from "../../lib/api";
 import { reloadAfterProfileSwitch } from "../../lib/profiles";
 import type { ProfileCard } from "../../lib/types";
 import { attempt, errorText } from "../../store/actions";
+import { RememberPasswordCheck } from "../lock/RememberPassword";
 
 function profileName(p: ProfileCard): string {
   return p.label || i18n.t("profiles.account");
@@ -28,6 +29,7 @@ function profileSub(p: ProfileCard): string {
 export function UnlockForm({ profile, onForgotten, bare }: { profile: ProfileCard; onForgotten: () => void; bare?: boolean }) {
   const { t } = useTranslation();
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,7 +38,7 @@ export function UnlockForm({ profile, onForgotten, bare }: { profile: ProfileCar
     setBusy(true);
     setError(null);
     try {
-      await api.openProfile({ id: profile.id, password });
+      await api.openProfile({ id: profile.id, password, remember });
       reloadAfterProfileSwitch(true);
     } catch (e) {
       setError(parseError(e).code === "invalid_password" ? t("dataLock.wrongPassword") : errorText(e));
@@ -77,6 +79,7 @@ export function UnlockForm({ profile, onForgotten, bare }: { profile: ProfileCar
         autoFocus
         error={error}
       />
+      <RememberPasswordCheck on={remember} onChange={setRemember} zIndex={bare ? 400 : undefined} />
       <button type="submit" className="btn btn-primary" disabled={!password || busy}>
         {busy ? t("profiles.opening") : t("profiles.open")}
       </button>
@@ -113,6 +116,14 @@ export function ProfileList({ profiles, onChanged }: { profiles: ProfileCard[]; 
                   );
                   return;
                 }
+                // "Remember the password on this computer" is on for it (the app lock still applies).
+                if (p.auto_unlock) {
+                  void api.openProfileAuto({ id: p.id }).then(
+                    () => reloadAfterProfileSwitch(false),
+                    () => setOpen(p.id),
+                  );
+                  return;
+                }
                 setOpen(open === p.id ? null : p.id);
               }}
             >
@@ -121,7 +132,7 @@ export function ProfileList({ profiles, onChanged }: { profiles: ProfileCard[]; 
                 <div className="list-card-title truncate">{profileName(p)}</div>
                 {profileSub(p) && <div className="list-card-sub truncate mono">{profileSub(p)}</div>}
               </div>
-              {p.unlocked ? (
+              {p.unlocked || p.auto_unlock ? (
                 <span className="list-card-sub" style={{ marginTop: 0, color: "var(--accent-text)", fontWeight: 600 }}>{t("profiles.unlocked")}</span>
               ) : (
                 <span className="list-card-chev" style={{ transform: open === p.id ? "rotate(90deg)" : undefined }}>

@@ -109,52 +109,111 @@ function markdownLink(label: string, tok: Token | undefined, image: boolean): Se
   return { t: "link", text: image ? `🖼 ${label}` : label, href, suspicious: tok.seg.suspicious || mismatch };
 }
 
-/** Inline formatting of one piece without code spans. */
-function inline(s: string, tokens: Token[], depth: number): Seg[] {
-  if (depth > 4) return leaves(s, tokens);
-  const md = MD_LINK_RE.exec(s);
-  if (md) {
-    const link = markdownLink(restore(md[2], tokens), tokens[md[3].charCodeAt(0) - PH], md[1] === "!");
-    if (link) {
-      const idx = md.index;
-      return [...inline(s.slice(0, idx), tokens, depth), link, ...inline(s.slice(idx + md[0].length), tokens, depth)];
-    }
-  }
+// Bounds on the work one piece of text may cost, whoever wrote it: a message is parsed on
+// every render of its bubble, of the chat list and of search results, and a crash here would
+// take the whole UI down on every start as long as the message is the last one.
+/// Formatted spans per piece; the rest of the piece is shown as plain text.
+const MAX_SPANS = 500;
+/// How far past an opening marker its closing marker is looked for.
+const MAX_SPAN_LEN = 1000;
+
+/** The first formatted span of `s`: the plain text before it, the span, and the rest. */
+function firstSpan(s: string, tokens: Token[], depth: number): { before: string; seg: Seg; after: string } | null {
   for (let i = 0; i < s.length; i++) {
     // Markdown **bold** (and __bold__).
     if ((s[i] === "*" || s[i] === "_") && s[i + 1] === s[i] && !isWordChar(s[i - 1]) && s[i + 2] && !isSpace(s[i + 2])) {
-      const close = s.indexOf(s[i] + s[i], i + 3);
-      if (close > i + 2 && !s.slice(i + 2, close).includes("\n") && !isSpace(s[close - 1])) {
-        return [
-          ...leaves(s.slice(0, i), tokens),
-          { t: "bold", children: inline(s.slice(i + 2, close), tokens, depth + 1) },
-          ...inline(s.slice(close + 2), tokens, depth),
-        ];
+      const limit = Math.min(s.length - 1, i + 3 + MAX_SPAN_LEN);
+      let close = -1;
+      for (let j = i + 3; j < limit; j++) {
+        if (s[j] === "\n") break;
+        if (s[j] === s[i] && s[j + 1] === s[i]) {
+          close = j;
+          break;
+        }
+      }
+      if (close > i + 2 && !isSpace(s[close - 1])) {
+        return {
+          before: s.slice(0, i),
+          seg: { t: "bold", children: inline(s.slice(i + 2, close), tokens, depth + 1) },
+          after: s.slice(close + 2),
+        };
       }
     }
     const kind = MARKS[s[i]];
     if (!kind) continue;
     // Opening marker: at the start or after a non-word character, followed by a non-space.
     if (isWordChar(s[i - 1]) || isSpace(s[i + 1]) || i + 1 >= s.length || s[i + 1] === s[i]) continue;
-    for (let j = i + 2; j < s.length; j++) {
+    const limit = Math.min(s.length, i + 2 + MAX_SPAN_LEN);
+    for (let j = i + 2; j < limit; j++) {
       if (s[j] === "\n") break;
       // Closing marker: after a non-space, followed by the end or a non-word character.
       if (s[j] === s[i] && !isSpace(s[j - 1]) && !isWordChar(s[j + 1])) {
-        return [
-          ...leaves(s.slice(0, i), tokens),
-          { t: kind, children: inline(s.slice(i + 1, j), tokens, depth + 1) },
-          ...inline(s.slice(j + 1), tokens, depth),
-        ];
+        return {
+          before: s.slice(0, i),
+          seg: { t: kind, children: inline(s.slice(i + 1, j), tokens, depth + 1) },
+          after: s.slice(j + 1),
+        };
       }
     }
   }
-  return leaves(s, tokens);
+  return null;
+}
+
+/**
+ * Inline formatting of one piece without code spans. Iterative over the piece (a message
+ * with thousands of spans must not grow the stack); nesting is bounded by `depth`.
+ */
+function inline(s: string, tokens: Token[], depth: number): Seg[] {
+  const out: Seg[] = [];
+  let rest = s;
+  let spans = 0;
+  while (rest) {
+    if (depth > 4 || spans >= MAX_SPANS) {
+      out.push(...leaves(rest, tokens));
+      break;
+    }
+    spans++;
+    const md = MD_LINK_RE.exec(rest);
+    if (md) {
+      const link = markdownLink(restore(md[2], tokens), tokens[md[3].charCodeAt(0) - PH], md[1] === "!");
+      if (link) {
+        // The text before the first link holds no link: this call only formats marks.
+        out.push(...inline(rest.slice(0, md.index), tokens, depth), link);
+        rest = rest.slice(md.index + md[0].length);
+        continue;
+      }
+    }
+    const span = firstSpan(rest, tokens, depth);
+    if (!span) {
+      out.push(...leaves(rest, tokens));
+      break;
+    }
+    out.push(...leaves(span.before, tokens), span.seg);
+    rest = span.after;
+  }
+  return out;
 }
 
 /** Parses a message text into display segments. */
 export function parseRich(text: string, mentions: Mention[] = []): Seg[] {
-  const { s, tokens } = protect(text, mentions);
-  return richProtected(s, tokens);
+  return guarded(text, () => {
+    const { s, tokens } = protect(text, mentions);
+    return richProtected(s, tokens);
+  }, (t) => [{ t: "text", text: t }]);
+}
+
+/**
+ * Runs a parser; whatever it throws, the message is shown as plain text instead of taking
+ * the whole UI down (the chat list parses the last message of every conversation on each
+ * render, so an exception there would repeat at every start).
+ */
+function guarded<T>(text: string, parse: () => T, fallback: (text: string) => T): T {
+  try {
+    return parse();
+  } catch (e) {
+    console.warn("message formatting failed; showing the text unformatted", (e as Error)?.name);
+    return fallback(text);
+  }
 }
 
 /** Code spans and blocks, then inline formatting, of an already protected text. */
@@ -178,7 +237,7 @@ function richProtected(s: string, tokens: Token[]): Seg[] {
 export function plainText(text: string, mentions: Mention[] = []): string {
   const flat = (segs: Seg[]): string =>
     segs.map((g) => ("children" in g ? flat(g.children) : g.text)).join("");
-  return flat(parseRich(text, mentions));
+  return guarded(text, () => flat(parseRich(text, mentions)), (t) => t);
 }
 
 // ---------------------------------------------------------------------------------------
@@ -216,6 +275,10 @@ function cells(line: string): string[] {
  * parseRich). A message without Markdown gives one paragraph, rendered as before.
  */
 export function parseBlocks(text: string, mentions: Mention[] = []): Block[] {
+  return guarded(text, () => parseBlocksUnguarded(text, mentions), (t) => [{ t: "para", segs: [{ t: "text", text: t }] }]);
+}
+
+function parseBlocksUnguarded(text: string, mentions: Mention[]): Block[] {
   const { s, tokens } = protect(text, mentions);
   const lines = s.split("\n");
   const blocks: Block[] = [];

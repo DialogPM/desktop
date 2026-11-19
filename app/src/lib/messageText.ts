@@ -22,6 +22,23 @@ export function kindLabel(kind: MessageKind, t: TFunction): string {
   }
 }
 
+// The chat list recomputes every conversation's preview on each render; the parse of a long
+// message is not free, so the last results are kept (insertion order, oldest dropped).
+const PLAIN_CACHE_SIZE = 500;
+const plainCache = new Map<string, string>();
+
+function cachedPlainText(raw: string): string {
+  const hit = plainCache.get(raw);
+  if (hit !== undefined) return hit;
+  const text = plainText(raw);
+  if (plainCache.size >= PLAIN_CACHE_SIZE) {
+    const oldest = plainCache.keys().next().value;
+    if (oldest !== undefined) plainCache.delete(oldest);
+  }
+  plainCache.set(raw, text);
+  return text;
+}
+
 export function previewText(kind: MessageKind, raw: string | null, t: TFunction, viewOnce?: string | null): string {
   // Media erased by the retention period: the caption if there was one, else a placeholder.
   if (viewOnce === "expired" && !raw) return t(kind === "voice" ? "retention.voiceExpired" : "retention.mediaExpired");
@@ -29,7 +46,7 @@ export function previewText(kind: MessageKind, raw: string | null, t: TFunction,
   if (viewOnce && (kind === "image" || kind === "video" || kind === "voice"))
     return t(kind === "voice" ? "viewOnce.voice" : kind === "video" ? "viewOnce.video" : "viewOnce.photo");
   // Previews and notifications show the text without formatting markers.
-  const text = raw ? plainText(raw) : raw;
+  const text = raw ? cachedPlainText(raw) : raw;
   if (kind === "text") return text ?? "";
   if (kind === "file" || kind === "location") return text || kindLabel(kind, t);
   return text ? text : kindLabel(kind, t);

@@ -738,7 +738,13 @@
       "approvalHint": "O autentificare cu parola trebuie aprobată pe unul dintre dispozitivele tale. Recuperarea cu fraza de recuperare funcționează în continuare (deconectează toate celelalte dispozitive).",
       "sessions_one": "{{count}} sesiune activă",
       "sessions_few": "{{count}} sesiuni active",
-      "sessions_other": "{{count}} de sesiuni active"
+      "sessions_other": "{{count}} de sesiuni active",
+      "staleTitle_one": "„{{name}}” nu s-a mai conectat de {{count}} zi",
+      "staleTitle_few": "„{{name}}” nu s-a mai conectat de {{count}} zile",
+      "staleTitle_other": "„{{name}}” nu s-a mai conectat de {{count}} de zile",
+      "staleText": "Mesajele tale se păstrează pe server pentru acest dispozitiv până se conectează din nou. Dacă nu-l mai folosești, scoate-l din cont. Altfel, va fi deconectat automat după 30 de zile.",
+      "staleUnlink": "Scoate dispozitivul",
+      "staleKeep": "Îl folosesc încă"
     },
     "chats": {
       "title": "Conversații",
@@ -775,7 +781,24 @@
       "names": {
         "ro": "Română",
         "en": "Engleză",
-        "it": "Italiană"
+        "it": "Italiană",
+        "es": "Spaniolă",
+        "de": "Germană",
+        "fr": "Franceză",
+        "pt": "Portugheză",
+        "ru": "Rusă",
+        "uk": "Ucraineană",
+        "pl": "Poloneză",
+        "tr": "Turcă",
+        "ar": "Arabă",
+        "fa": "Persană",
+        "nl": "Neerlandeză",
+        "hi": "Hindi",
+        "id": "Indoneziană",
+        "vi": "Vietnameză",
+        "zh": "Chineză (simplificată)",
+        "ja": "Japoneză",
+        "ko": "Coreeană"
       }
     },
     "about": {
@@ -956,6 +979,18 @@
     "callsOffHint": "Activează apelurile din Setări → Confidențialitate",
     "callsOffBanner": "Apelurile sunt dezactivate din Setări",
     "relayUnavailable": "Apelurile prin releu nu sunt disponibile pe acest server",
+    "shareScreen": "Partajează ecranul",
+    "stopSharing": "Oprește partajarea",
+    "askScreen": "Cere ecranul",
+    "askedScreen": "I-ai cerut lui {{name}} să-și partajeze ecranul…",
+    "screenRequest": "{{name}} cere să-ți vadă ecranul",
+    "screenRequestShare": "Partajează",
+    "screenRequestNo": "Nu acum",
+    "screenDeclined": "{{name}} nu a partajat ecranul",
+    "screenUnsupported": "Dispozitivul lui {{name}} nu poate partaja ecranul (doar calculatoarele pot)",
+    "sharingScreen": "Partajezi ecranul",
+    "peerScreen": "Ecranul lui {{name}}",
+    "screenError": "Partajarea ecranului nu este disponibilă",
     "quality": {
       "weak": "Conexiune slabă",
       "mine": "Conexiunea ta e slabă: vocea ta poate ajunge cu întreruperi",
@@ -1083,6 +1118,18 @@
     "disable": "Dezactivează",
     "enabled": "Modul temporar este activ",
     "disabled": "Modul temporar este dezactivat"
+  },
+  "autoUnlock": {
+    "remember": "Reține parola pe acest dispozitiv",
+    "rememberHint": "Contul se deschide la pornire fără să ceară parola.",
+    "warnTitle": "Reții parola pe acest dispozitiv?",
+    "warnBody": "Cheia conversațiilor tale va fi salvată în clar pe acest dispozitiv. Oricine are acces la fișierele dispozitivului îți poate citi mesajele, fără parolă. Opțiunea nu înlocuiește fraza de recuperare de 24 de cuvinte: păstreaz-o în siguranță, e singura cale de a recupera contul dacă uiți parola.",
+    "warnConfirm": "Am înțeles, reține parola",
+    "enableLead": "Confirmă parola contului pentru a activa opțiunea.",
+    "enabled": "Parola este reținută pe acest dispozitiv",
+    "disabled": "Parola va fi cerută din nou la pornire",
+    "hintOn": "Contul se deschide la pornire fără parolă. Oricine are fișierele dispozitivului îți poate citi mesajele.",
+    "hintOff": "Oprit: parola e cerută la fiecare pornire a aplicației (recomandat)."
   },
   "dataLock": {
     "unlockTitle": "Deblochează {{appName}}",

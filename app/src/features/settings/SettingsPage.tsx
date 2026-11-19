@@ -22,6 +22,7 @@ import { attempt, errorText, goBack, notifyOk, openSettings } from "../../store/
 import { getApp, setApp, useApp, type SettingsSection } from "../../store/app";
 import { AccountSection } from "./AccountSection";
 import { BlockedRow, BlockedSection } from "./BlockedSection";
+import { disableAutoUnlock, enableAutoUnlock } from "../lock/RememberPassword";
 import { openCameraCapture } from "./cameraDialog";
 import { ChatsSection } from "./ChatsSection";
 import { DevicesSection } from "./DevicesSection";
@@ -234,6 +235,8 @@ function PrivacySection() {
   const { t } = useTranslation();
   const privacy = useApp((s) => s.details?.privacy);
   const accountId = useApp((s) => s.details?.account.account_id);
+  const localProtected = useApp((s) => s.appState?.local_protected ?? false);
+  const autoUnlock = useApp((s) => s.appState?.auto_unlock ?? false);
   const notifPreview = useAppearance((s) => s.notifPreview);
   const setNotifPreview = useAppearance((s) => s.setNotifPreview);
   const lockEnabled = useAppLock((s) => s.enabled);
@@ -314,6 +317,14 @@ function PrivacySection() {
               <Icon name="chevron" size={17} />
             </span>
           </button>
+        )}
+        {localProtected && (
+          <PrivacyRow
+            label={t("autoUnlock.remember")}
+            sub={autoUnlock ? t("autoUnlock.hintOn") : t("autoUnlock.hintOff")}
+            on={autoUnlock}
+            onToggle={() => void (autoUnlock ? disableAutoUnlock() : enableAutoUnlock())}
+          />
         )}
         <PrivacyRow
           label={t("settings.privacy.screenshots")}
@@ -800,7 +811,6 @@ function LanguageSection() {
           </button>
         ))}
       </div>
-      <div className="hint">{t("settings.language.hint")}</div>
     </>
   );
 }

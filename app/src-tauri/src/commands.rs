@@ -144,6 +144,7 @@ forward!(
     set_temporary_mode,
     unlock,
     protect_local_data,
+    set_auto_unlock,
     reset_local_data,
     pin_message,
     star_message,
@@ -173,7 +174,8 @@ forward!(
     kt_dismiss_alerts,
     ; extra: [crate::media::read_media, crate::picked::pick_files, crate::picked::pick_save_path, crate::sounds::play_sound, crate::sounds::stop_sound, crate::badge::set_unread_badge, crate::attention::notify_permission, crate::attention::notify_show, crate::attention::call_attention, crate::updater::update_install, ui_log, voice_mask,
         crate::profiles::profiles_list, crate::profiles::profile_open, crate::profiles::profile_open_by_number, crate::profiles::profile_close,
-        crate::profiles::profile_forget, crate::profiles::profile_current, crate::profiles::profile_set_visible, crate::profiles::profiles_check_revoked, crate::profiles::profile_switch]
+        crate::profiles::profile_forget, crate::profiles::profile_current, crate::profiles::profile_set_visible, crate::profiles::profiles_check_revoked, crate::profiles::profile_switch,
+        crate::profiles::profile_open_auto, crate::profiles::profiles_auto_open]
 );
 
 /// Masks the voice in a WAV voice note before it is sent (chat_core::voice_mask).
@@ -218,6 +220,8 @@ mod tests {
             "profile_set_visible",
             "profiles_check_revoked",
             "profile_switch",
+            "profile_open_auto",
+            "profiles_auto_open",
         ];
         let mut missing = Vec::new();
         // Matches `call("name"` and `call<T>("name"`.

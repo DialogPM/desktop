@@ -737,7 +737,12 @@
       "approvalLabel": "Richiedi approvazione per i nuovi accessi",
       "approvalHint": "Un accesso con la password deve essere approvato su uno dei tuoi dispositivi. L'accesso con la frase di recupero funziona comunque (disconnette tutti gli altri dispositivi).",
       "sessions_one": "{{count}} sessione attiva",
-      "sessions_other": "{{count}} sessioni attive"
+      "sessions_other": "{{count}} sessioni attive",
+      "staleTitle_one": "“{{name}}” non si connette da {{count}} giorno",
+      "staleTitle_other": "“{{name}}” non si connette da {{count}} giorni",
+      "staleText": "I tuoi messaggi vengono conservati sul server per questo dispositivo finché non si riconnette. Se non lo usi più, rimuovilo dall'account. Altrimenti verrà scollegato automaticamente dopo 30 giorni.",
+      "staleUnlink": "Rimuovi il dispositivo",
+      "staleKeep": "Lo uso ancora"
     },
     "chats": {
       "title": "Chat",
@@ -774,7 +779,24 @@
       "names": {
         "ro": "Rumeno",
         "en": "Inglese",
-        "it": "Italiano"
+        "it": "Italiano",
+        "es": "Spagnolo",
+        "de": "Tedesco",
+        "fr": "Francese",
+        "pt": "Portoghese",
+        "ru": "Russo",
+        "uk": "Ucraino",
+        "pl": "Polacco",
+        "tr": "Turco",
+        "ar": "Arabo",
+        "fa": "Persiano",
+        "nl": "Olandese",
+        "hi": "Hindi",
+        "id": "Indonesiano",
+        "vi": "Vietnamita",
+        "zh": "Cinese (semplificato)",
+        "ja": "Giapponese",
+        "ko": "Coreano"
       }
     },
     "about": {
@@ -954,6 +976,18 @@
     "callsOffHint": "Attiva le chiamate in Impostazioni → Privacy",
     "callsOffBanner": "Le chiamate sono disattivate nelle Impostazioni",
     "relayUnavailable": "Le chiamate tramite relay non sono disponibili su questo server",
+    "shareScreen": "Condividi schermo",
+    "stopSharing": "Interrompi condivisione",
+    "askScreen": "Chiedi lo schermo",
+    "askedScreen": "Hai chiesto a {{name}} di condividere lo schermo…",
+    "screenRequest": "{{name}} chiede di vedere il tuo schermo",
+    "screenRequestShare": "Condividi",
+    "screenRequestNo": "Non ora",
+    "screenDeclined": "{{name}} non ha condiviso lo schermo",
+    "screenUnsupported": "Il dispositivo di {{name}} non può condividere lo schermo (solo i computer possono)",
+    "sharingScreen": "Stai condividendo lo schermo",
+    "peerScreen": "Schermo di {{name}}",
+    "screenError": "La condivisione dello schermo non è disponibile",
     "quality": {
       "weak": "Connessione debole",
       "mine": "La tua connessione è debole: la tua voce potrebbe interrompersi",
@@ -1081,6 +1115,18 @@
     "disable": "Disattiva",
     "enabled": "Modalità temporanea attiva",
     "disabled": "Modalità temporanea disattivata"
+  },
+  "autoUnlock": {
+    "remember": "Ricorda la password su questo dispositivo",
+    "rememberHint": "L'account si apre all'avvio senza chiedere la password.",
+    "warnTitle": "Ricordare la password su questo dispositivo?",
+    "warnBody": "La chiave delle tue chat verrà salvata in chiaro su questo dispositivo. Chiunque abbia accesso ai file del dispositivo può leggere i tuoi messaggi, senza password. Questa opzione non sostituisce la frase di recupero di 24 parole: conservala al sicuro, è l'unico modo per recuperare l'account se dimentichi la password.",
+    "warnConfirm": "Ho capito, ricordala",
+    "enableLead": "Conferma la password dell'account per attivare l'opzione.",
+    "enabled": "La password è ricordata su questo dispositivo",
+    "disabled": "La password verrà chiesta di nuovo all'avvio",
+    "hintOn": "L'account si apre all'avvio senza password. Chiunque abbia i file del dispositivo può leggere i tuoi messaggi.",
+    "hintOff": "Spento: la password viene chiesta a ogni avvio dell'app (consigliato)."
   },
   "dataLock": {
     "unlockTitle": "Sblocca {{appName}}",

@@ -136,3 +136,11 @@
 .password-rules li[data-ok="true"] {
   color: var(--accent-text);
 }
+
+/* Text written by people follows its own direction, not the interface's: an English message
+   in an Arabic interface (or the reverse) keeps its punctuation and alignment. */
+.bubble-text,
+.chat-row-preview,
+textarea {
+  unicode-bidi: plaintext;
+}

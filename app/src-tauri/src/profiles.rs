@@ -17,12 +17,24 @@ pub fn profiles_list(profiles: State<'_, Profiles>) -> Vec<ProfileCard> {
 
 #[tauri::command]
 pub async fn profile_open(profiles: State<'_, Profiles>, req: OpenReq) -> Result<(), String> {
-    profiles.open(&req.id, &req.password).await
+    profiles.open(&req.id, &req.password, req.remember).await
+}
+
+/// Opens a profile whose "remember the password on this computer" is on, without a password.
+#[tauri::command]
+pub async fn profile_open_auto(profiles: State<'_, Profiles>, req: IdReq) -> Result<(), String> {
+    profiles.open_auto(&req.id).await
+}
+
+/// App start: opens the most recent profile with "remember the password" on, once per run.
+#[tauri::command]
+pub async fn profiles_auto_open(profiles: State<'_, Profiles>) -> Result<serde_json::Value, String> {
+    Ok(serde_json::json!({ "opened": profiles.auto_open_at_start().await }))
 }
 
 #[tauri::command]
 pub async fn profile_open_by_number(profiles: State<'_, Profiles>, req: OpenByNumberReq) -> Result<(), String> {
-    profiles.open_by_number(&req.number, &req.password).await
+    profiles.open_by_number(&req.number, &req.password, req.remember).await
 }
 
 #[tauri::command]

@@ -8,6 +8,12 @@
 // Video: the offer carries `video: true`; both sides send a camera track on the same peer
 // connection. Turning the camera off only disables the track (no renegotiation) and tells the
 // peer with a "media" signal, so it shows the avatar instead of black frames.
+//
+// Screen sharing (desktop only; phones can watch and ask): the screen travels on the call's
+// single video section. In a video call it takes the camera's place on the wire (the camera
+// resumes when sharing stops); in a voice call the section is added once with a "renegotiate"
+// offer and kept for later shares. "media" `{screen: bool}` tells the peer what the video is;
+// "screen" `{request: true}` asks the peer to share, `{declined: true}` says no.
 
 import { BRAND_NAME } from "../brand";
 import { notifications } from "@mantine/notifications";
@@ -36,6 +42,8 @@ const RESTART_DELAY_MS = 2_000;
 /** At most one ICE restart this often while the connection is down. */
 const RESTART_EVERY_MS = 8_000;
 const ICE_BATCH_MS = 120;
+/** A request to see the peer's screen is given up (button enabled again) after this long. */
+const ASK_TIMEOUT_MS = 30_000;
 
 export type CallPhase = "outgoing" | "incoming" | "connecting" | "active";
 
@@ -65,8 +73,18 @@ export interface CallState {
   cameraOn: boolean;
   /** The peer's camera is sending. */
   remoteCameraOn: boolean;
+  /** We are sharing our screen (its video replaces the camera's on the wire). */
+  screenOn: boolean;
+  /** The peer's video is its screen, not its camera. */
+  remoteScreenOn: boolean;
+  /** The peer asked to see our screen (answered with answerScreenRequest). */
+  screenRequest: boolean;
+  /** We asked to see the peer's screen and wait for it. */
+  screenAsked: boolean;
   localStream: MediaStream | null;
   remoteStream: MediaStream | null;
+  /** Bumped when a remote track arrives: the stream object stays the same, the <video> rebinds. */
+  remoteVersion: number;
   startedAt: number;
   connectedAt: number | null;
 }
@@ -83,6 +101,11 @@ const set = (patch: Partial<CallState>) =>
 /** WebRTC and microphone are available in this webview. */
 export function callsSupported(): boolean {
   return typeof RTCPeerConnection !== "undefined" && !!navigator.mediaDevices?.getUserMedia;
+}
+
+/** This webview can capture the screen (desktop webviews; a phone cannot share its screen). */
+export function screenShareSupported(): boolean {
+  return typeof navigator.mediaDevices?.getDisplayMedia === "function";
 }
 
 // --- non-reactive session state ---------------------------------------------------------
@@ -122,6 +145,12 @@ interface Session {
   meter: QualityMeter;
   /** Consecutive samples with too little bandwidth for video. */
   lowBitrate: number;
+  /** The screen capture while we share it. */
+  screen: MediaStream | null;
+  /** Our renegotiation offer waits for its answer. */
+  renegotiatePending: boolean;
+  renegotiateTimer: number;
+  askTimer: number;
 }
 
 let session: Session | null = null;
@@ -157,6 +186,10 @@ function newSession(callId: string): Session {
     qualityTimer: 0,
     meter: new QualityMeter(),
     lowBitrate: 0,
+    screen: null,
+    renegotiatePending: false,
+    renegotiateTimer: 0,
+    askTimer: 0,
   };
   return s;
 }
@@ -267,11 +300,13 @@ function createPeerConnection(servers: RTCIceServer[], stream: MediaStream): RTC
     if (session !== s) return;
     const remote = e.streams[0] ?? new MediaStream([e.track]);
     // Audio plays through the hidden element; the (muted) video element only draws frames.
-    if (s.audio.srcObject !== remote) {
+    // A video track added later (the peer's screen) comes in the same stream: the element
+    // keeps playing, the state only tells the UI that the stream changed.
+    if (s.audio.srcObject !== remote && remote.getAudioTracks().length > 0) {
       s.audio.srcObject = remote;
       void s.audio.play().catch((err: unknown) => console.warn("remote audio playback", err));
     }
-    set({ remoteStream: remote });
+    set({ remoteStream: remote, remoteVersion: (useCall.getState().call?.remoteVersion ?? 0) + 1 });
   };
   pc.onconnectionstatechange = () => {
     if (session !== s) return;
@@ -317,7 +352,8 @@ async function checkQuality(s: Session) {
   if (session !== s || !call) return;
   if (call.quality !== q.level || call.qualityWho !== q.who) set({ quality: q.level, qualityWho: q.who });
   s.lowBitrate = q.outBitrate !== null && q.outBitrate < VIDEO_MIN_BITRATE && q.level !== "good" ? s.lowBitrate + 1 : 0;
-  if (call.video && call.cameraOn && s.lowBitrate >= 3) {
+  // While the screen is shared the camera is not on the wire: nothing to stop.
+  if (call.video && call.cameraOn && !call.screenOn && s.lowBitrate >= 3) {
     s.lowBitrate = 0;
     toggleCamera();
     set({ autoCameraOff: true });
@@ -370,6 +406,44 @@ async function restartIce(s: Session) {
   }
 }
 
+/** A new offer for the media of the call in progress (the screen's video section), on the same
+ *  peer connection, from either side; answered with a plain "answer". Waits for a stable
+ *  signaling state (an ICE restart in flight) and gives up after a few tries. */
+async function renegotiate(s: Session, attempt = 0) {
+  s.renegotiateTimer = 0;
+  const pc = s.pc;
+  if (session !== s || s.ended || !pc || s.peerDevice === null) return;
+  if (pc.signalingState !== "stable" || s.restartPending) {
+    if (attempt < 5) s.renegotiateTimer = window.setTimeout(() => void renegotiate(s, attempt + 1), 1_000);
+    return;
+  }
+  try {
+    const offer = tuned(await pc.createOffer());
+    if (session !== s || s.ended) return;
+    await pc.setLocalDescription(offer);
+    if (session !== s || s.ended) return;
+    s.renegotiatePending = true;
+    await signal("renegotiate", { sdp: offer.sdp });
+  } catch (e) {
+    console.warn("call: renegotiation failed", e);
+  }
+}
+
+/** The peer's offer arrived while ours waits for its answer (both sides changed the call at
+ *  once). The callee gives way: it withdraws its offer, answers, and offers again afterwards.
+ *  The caller keeps its offer and ignores the peer's (false), which the callee then answers. */
+async function yieldToOffer(s: Session, pc: RTCPeerConnection): Promise<boolean> {
+  if (pc.signalingState !== "have-local-offer") return true;
+  if (useCall.getState().call?.direction === "out") return false;
+  await pc.setLocalDescription({ type: "rollback" });
+  if (s.renegotiatePending) {
+    s.renegotiatePending = false;
+    window.clearTimeout(s.renegotiateTimer);
+    s.renegotiateTimer = window.setTimeout(() => void renegotiate(s), 500);
+  }
+  return true;
+}
+
 async function applyRemoteIce() {
   const s = session;
   if (!s?.pc?.remoteDescription || s.holdIce) return;
@@ -387,9 +461,15 @@ function cleanup() {
   window.clearTimeout(s.ringTimer);
   window.clearTimeout(s.disconnectTimer);
   window.clearTimeout(s.restartTimer);
+  window.clearTimeout(s.renegotiateTimer);
+  window.clearTimeout(s.askTimer);
   window.clearInterval(s.qualityTimer);
   s.fx.stop();
   s.stream?.getTracks().forEach((t) => t.stop());
+  s.screen?.getTracks().forEach((t) => {
+    t.onended = null;
+    t.stop();
+  });
   s.pc?.close();
   s.audio.srcObject = null;
   session = null;
@@ -456,8 +536,13 @@ export async function startCall(conversationId: string, opts: { video?: boolean 
       video,
       cameraOn: video,
       remoteCameraOn: video,
+      screenOn: false,
+      remoteScreenOn: false,
+      screenRequest: false,
+      screenAsked: false,
       localStream: null,
       remoteStream: null,
+      remoteVersion: 0,
       startedAt: Date.now(),
       connectedAt: null,
     },
@@ -576,6 +661,116 @@ export function toggleCamera() {
   set({ cameraOn, autoCameraOff: false });
   // Before the answer the peer device is unknown: the state is sent once it answers.
   if (session?.peerDevice !== null && call.phase !== "incoming") void signal("media", { camera: cameraOn });
+}
+
+const SCREEN: MediaTrackConstraints = { frameRate: { ideal: 15, max: 30 } };
+
+function inProgress(call: CallState): boolean {
+  return call.phase === "connecting" || call.phase === "active";
+}
+
+/** Shares our screen with the peer (the system asks which screen or window). In a video call the
+ *  screen takes the camera's place on the wire; in a voice call a video section is added once. */
+export async function startScreenShare() {
+  const call = useCall.getState().call;
+  const s = session;
+  if (!call || !s || s.ended || !s.pc || call.screenOn || !inProgress(call)) return;
+  if (!screenShareSupported()) {
+    notifications.show({ color: "red", message: i18n.t("call.screenError") });
+    return;
+  }
+  let stream: MediaStream;
+  try {
+    stream = await navigator.mediaDevices.getDisplayMedia({ video: SCREEN, audio: false });
+  } catch (e) {
+    // Cancelled in the system's picker: nothing to say.
+    if (!(e instanceof DOMException && e.name === "NotAllowedError")) {
+      console.warn("screen share", e);
+      notifications.show({ color: "red", message: i18n.t("call.screenError") });
+    }
+    return;
+  }
+  const track = stream.getVideoTracks()[0];
+  const pc = s.pc;
+  if (session !== s || s.ended || !pc || !track || useCall.getState().call?.screenOn) {
+    stream.getTracks().forEach((t) => t.stop());
+    return;
+  }
+  // Text stays sharp: resolution before frame rate when bandwidth is short.
+  track.contentHint = "detail";
+  s.screen = stream;
+  // Ended from the system's own "stop sharing" control.
+  track.onended = () => {
+    if (session === s && s.screen === stream) void stopScreenShare();
+  };
+  let needOffer = false;
+  const videoTx = pc.getTransceivers().find((t) => t.receiver.track.kind === "video");
+  try {
+    if (videoTx) {
+      await videoTx.sender.replaceTrack(track);
+      // A video call without our camera only receives: the section now sends too.
+      if (videoTx.direction === "recvonly" || videoTx.direction === "inactive") {
+        videoTx.direction = "sendrecv";
+        needOffer = true;
+      }
+    } else {
+      // Voice call: the video section, in our stream (the peer sees one stream).
+      pc.addTrack(track, s.stream ?? stream);
+      needOffer = true;
+    }
+  } catch (e) {
+    console.warn("screen share", e);
+    s.screen = null;
+    stream.getTracks().forEach((t) => t.stop());
+    notifications.show({ color: "red", message: i18n.t("call.screenError") });
+    return;
+  }
+  set({ screenOn: true, screenRequest: false });
+  void signal("media", { screen: true });
+  if (needOffer) void renegotiate(s);
+}
+
+/** Stops sharing our screen; in a video call the camera is back on the wire. */
+export async function stopScreenShare() {
+  const call = useCall.getState().call;
+  const s = session;
+  if (!call || !s || !call.screenOn) return;
+  const stream = s.screen;
+  s.screen = null;
+  stream?.getTracks().forEach((t) => {
+    t.onended = null;
+    t.stop();
+  });
+  set({ screenOn: false });
+  const pc = s.pc;
+  if (!pc || s.ended) return;
+  // The video section stays (sending nothing in a voice call) for a later share.
+  const videoTx = pc.getTransceivers().find((t) => t.receiver.track.kind === "video");
+  const camera = s.stream?.getVideoTracks()[0] ?? null;
+  await videoTx?.sender.replaceTrack(camera).catch((e: unknown) => console.warn("call: camera back after screen share", e));
+  void signal("media", { screen: false });
+}
+
+/** Asks the peer to share its screen (a phone answers that it cannot). */
+export function askForScreen() {
+  const call = useCall.getState().call;
+  const s = session;
+  if (!call || !s || s.peerDevice === null || call.screenAsked || call.remoteScreenOn || !inProgress(call)) return;
+  set({ screenAsked: true });
+  void signal("screen", { request: true });
+  window.clearTimeout(s.askTimer);
+  s.askTimer = window.setTimeout(() => {
+    if (session === s) set({ screenAsked: false });
+  }, ASK_TIMEOUT_MS);
+}
+
+/** Answers the peer's request to see our screen: shares it, or says no (also when the system's
+ *  picker was cancelled). */
+export async function answerScreenRequest(share: boolean) {
+  if (!useCall.getState().call?.screenRequest) return;
+  set({ screenRequest: false });
+  if (share) await startScreenShare();
+  if (!useCall.getState().call?.screenOn) void signal("screen", { declined: true });
 }
 
 // --- incoming signals -------------------------------------------------------------------
@@ -700,8 +895,13 @@ export async function handleCallSignal(ev: CallSignalEvent) {
           video,
           cameraOn: video,
           remoteCameraOn: video,
+          screenOn: false,
+          remoteScreenOn: false,
+          screenRequest: false,
+          screenAsked: false,
           localStream: null,
           remoteStream: null,
+          remoteVersion: 0,
           startedAt: Date.now(),
           connectedAt: null,
         },
@@ -724,6 +924,18 @@ export async function handleCallSignal(ev: CallSignalEvent) {
       if (current?.direction === "out") set({ ringing: true });
       return;
     case "answer": {
+      if (current && s?.pc && s.renegotiatePending && !s.restartPending && ev.device_id === s.peerDevice && inProgress(current)) {
+        // Answer to our renegotiation (the screen's video section).
+        const sdp = sdpOf(ev.data);
+        if (!sdp) return;
+        s.renegotiatePending = false;
+        try {
+          await s.pc.setRemoteDescription({ type: "answer", sdp });
+        } catch (e) {
+          console.warn("call: renegotiation answer rejected", e);
+        }
+        return;
+      }
       if (current?.direction === "out" && s?.restartPending && s.pc && ev.device_id === s.peerDevice) {
         // Answer to our ICE restart.
         const sdp = sdpOf(ev.data);
@@ -768,6 +980,7 @@ export async function handleCallSignal(ev: CallSignalEvent) {
       s.remoteIceCount = 0;
       const pc = s.pc;
       try {
+        await yieldToOffer(s, pc);
         await pc.setRemoteDescription({ type: "offer", sdp });
         const answer = tuned(await pc.createAnswer());
         if (session !== s || s.ended) return;
@@ -778,6 +991,29 @@ export async function handleCallSignal(ev: CallSignalEvent) {
       } catch (e) {
         console.warn("call: restart offer rejected", e);
         s.holdIce = false;
+        return;
+      }
+      await applyRemoteIce();
+      flushLocalIce();
+      return;
+    }
+    case "renegotiate": {
+      // The media of the call in progress changed (the peer's screen): a new offer from the
+      // device we talk to, on the same peer connection.
+      if (!current || !s || ev.device_id !== s.peerDevice || !s.pc || !inProgress(current)) return;
+      const sdp = sdpOf(ev.data);
+      if (!sdp) return;
+      const pc = s.pc;
+      try {
+        if (!(await yieldToOffer(s, pc))) return;
+        await pc.setRemoteDescription({ type: "offer", sdp });
+        const answer = tuned(await pc.createAnswer());
+        if (session !== s || s.ended) return;
+        await pc.setLocalDescription(answer);
+        if (session !== s || s.ended) return;
+        await signal("answer", { sdp: answer.sdp });
+      } catch (e) {
+        console.warn("call: renegotiation offer rejected", e);
         return;
       }
       await applyRemoteIce();
@@ -795,6 +1031,30 @@ export async function handleCallSignal(ev: CallSignalEvent) {
     case "media": {
       if (!current || !s || ev.device_id !== s.peerDevice) return;
       if (typeof ev.data?.camera === "boolean") set({ remoteCameraOn: ev.data.camera });
+      if (typeof ev.data?.screen === "boolean") {
+        set({ remoteScreenOn: ev.data.screen });
+        if (ev.data.screen && current.screenAsked) {
+          window.clearTimeout(s.askTimer);
+          set({ screenAsked: false });
+        }
+      }
+      return;
+    }
+    case "screen": {
+      if (!current || !s || ev.device_id !== s.peerDevice || !inProgress(current)) return;
+      if (ev.data?.request === true) {
+        if (current.screenOn) return;
+        if (!screenShareSupported()) {
+          void signal("screen", { declined: true, unsupported: true });
+          return;
+        }
+        set({ screenRequest: true });
+      } else if (ev.data?.declined === true && current.screenAsked) {
+        window.clearTimeout(s.askTimer);
+        set({ screenAsked: false });
+        const key = ev.data.unsupported === true ? "call.screenUnsupported" : "call.screenDeclined";
+        notifications.show({ color: "orange", message: i18n.t(key, { name: current.peerName }) });
+      }
       return;
     }
     case "busy":

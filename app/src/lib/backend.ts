@@ -106,6 +106,11 @@ export const backend = {
   /** Locks the local data with the (checked) account password, or re-locks it with a new one. */
   protectLocalData: (req: { password: string }) => call<void>("protect_local_data", req),
   /**
+   * "Remember the password on this device" (opt-in, per profile): on, the database key is kept
+   * on disk and the account opens at startup without the password (proof: the password).
+   */
+  setAutoUnlock: (req: { enabled: boolean; password?: string }) => call<void>("set_auto_unlock", req),
+  /**
    * Forgotten password: deletes all local data (emits logged_out with "local_reset").
    * Without a password only while the data is locked; once unlocked the core requires it.
    */
@@ -119,9 +124,13 @@ export const backend = {
   // (the UI reloads afterwards). Errors: "invalid_password" (also for an unknown number).
   /** Accounts listed on the start screen (hidden ones are not), most recent first. */
   listProfiles: () => call<ProfileCard[]>("profiles_list"),
-  openProfile: (req: { id: string; password: string }) => call<void>("profile_open", req),
+  openProfile: (req: { id: string; password: string; remember?: boolean }) => call<void>("profile_open", req),
   /** "Open another account on this computer": finds the profile (hidden too) by full number. */
-  openProfileByNumber: (req: { number: string; password: string }) => call<void>("profile_open_by_number", req),
+  openProfileByNumber: (req: { number: string; password: string; remember?: boolean }) => call<void>("profile_open_by_number", req),
+  /** Opens a profile with "remember the password" on, without a password ("password_required" otherwise). */
+  openProfileAuto: (req: { id: string }) => call<void>("profile_open_auto", req),
+  /** App start: opens the most recent profile with "remember the password" on (once per run). */
+  autoOpenProfiles: () => call<{ opened: boolean }>("profiles_auto_open"),
   /** Quick switch to an account opened with its password since the app started (error
    *  "password_required" otherwise). The UI reloads afterwards. */
   switchProfile: (req: { id: string }) => call<void>("profile_switch", req),
@@ -430,7 +439,9 @@ export interface IdentityConflictEvent {
 }
 
 /** "reoffer": ICE restart of the call in progress (caller -> the device it talks to). */
-export type CallSignalKind = "offer" | "answer" | "ice" | "ringing" | "hangup" | "busy" | "media" | "reoffer";
+/** "renegotiate": a new offer from either side of a call in progress (its media changed, e.g. a
+ *  screen shared in a voice call); "screen": a request to share the screen, or its refusal. */
+export type CallSignalKind = "offer" | "answer" | "ice" | "ringing" | "hangup" | "busy" | "media" | "reoffer" | "renegotiate" | "screen";
 
 export interface CallSignalRequest {
   /** Peer account (ignored with to_own_devices). */

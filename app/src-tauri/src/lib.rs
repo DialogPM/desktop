@@ -221,12 +221,14 @@ impl EventSink for TauriEvents {
 
 /// Crash reporting (Sentry) for release builds: panics with their stack traces only. No IP
 /// address or other personal data, and the device name is replaced by a fixed label.
-fn init_sentry() -> Option<sentry::ClientInitGuard> {
+/// `version` is the app's version (tauri.conf.json), not the crate's: reports then say which
+/// build they come from.
+fn init_sentry(version: &str) -> Option<sentry::ClientInitGuard> {
     if cfg!(debug_assertions) {
         return None;
     }
     let mut options = sentry::ClientOptions::default();
-    options.release = sentry::release_name!();
+    options.release = Some(format!("dialog-desktop@{version}").into());
     options.send_default_pii = false;
     options.server_name = Some("desktop".into());
     options.max_breadcrumbs = 0;
@@ -238,10 +240,10 @@ pub fn run() {
     // Two TLS crypto providers end up in the build (ring for the chat core, aws-lc-rs through
     // Sentry), so rustls cannot pick one on its own and every connection would fail: choose ring.
     let _ = rustls::crypto::ring::default_provider().install_default();
-    // Kept for the whole run: dropping it would stop reporting.
-    let _sentry = init_sentry();
-    let _ = env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info,chat_core=debug")).try_init();
     let mut context = tauri::generate_context!();
+    // Kept for the whole run: dropping it would stop reporting.
+    let _sentry = init_sentry(&context.package_info().version.to_string());
+    let _ = env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info,chat_core=debug")).try_init();
     // Auto-updates only in builds configured with an update signing key (updater.rs).
     let updates = updater::configure(&mut context);
     let mut builder = tauri::Builder::default();

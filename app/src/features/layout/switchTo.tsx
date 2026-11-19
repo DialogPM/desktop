@@ -15,10 +15,16 @@ export function profileLabel(p: ProfileCard): string {
 /** Switches to `p`: at once when it is unlocked, else after its password. */
 export async function switchTo(p: ProfileCard) {
   if (p.active) return;
-  if (p.unlocked) {
+  if (p.unlocked || p.auto_unlock) {
     try {
-      await api.switchProfile({ id: p.id });
-      reloadAfterProfileSwitch(true);
+      if (p.unlocked) {
+        await api.switchProfile({ id: p.id });
+        reloadAfterProfileSwitch(true);
+      } else {
+        // "Remember the password on this computer" is on for it.
+        await api.openProfileAuto({ id: p.id });
+        reloadAfterProfileSwitch(false);
+      }
       return;
     } catch (e) {
       if (parseError(e).code !== "password_required") {

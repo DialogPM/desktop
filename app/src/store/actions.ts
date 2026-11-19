@@ -53,10 +53,13 @@ export async function attempt<T>(fn: () => Promise<T>): Promise<T | undefined> {
 
 export async function bootstrap() {
   try {
-    const appState = await api.getState();
-    setApp({ appState });
     // Opened from the start screen with the password just now (lib/profiles.ts).
     const justOpened = takeJustOpened();
+    // An account with "remember the password on this computer" opens by itself at app start
+    // (once per run, never after "Switch account"). The app lock, if on, still applies.
+    if (!justOpened) await api.autoOpenProfiles().catch((e) => console.error("auto open", e));
+    const appState = await api.getState();
+    setApp({ appState });
     if (appState.status === "ready") {
       // A saved session opened at app start: honour the app lock.
       initAppLock(appState.account?.account_id, !justOpened);
