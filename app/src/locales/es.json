@@ -1368,5 +1368,13 @@
     "title": "Algo salió mal al mostrar esto",
     "body": "Tus datos están a salvo. Recarga la ventana para continuar.",
     "reload": "Recargar"
+  },
+  "update": {
+    "title": "Actualización disponible",
+    "body": "{{appName}} {{version}} ya está disponible. Estás usando la versión {{current}}.",
+    "requiredTitle": "Actualización necesaria",
+    "requiredBody": "Esta versión de {{appName}} ({{current}}) ya no es compatible. Actualiza a la {{version}} para seguir usándola.",
+    "now": "Actualizar",
+    "later": "Más tarde"
   }
 }

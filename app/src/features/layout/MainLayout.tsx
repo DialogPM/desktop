@@ -2,6 +2,7 @@ import { BRAND_NAME } from "../../brand";
 import { CallScreen } from "../calls/CallScreen";
 import { GroupCallScreen } from "../calls/GroupCallScreen";
 import { StaleDeviceNudge } from "../settings/StaleDeviceNudge";
+import { UpdatePrompt } from "./UpdatePrompt";
 import { TwoStepNudge } from "../settings/TwoStepNudge";
 import { LocalPasswordNudge } from "../lock/LocalPasswordNudge";
 import { WeakPasswordNudge } from "../settings/WeakPasswordNudge";
@@ -158,6 +159,7 @@ export function MainLayout() {
       <GroupCallScreen />
       <TwoStepNudge />
       <StaleDeviceNudge />
+      <UpdatePrompt />
       <LocalPasswordNudge />
       <WeakPasswordNudge />
       <LoginRequestPrompt />

@@ -458,6 +458,16 @@ function historySync() {
 
 let linkCancelled = false;
 
+/** Versions the mock server announces for the update prompt (off unless set in localStorage). */
+function mockAnnouncedVersions(): { client_latest: string | null; client_min: string | null } {
+  try {
+    const v = JSON.parse(localStorage.getItem("chatapp-mock-update") ?? "{}") as { latest?: string; min?: string };
+    return { client_latest: v.latest ?? null, client_min: v.min ?? null };
+  } catch {
+    return { client_latest: null, client_min: null };
+  }
+}
+
 export const mockBackend: Backend = {
   async getState() {
     await latency();
@@ -538,6 +548,9 @@ export const mockBackend: Backend = {
       phone_verification_enabled: isDefault,
       max_attachment_bytes: 100 * 1024 * 1024,
       max_devices: 6,
+      // The update prompt, for previews: localStorage "chatapp-mock-update" = {"latest":"9.9.9"}
+      // (and/or "min").
+      ...mockAnnouncedVersions(),
     };
   },
   async register(req) {

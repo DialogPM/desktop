@@ -131,6 +131,10 @@ jobs:
         env:
           APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
           APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          # `pnpm tauri build` runs the test gate first (app/scripts/check.mjs). Here the same
+          # commit is tested by ci.yml (which has MySQL and MinIO for the e2e tests), so the
+          # three installer builds do not repeat it.
+          SKIP_TESTS: "1"
         run: pnpm tauri build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }}
       # tauri notarizes the .app; the .dmg around it is notarized and stapled here, so Gatekeeper
       # also accepts the downloaded disk image.

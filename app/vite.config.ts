@@ -2,7 +2,9 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { readFileSync } from "node:fs";
 
-const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as { version: string };
+// The app's version is the one of the Tauri bundle (what the installers and the stores carry),
+// not package.json's: the About screen, crash reports and the update prompt all compare with it.
+const pkg = JSON.parse(readFileSync(new URL("./src-tauri/tauri.conf.json", import.meta.url), "utf8")) as { version: string };
 
 // Tauri-friendly Vite config, see https://v2.tauri.app/start/frontend/vite/
 const host = process.env.TAURI_DEV_HOST;

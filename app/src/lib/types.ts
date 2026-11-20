@@ -12,6 +12,10 @@ export interface ServerInfo {
   phone_verification_enabled: boolean;
   max_attachment_bytes: number;
   max_devices: number;
+  /** Newest version of this app the server announces ("1.2.3"); null when none. */
+  client_latest?: string | null;
+  /** Versions older than this must update before the app can be used. */
+  client_min?: string | null;
 }
 
 export interface AccountInfo {

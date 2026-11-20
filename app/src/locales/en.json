@@ -1368,5 +1368,13 @@
     "title": "Something went wrong while displaying this",
     "body": "Your data is safe. Reload the window to continue.",
     "reload": "Reload"
+  },
+  "update": {
+    "title": "Update available",
+    "body": "{{appName}} {{version}} is available. You are using {{current}}.",
+    "requiredTitle": "Update required",
+    "requiredBody": "This version of {{appName}} ({{current}}) is no longer supported. Update to {{version}} to keep using it.",
+    "now": "Update",
+    "later": "Later"
   }
 }

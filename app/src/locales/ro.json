@@ -1388,5 +1388,13 @@
     "title": "Ceva n-a mers bine la afișare",
     "body": "Datele tale sunt în siguranță. Reîncarcă fereastra ca să continui.",
     "reload": "Reîncarcă"
+  },
+  "update": {
+    "title": "Actualizare disponibilă",
+    "body": "{{appName}} {{version}} este disponibil. Folosești versiunea {{current}}.",
+    "requiredTitle": "Actualizare necesară",
+    "requiredBody": "Această versiune de {{appName}} ({{current}}) nu mai este acceptată. Actualizează la {{version}} pentru a continua.",
+    "now": "Actualizează",
+    "later": "Mai târziu"
   }
 }

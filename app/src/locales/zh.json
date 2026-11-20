@@ -1348,5 +1348,13 @@
     "title": "显示此内容时出错了",
     "body": "你的数据是安全的。请重新加载窗口以继续。",
     "reload": "重新加载"
+  },
+  "update": {
+    "title": "有可用更新",
+    "body": "{{appName}} {{version}} 已发布。你当前使用的是 {{current}} 版本。",
+    "requiredTitle": "需要更新",
+    "requiredBody": "此版本的 {{appName}}（{{current}}）已不再受支持。请更新到 {{version}} 以继续使用。",
+    "now": "更新",
+    "later": "稍后"
   }
 }

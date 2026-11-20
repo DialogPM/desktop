@@ -1348,5 +1348,13 @@
     "title": "Đã xảy ra lỗi khi hiển thị nội dung này",
     "body": "Dữ liệu của bạn vẫn an toàn. Hãy tải lại cửa sổ để tiếp tục.",
     "reload": "Tải lại"
+  },
+  "update": {
+    "title": "Có bản cập nhật",
+    "body": "{{appName}} {{version}} đã có. Bạn đang dùng phiên bản {{current}}.",
+    "requiredTitle": "Cần cập nhật",
+    "requiredBody": "Phiên bản {{appName}} này ({{current}}) không còn được hỗ trợ. Hãy cập nhật lên {{version}} để tiếp tục sử dụng.",
+    "now": "Cập nhật",
+    "later": "Để sau"
   }
 }

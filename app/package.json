@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "typecheck": "pnpm fx && tsc -b",
     "tauri": "tauri",
-    "fx": "node scripts/build-voice-fx.mjs"
+    "fx": "node scripts/build-voice-fx.mjs",
+    "check": "node scripts/check.mjs"
   },
   "dependencies": {
     "@fontsource-variable/figtree": "^5.3.0",

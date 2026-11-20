@@ -1368,5 +1368,13 @@
     "title": "Bu görüntülenirken bir sorun oluştu",
     "body": "Verileriniz güvende. Devam etmek için pencereyi yeniden yükleyin.",
     "reload": "Yeniden yükle"
+  },
+  "update": {
+    "title": "Güncelleme mevcut",
+    "body": "{{appName}} {{version}} yayınlandı. Şu anda {{current}} sürümünü kullanıyorsunuz.",
+    "requiredTitle": "Güncelleme gerekli",
+    "requiredBody": "{{appName}} uygulamasının bu sürümü ({{current}}) artık desteklenmiyor. Kullanmaya devam etmek için {{version}} sürümüne güncelleyin.",
+    "now": "Güncelle",
+    "later": "Daha sonra"
   }
 }

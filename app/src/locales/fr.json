@@ -1368,5 +1368,13 @@
     "title": "Un problème est survenu lors de l'affichage",
     "body": "Vos données sont en sécurité. Rechargez la fenêtre pour continuer.",
     "reload": "Recharger"
+  },
+  "update": {
+    "title": "Mise à jour disponible",
+    "body": "{{appName}} {{version}} est disponible. Vous utilisez la version {{current}}.",
+    "requiredTitle": "Mise à jour requise",
+    "requiredBody": "Cette version de {{appName}} ({{current}}) n'est plus prise en charge. Passez à la version {{version}} pour continuer à l'utiliser.",
+    "now": "Mettre à jour",
+    "later": "Plus tard"
   }
 }

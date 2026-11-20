@@ -1348,5 +1348,13 @@
     "title": "Terjadi kesalahan saat menampilkan ini",
     "body": "Data Anda aman. Muat ulang jendela untuk melanjutkan.",
     "reload": "Muat ulang"
+  },
+  "update": {
+    "title": "Pembaruan tersedia",
+    "body": "{{appName}} {{version}} sudah tersedia. Anda menggunakan versi {{current}}.",
+    "requiredTitle": "Pembaruan diperlukan",
+    "requiredBody": "Versi {{appName}} ini ({{current}}) tidak lagi didukung. Perbarui ke versi {{version}} untuk terus menggunakannya.",
+    "now": "Perbarui",
+    "later": "Nanti"
   }
 }

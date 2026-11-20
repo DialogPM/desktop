@@ -1368,5 +1368,13 @@
     "title": "Er is iets misgegaan bij het weergeven hiervan",
     "body": "Je gegevens zijn veilig. Laad het venster opnieuw om door te gaan.",
     "reload": "Opnieuw laden"
+  },
+  "update": {
+    "title": "Update beschikbaar",
+    "body": "{{appName}} {{version}} is beschikbaar. Je gebruikt versie {{current}}.",
+    "requiredTitle": "Update vereist",
+    "requiredBody": "Deze versie van {{appName}} ({{current}}) wordt niet meer ondersteund. Werk bij naar {{version}} om de app te blijven gebruiken.",
+    "now": "Bijwerken",
+    "later": "Later"
   }
 }

@@ -1368,5 +1368,13 @@
     "title": "Algo deu errado ao exibir isto",
     "body": "Seus dados estão seguros. Recarregue a janela para continuar.",
     "reload": "Recarregar"
+  },
+  "update": {
+    "title": "Atualização disponível",
+    "body": "{{appName}} {{version}} está disponível. Você está usando a versão {{current}}.",
+    "requiredTitle": "Atualização necessária",
+    "requiredBody": "Esta versão do {{appName}} ({{current}}) não é mais compatível. Atualize para a {{version}} para continuar usando.",
+    "now": "Atualizar",
+    "later": "Mais tarde"
   }
 }

@@ -1368,5 +1368,13 @@
     "title": "Beim Anzeigen ist etwas schiefgelaufen",
     "body": "Deine Daten sind sicher. Lade das Fenster neu, um fortzufahren.",
     "reload": "Neu laden"
+  },
+  "update": {
+    "title": "Update verfügbar",
+    "body": "{{appName}} {{version}} ist verfügbar. Du verwendest Version {{current}}.",
+    "requiredTitle": "Update erforderlich",
+    "requiredBody": "Diese Version von {{appName}} ({{current}}) wird nicht mehr unterstützt. Aktualisiere auf {{version}}, um die App weiter zu nutzen.",
+    "now": "Aktualisieren",
+    "later": "Später"
   }
 }

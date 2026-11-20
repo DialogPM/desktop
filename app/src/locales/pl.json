@@ -1408,5 +1408,13 @@
     "title": "Coś poszło nie tak podczas wyświetlania",
     "body": "Twoje dane są bezpieczne. Załaduj ponownie okno, aby kontynuować.",
     "reload": "Załaduj ponownie"
+  },
+  "update": {
+    "title": "Dostępna aktualizacja",
+    "body": "Dostępna jest wersja {{version}} aplikacji {{appName}}. Używasz wersji {{current}}.",
+    "requiredTitle": "Wymagana aktualizacja",
+    "requiredBody": "Ta wersja aplikacji {{appName}} ({{current}}) nie jest już obsługiwana. Zaktualizuj do wersji {{version}}, aby dalej z niej korzystać.",
+    "now": "Aktualizuj",
+    "later": "Później"
   }
 }

@@ -1380,5 +1380,13 @@
     "title": "Qualcosa è andato storto nella visualizzazione",
     "body": "I tuoi dati sono al sicuro. Ricarica la finestra per continuare.",
     "reload": "Ricarica"
+  },
+  "update": {
+    "title": "Aggiornamento disponibile",
+    "body": "{{appName}} {{version}} è disponibile. Stai usando la versione {{current}}.",
+    "requiredTitle": "Aggiornamento necessario",
+    "requiredBody": "Questa versione di {{appName}} ({{current}}) non è più supportata. Aggiorna alla {{version}} per continuare a usarla.",
+    "now": "Aggiorna",
+    "later": "Più tardi"
   }
 }
