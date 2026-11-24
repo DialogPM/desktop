@@ -138,18 +138,20 @@ async fn check(app: &AppHandle) -> Result<Option<UpdateAvailable>, String> {
     Ok(found)
 }
 
-/// Looks for an update at start and then every few hours.
+/// Looks for an update at start and then every few hours (a thread of its own that sleeps in
+/// between: no timer of an async runtime, which not every platform's build has here).
 pub fn spawn_check(app: AppHandle) {
-    tauri::async_runtime::spawn(async move {
-        loop {
-            if !INSTALLING.load(Ordering::SeqCst) {
-                if let Err(e) = check(&app).await {
-                    log::warn!("update check: {e}");
-                }
+    let spawned = std::thread::Builder::new().name("update-check".into()).spawn(move || loop {
+        if !INSTALLING.load(Ordering::SeqCst) {
+            if let Err(e) = tauri::async_runtime::block_on(check(&app)) {
+                log::warn!("update check: {e}");
             }
-            tokio::time::sleep(CHECK_EVERY).await;
         }
+        std::thread::sleep(CHECK_EVERY);
     });
+    if let Err(e) = spawned {
+        log::warn!("update check: {e}");
+    }
 }
 
 /// Whether this copy updates itself, and the update the last check found.
