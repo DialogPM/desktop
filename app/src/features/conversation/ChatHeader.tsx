@@ -6,6 +6,7 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../../components/Icon";
+import { OfficialBadge } from "../../components/OfficialBadge";
 import { AdaptiveMenu } from "../../components/Menus";
 import { UserAvatar } from "../../components/UserAvatar";
 import { api } from "../../lib/api";
@@ -15,6 +16,7 @@ import { disappearingLabel, previewText } from "../../lib/messageText";
 import type { Conversation, Message } from "../../lib/types";
 import { goBack } from "../../store/actions";
 import { setApp, useApp } from "../../store/app";
+import { usePeerOfficial } from "../../store/selectors";
 import { Highlighted } from "../chats/Sidebar";
 import { headerActions } from "../chats/dialogs";
 import { useSubtitle } from "./subtitle";
@@ -99,6 +101,7 @@ export function ChatHeader({ conv }: { conv: Conversation }) {
   const sub = useSubtitle(conv);
   const infoOpen = useApp((s) => s.infoOpen);
   const verified = useApp((s) => (conv.peer_account_id ? (s.contacts[conv.peer_account_id]?.verified ?? false) : false));
+  const official = usePeerOfficial(conv);
   const blocked = useApp((s) => (conv.peer_account_id ? (s.contacts[conv.peer_account_id]?.blocked ?? conv.blocked) : conv.blocked));
   const searching = useChatSearch((s) => s.conversationId === conv.id);
   const inOneToOne = useCall((s) => s.call !== null);
@@ -132,6 +135,7 @@ export function ChatHeader({ conv }: { conv: Conversation }) {
           <div style={{ minWidth: 0 }}>
             <div className="chat-head-name">
               <span className="truncate">{conv.title}</span>
+              <OfficialBadge label={official} size={16} />
               {verified && (
                 <span className="shield-mark" aria-label={t("safety.verified")}>
                   <Icon name="shield" size={15} />

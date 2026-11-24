@@ -1356,5 +1356,20 @@
     "requiredBody": "此版本的 {{appName}}（{{current}}）已不再受支持。请更新到 {{version}} 以继续使用。",
     "now": "更新",
     "later": "稍后"
+  },
+  "official": {
+    "badge": "官方账户 · {{label}}",
+    "title": "官方账户",
+    "hint": "{{server}} 的运营方为此账户担保。名称、表情符号或个人资料文字都无法添加此徽章。"
+  },
+  "notices": {
+    "title": "公告",
+    "from": "这些公告来自 {{server}}（你的账户所在的服务器）的运营方。公告由服务器签名，并经应用验证。它们不是聊天消息：任何人都无法回复。",
+    "empty": "暂无公告",
+    "emptyHint": "{{server}} 运营方的公告（例如计划维护或必需的更新）会显示在这里。",
+    "delete": "删除公告",
+    "new": "新",
+    "notifyTitle": "{{server}} · 公告",
+    "hidden": "来自服务器的新公告"
   }
 }

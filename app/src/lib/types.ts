@@ -52,6 +52,11 @@ export interface Profile {
   name: string;
   about: string;
   avatar_path: string | null;
+  /**
+   * Our own official badge label ("Dialog Support"), when the server operator marked this
+   * account as official; null otherwise. Absent with an older core.
+   */
+  official?: string | null;
 }
 
 export interface Contact {
@@ -70,6 +75,12 @@ export interface Contact {
   blocked: boolean;
   /** User has compared safety numbers and marked the contact as verified. */
   verified: boolean;
+  /**
+   * Official badge label ("Dialog Support"): the server operator vouches for this account, in
+   * a statement the core verified against the operator's key. null for everyone else; absent
+   * with an older core. Not the same as `verified` (keys compared by the user).
+   */
+  official?: string | null;
 }
 
 export type ConversationKind = "direct" | "group";
@@ -132,6 +143,8 @@ export interface Conversation {
   accepted: boolean;
   /** Direct chats: the peer is in our contacts (calls with anyone else are relayed). */
   peer_is_contact: boolean;
+  /** Direct chats: the peer's verified official badge label (see Contact.official); null for groups. */
+  official?: string | null;
 }
 
 /** "expired": erased by the media retention (only kind, type, size and, for documents, the name remain). */
@@ -301,6 +314,8 @@ export interface GroupMember {
   is_me: boolean;
   /** Confirmed end to end by an admin (false: only the server lists this member). */
   verified?: boolean;
+  /** Verified official badge label as this device holds it for the contact (ours for is_me). */
+  official?: string | null;
 }
 
 export interface GroupInfo {
@@ -588,6 +603,30 @@ export interface FoundAccount {
   display_name: string;
   avatar_path: string | null;
   is_me: boolean;
+  /** Verified official badge label (see Contact.official). */
+  official?: string | null;
+}
+
+/**
+ * A notice from the operator of our server ("maintenance tonight", "update required"), to this
+ * account or to everyone. Signed by the operator and checked by the core before it is stored;
+ * it is not a chat message and cannot be answered. Plain text.
+ */
+export interface Notice {
+  id: number;
+  title: string;
+  body: string;
+  /** When the operator issued it (ms). */
+  created_at: number;
+  /** When this device received it (ms). */
+  received_at: number;
+  read: boolean;
+}
+
+export interface NoticeList {
+  /** Newest first. */
+  notices: Notice[];
+  unread: number;
 }
 
 // ---------------------------------------------------------------------------

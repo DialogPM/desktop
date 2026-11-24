@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CheckBox } from "../../components/Field";
 import { Icon } from "../../components/Icon";
+import { OfficialBadge } from "../../components/OfficialBadge";
 import { UserAvatar } from "../../components/UserAvatar";
 import { formatAccountNumber } from "../../lib/format";
 import { useApp } from "../../store/app";
@@ -35,7 +36,10 @@ export function ContactPicker({ selected, onChange, exclude = [], height, includ
         <button type="button" key={c.account_id} className="row" onClick={() => toggle(c.account_id)} aria-pressed={selected.includes(c.account_id)}>
           <UserAvatar name={c.display_name} path={c.avatar_path} seed={c.account_id} size={40} />
           <div className="flex1">
-            <div className="row-title truncate">{c.display_name}</div>
+            <div className="row-title name-badges">
+              <span className="truncate">{c.display_name}</span>
+              <OfficialBadge label={c.official} />
+            </div>
             <div className="row-sub truncate">{c.about || formatAccountNumber(c.number)}</div>
           </div>
           <CheckBox on={selected.includes(c.account_id)} round />

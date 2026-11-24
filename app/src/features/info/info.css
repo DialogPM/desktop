@@ -409,3 +409,13 @@
   object-fit: cover;
   display: block;
 }
+
+/* "Official account · {label}" under the name, with what it means (see OfficialLine.tsx). */
+.info-official {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  max-width: 100%;
+  text-align: start;
+}

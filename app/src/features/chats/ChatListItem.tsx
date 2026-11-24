@@ -2,6 +2,7 @@ import { IconBan } from "@tabler/icons-react";
 import { memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../../components/Icon";
+import { OfficialBadge } from "../../components/OfficialBadge";
 import { ContextMenu } from "../../components/Menus";
 import { UserAvatar } from "../../components/UserAvatar";
 import { formatListTime, isMuted } from "../../lib/format";
@@ -10,6 +11,7 @@ import { previewText, systemText } from "../../lib/messageText";
 import type { Conversation } from "../../lib/types";
 import { openConversation } from "../../store/actions";
 import { useApp } from "../../store/app";
+import { usePeerOfficial } from "../../store/selectors";
 import { listActions } from "./dialogs";
 import { isRequest } from "../conversation/requestActions";
 import { disappearingLabel } from "../../lib/messageText";
@@ -28,6 +30,7 @@ export const ChatListItem = memo(function ChatListItem({ conv, active }: { conv:
   const { t } = useTranslation();
   const locale = useLocale();
   const verified = useApp((s) => (conv.peer_account_id ? (s.contacts[conv.peer_account_id]?.verified ?? false) : false));
+  const official = usePeerOfficial(conv);
   const typing = useTypingText(conv);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const long = useLongPress((x, y) => setMenu({ x, y }));
@@ -109,6 +112,7 @@ export const ChatListItem = memo(function ChatListItem({ conv, active }: { conv:
         <div className="chat-row-body">
           <div className="chat-row-top">
             <span className="chat-row-name">{conv.title}</span>
+            <OfficialBadge label={official} size={15} />
             {verified && (
               <span className="shield-mark" aria-label={t("safety.verified")}>
                 <Icon name="shield" size={14} />

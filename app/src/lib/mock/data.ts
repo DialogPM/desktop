@@ -11,6 +11,7 @@ import type {
   Location,
   Message,
   MessageStatus,
+  Notice,
   Profile,
   QuotedMessage,
   Reaction,
@@ -35,6 +36,8 @@ export interface MockDb {
   presence: Map<string, { online: boolean; last_seen: number | null }>;
   /** Server directory: accounts that can be found by number or username (contacts included). */
   directory: DirectoryEntry[];
+  /** Notices from the server operator, newest first. */
+  notices: Notice[];
 }
 
 export interface DirectoryEntry {
@@ -43,6 +46,8 @@ export interface DirectoryEntry {
   username: string | null;
   profile_name: string | null;
   avatar_path: string | null;
+  /** Official badge label (the operator vouches for the account). */
+  official?: string | null;
 }
 
 const MIN = 60_000;
@@ -131,7 +136,12 @@ export function buildDb(): MockDb {
   const noah = contact("acc-noah", "3312987765540021", "Noah Williams", { avatar_path: avatarPic(5) });
   // Someone who wrote first and has no profile name yet: shown by number until renamed.
   const unnamed = contact("acc-unnamed", "2045118830917743", null);
-  [maria, luca, sarah, andrei, giulia, tom, elena, david, noah, unnamed].forEach(add);
+  // An account the server operator marked as official (badge drawn by the app, not the name).
+  const support = contact("acc-support", "1000200030004000", `${BRAND_NAME} Support`, {
+    about: "Help with your account",
+    official: `${BRAND_NAME} Support`,
+  });
+  [maria, luca, sarah, andrei, giulia, tom, elena, david, noah, unnamed, support].forEach(add);
 
   const conversations = new Map<string, Conversation>();
   const messages = new Map<string, Message[]>();
@@ -161,6 +171,7 @@ export function buildDb(): MockDb {
       updated_at: now,
       accepted: true,
       peer_is_contact: true,
+      official: c.official ?? null,
       ...extra,
     };
     conversations.set(conv.id, conv);
@@ -443,7 +454,7 @@ export function buildDb(): MockDb {
   const cAurora = group(
     "aurora",
     "Project Aurora",
-    [{ c: sarah }, { c: david, admin: true }, { c: giulia }, { c: andrei }],
+    [{ c: sarah }, { c: david, admin: true }, { c: giulia }, { c: andrei }, { c: support }],
     { meAdmin: true, description: "Release planning for v2. Weekly sync on Mondays.", avatar: null, createdBy: null, createdAgo: 90 * DAY },
     { muted_until: -1 },
   );
@@ -492,6 +503,14 @@ export function buildDb(): MockDb {
   const cUnnamed = direct(unnamed, { accepted: false, peer_is_contact: false });
   push(cUnnamed, { from: unnamed, at: now - 4 * DAY, text: `Hi! We met at the conference, this is my ${BRAND_NAME}.` });
 
+  // --- official support account: a message request from an official account ------
+  const cSupport = direct(support, { accepted: false, peer_is_contact: false });
+  push(cSupport, {
+    from: support,
+    at: now - 2 * HOUR,
+    text: "Hello! We received your report about the username @alex. It was reviewed and you can choose a new one in Settings → Account.",
+  });
+
   // finalize previews
   for (const conv of conversations.values()) {
     const list = messages.get(conv.id)!;
@@ -514,15 +533,17 @@ export function buildDb(): MockDb {
     [david.account_id, { online: false, last_seen: now - 5 * HOUR }],
     [noah.account_id, { online: true, last_seen: now }],
     [unnamed.account_id, { online: false, last_seen: now - 7 * HOUR }],
+    [support.account_id, { online: true, last_seen: now }],
   ]);
 
   const directory: DirectoryEntry[] = [
     ...[...contacts.values()].map((c) => ({
       account_id: c.account_id,
       number: c.number,
-      username: ({ "acc-maria": "maria.popescu", "acc-luca": "luca_rossi", "acc-sarah": "sarah" } as Record<string, string>)[c.account_id] ?? null,
+      username: ({ "acc-maria": "maria.popescu", "acc-luca": "luca_rossi", "acc-sarah": "sarah", "acc-support": "support" } as Record<string, string>)[c.account_id] ?? null,
       profile_name: c.profile_name,
       avatar_path: c.avatar_path,
+      official: c.official ?? null,
     })),
     { account_id: "acc-irina", number: "7700112233445566", username: "irina.v", profile_name: "Irina Vasile", avatar_path: avatarPic(3) },
     { account_id: "acc-marco", number: "6655443322110099", username: "marco", profile_name: "Marco Esposito", avatar_path: null },
@@ -554,5 +575,23 @@ export function buildDb(): MockDb {
     ],
     presence,
     directory,
+    notices: [
+      {
+        id: 2,
+        title: "Maintenance tonight",
+        body: "The server will be unavailable tonight between 02:00 and 02:30 (UTC) for an upgrade.\nMessages sent in the meantime are delivered afterwards.\n\nDetails: https://status.example.org/maintenance",
+        created_at: now - 3 * HOUR,
+        received_at: now - 3 * HOUR,
+        read: false,
+      },
+      {
+        id: 1,
+        title: "Your username was removed",
+        body: "The username @alex was reported and removed because it imitated another account. You can choose a new username in Settings → Account.",
+        created_at: now - 5 * DAY,
+        received_at: now - 5 * DAY,
+        read: true,
+      },
+    ],
   };
 }

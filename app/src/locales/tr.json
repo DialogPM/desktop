@@ -1376,5 +1376,20 @@
     "requiredBody": "{{appName}} uygulamasının bu sürümü ({{current}}) artık desteklenmiyor. Kullanmaya devam etmek için {{version}} sürümüne güncelleyin.",
     "now": "Güncelle",
     "later": "Daha sonra"
+  },
+  "official": {
+    "badge": "Resmî hesap · {{label}}",
+    "title": "Resmî hesap",
+    "hint": "{{server}} işletmecisi bu hesaba kefil oluyor. Adlar, emojiler ve profil metni bu rozeti ekleyemez."
+  },
+  "notices": {
+    "title": "Duyurular",
+    "from": "Bu duyurular, hesabınızın bulunduğu sunucu olan {{server}} işletmecisinden gelir. Sunucu tarafından imzalanır ve uygulama tarafından doğrulanır. Sohbet mesajı değildir: kimse yanıt veremez.",
+    "empty": "Duyuru yok",
+    "emptyHint": "{{server}} işletmecisinin planlı bakım veya zorunlu güncelleme gibi duyuruları burada görünür.",
+    "delete": "Duyuruyu sil",
+    "new": "Yeni",
+    "notifyTitle": "{{server}} · Duyuru",
+    "hidden": "Sunucudan yeni duyuru"
   }
 }

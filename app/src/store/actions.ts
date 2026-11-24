@@ -10,6 +10,7 @@ import { loadCallSettings } from "../lib/callSettings";
 import { loadMediaRetention } from "../lib/mediaRetention";
 import { loadDefaultTimer } from "../lib/defaultTimer";
 import { loadDnd } from "../lib/dnd";
+import { loadNotices } from "./notices";
 import { ensureNotificationPermission } from "../lib/platform";
 import type { Conversation, ConversationSettingsPatch, LoggedOutEvent, Mention, Message } from "../lib/types";
 import {
@@ -98,6 +99,7 @@ export async function loadSession() {
   void loadCallSettings();
   void loadMediaRetention();
   void loadDefaultTimer();
+  void loadNotices();
   void ensureNotificationPermission();
 }
 
@@ -144,6 +146,11 @@ export function openConversation(id: string | null) {
 
 export function openSettings(section: SettingsSection | null = null) {
   setApp({ sidebar: "settings", settingsSection: section });
+}
+
+/** Notices from the server operator (a pane of the sidebar, like starred messages). */
+export function openNotices() {
+  setApp({ sidebar: "notices", settingsSection: null });
 }
 
 export async function openDirect(accountId: string) {

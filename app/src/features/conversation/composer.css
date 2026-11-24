@@ -231,6 +231,16 @@
   font-size: 14.5px;
 }
 
+/* A request from an official account says so (OfficialLine), centered like the rest. */
+.request-bar-text .official-line {
+  align-items: center;
+  margin: 2px 0;
+}
+
+.request-bar-text .official-line-head {
+  justify-content: center;
+}
+
 .request-bar-actions {
   display: flex;
   flex-wrap: wrap;

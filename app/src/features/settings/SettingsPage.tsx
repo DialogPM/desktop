@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { PasswordField, RadioDot, TextField, ToggleRow } from "../../components/Field";
 import { Icon } from "../../components/Icon";
 import { PaneHeader } from "../../components/PaneHeader";
+import { OfficialLine } from "../../components/OfficialLine";
 import { UserAvatar } from "../../components/UserAvatar";
 import i18n, { LANGUAGES, setLanguage, type LanguageCode } from "../../i18n";
 import { api } from "../../lib/api";
@@ -157,6 +158,12 @@ function ProfileSection() {
             )}
           </Menu.Dropdown>
         </Menu>
+        {/* Our own badge, when the operator made this account official: others see it next to our name. */}
+        {profile?.official && (
+          <div className="info-official" style={{ marginTop: 8 }}>
+            <OfficialLine label={profile.official} explain />
+          </div>
+        )}
       </div>
       <TextField
         label={t("settings.profile.name")}

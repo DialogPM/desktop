@@ -15,7 +15,10 @@ import { previewText } from "../lib/messageText";
 import { getNotifyPrefs } from "../lib/notifyPrefs";
 import { setAppBadge, showNotification } from "../lib/platform";
 import { playInChat, playIncoming } from "../lib/sounds";
-import { reloadConversations } from "./actions";
+import { openNotices, reloadConversations } from "./actions";
+import { applyNotice, applyNoticesUnread, markNoticesRead, useNotices } from "./notices";
+import { serverName } from "./selectors";
+import type { Notice } from "../lib/types";
 import { handleCallSignal } from "./calls";
 import { handleGroupCall, handleGroupCallSignal } from "./groupCalls";
 import {
@@ -67,6 +70,51 @@ function flushQueued() {
   flushTimer = 0;
   // Updates made in one task are rendered together.
   for (const op of queued.splice(0)) op();
+}
+
+/** Longest notice text put in a toast or a system notification (the view shows all of it). */
+const NOTICE_PREVIEW = 160;
+
+function clip(text: string): string {
+  const one = text.replace(/\s+/g, " ").trim();
+  return one.length > NOTICE_PREVIEW ? `${one.slice(0, NOTICE_PREVIEW - 1)}…` : one;
+}
+
+/**
+ * A notice from the server operator arrived (already verified by the core). It is announced
+ * like a new message, but titled as coming from the server, never like a chat: nobody wrote
+ * it in a conversation and it cannot be answered.
+ */
+function onNotice(n: Notice) {
+  const fresh = !useNotices.getState().notices.some((x) => x.id === n.id);
+  applyNotice(n);
+  if (!fresh || n.read) return;
+  const focused = windowFocused();
+  if (useNotices.getState().viewOpen && focused) {
+    markNoticesRead();
+    return;
+  }
+  const t = i18n.t.bind(i18n);
+  const title = t("notices.notifyTitle", { server: serverName(getApp()) || BRAND_NAME });
+  const text = clip(n.title) || clip(n.body);
+  if (focused) {
+    notifications.show({
+      color: "teal",
+      title,
+      message: text,
+      autoClose: 8000,
+      style: { cursor: "pointer" },
+      onClick: () => openNotices(),
+    });
+  }
+  // Do not disturb silences notices like messages (they are still listed and counted).
+  if (dndActive()) return;
+  const prefs = getNotifyPrefs();
+  if (focused) return;
+  if (prefs.sound) playIncoming();
+  if (!prefs.desktop) return;
+  // "Notification preview" off: the OS may show it on the lock screen, so no content.
+  void showNotification(title, getAppearance().notifPreview ? text : t("notices.hidden"));
 }
 
 export function startEventBridge(): () => void {
@@ -173,6 +221,8 @@ export function startEventBridge(): () => void {
         message: p.error,
       });
     }),
+    onEvent("notice", (n) => later(() => onNotice(n))),
+    onEvent("notices_changed", (p) => later(() => applyNoticesUnread(p.unread))),
     onEvent("logged_out", (p) => {
       resetSession();
       setApp((s) => ({

@@ -3,11 +3,14 @@ import { IconPhone } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../../components/Icon";
+import { OfficialBadge } from "../../components/OfficialBadge";
+import { OfficialLine } from "../../components/OfficialLine";
 import { UserAvatar } from "../../components/UserAvatar";
 import { api } from "../../lib/api";
 import { formatAccountNumber } from "../../lib/format";
 import type { Conversation, SafetyNumber } from "../../lib/types";
 import { useApp } from "../../store/app";
+import { usePeerOfficial } from "../../store/selectors";
 import { canRename, confirmBlock, confirmDeleteChat, confirmReportSpam, openRenameContact } from "../chats/dialogs";
 import { useSubtitle } from "../conversation/subtitle";
 import { ChatToggles, DangerRow, InfoActions, MediaSection, Sect } from "./common";
@@ -63,6 +66,7 @@ export function ContactInfo({ conv, onView }: { conv: Conversation; onView: (v: 
   const { t } = useTranslation();
   const contact = useApp((s) => (conv.peer_account_id ? s.contacts[conv.peer_account_id] : undefined));
   const sub = useSubtitle(conv);
+  const official = usePeerOfficial(conv);
   const { search, mute } = useCommonActions(conv);
   const number = contact?.number ?? conv.peer_number ?? "";
   const blocked = contact?.blocked ?? conv.blocked;
@@ -74,6 +78,7 @@ export function ContactInfo({ conv, onView }: { conv: Conversation; onView: (v: 
         <UserAvatar name={conv.title} path={contact?.avatar_path ?? conv.avatar_path} seed={conv.id} size={112} />
         <div className="info-name">
           <span className="truncate">{name}</span>
+          <OfficialBadge label={official} size={19} />
           {contact?.verified && (
             <span className="shield-mark" aria-label={t("safety.verified")}>
               <Icon name="shield" size={18} />
@@ -108,6 +113,11 @@ export function ContactInfo({ conv, onView }: { conv: Conversation; onView: (v: 
             <Icon name="edit" size={15} />
             {t("contact.addName")}
           </button>
+        )}
+        {official && (
+          <div className="info-official">
+            <OfficialLine label={official} explain />
+          </div>
         )}
         <InfoActions actions={[search, mute, { key: "qr", icon: "qr", label: t("info.qr"), onClick: () => onView("safety"), hidden: !conv.peer_account_id }]} />
       </div>

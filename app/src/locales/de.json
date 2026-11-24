@@ -1376,5 +1376,20 @@
     "requiredBody": "Diese Version von {{appName}} ({{current}}) wird nicht mehr unterstützt. Aktualisiere auf {{version}}, um die App weiter zu nutzen.",
     "now": "Aktualisieren",
     "later": "Später"
+  },
+  "official": {
+    "badge": "Offizielles Konto · {{label}}",
+    "title": "Offizielles Konto",
+    "hint": "Der Betreiber von {{server}} bürgt für dieses Konto. Namen, Emojis und Profiltexte können dieses Abzeichen nicht hinzufügen."
+  },
+  "notices": {
+    "title": "Mitteilungen",
+    "from": "Diese Mitteilungen kommen vom Betreiber von {{server}}, dem Server deines Kontos. Sie sind vom Server signiert und werden von der App geprüft. Es sind keine Chatnachrichten: Niemand kann darauf antworten.",
+    "empty": "Keine Mitteilungen",
+    "emptyHint": "Mitteilungen des Betreibers von {{server}}, etwa geplante Wartungen oder erforderliche Updates, erscheinen hier.",
+    "delete": "Mitteilung löschen",
+    "new": "Neu",
+    "notifyTitle": "{{server}} · Mitteilung",
+    "hidden": "Neue Mitteilung vom Server"
   }
 }

@@ -5,6 +5,7 @@ import { Loader } from "@mantine/core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../../components/Icon";
+import { OfficialBadge } from "../../components/OfficialBadge";
 import { UserAvatar } from "../../components/UserAvatar";
 import { formatAccountNumber } from "../../lib/format";
 import { openDirect } from "../../store/actions";
@@ -71,7 +72,10 @@ export function AccountLookupRow({ query, onOpened }: { query: string; onOpened?
       >
         <UserAvatar name={name} path={found.avatar_path} seed={found.is_me ? "me" : found.account_id} size={44} />
         <div className="flex1">
-          <div className="row-title truncate">{name}</div>
+          <div className="row-title name-badges">
+            <span className="truncate">{name}</span>
+            <OfficialBadge label={found.official} />
+          </div>
           <div className="row-sub truncate mono-num">{sub}</div>
         </div>
         {found.is_me ? (

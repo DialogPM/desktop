@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Icon, type IconName } from "../../components/Icon";
+import { OfficialBadge } from "../../components/OfficialBadge";
 import { UserAvatar } from "../../components/UserAvatar";
 import { LANGUAGES } from "../../i18n";
 import { api } from "../../lib/api";
@@ -65,7 +66,10 @@ export function SettingsMenu() {
         <button type="button" className="set-profile" data-active={current === "profile"} onClick={() => openSettings("profile")}>
           <UserAvatar name={profile?.name || "?"} path={profile?.avatar_path} seed="me" size={58} />
           <div className="flex1">
-            <div className="set-profile-name truncate">{profile?.name || t("settings.profile.noName")}</div>
+            <div className="set-profile-name name-badges">
+              <span className="truncate">{profile?.name || t("settings.profile.noName")}</span>
+              <OfficialBadge label={profile?.official} size={17} />
+            </div>
             {username && <div className="set-profile-username truncate">@{username}</div>}
             <div className="set-profile-about truncate">{profile?.about || t("settings.profile.aboutPlaceholder")}</div>
           </div>

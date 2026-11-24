@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextField } from "../../components/Field";
 import { Icon } from "../../components/Icon";
+import { OfficialBadge } from "../../components/OfficialBadge";
 import { PaneHeader } from "../../components/PaneHeader";
 import { UserAvatar } from "../../components/UserAvatar";
 import { api, parseError } from "../../lib/api";
@@ -22,7 +23,10 @@ export function ContactRow({ c, onClick, right }: { c: Contact; onClick: () => v
     <button type="button" className="row" onClick={onClick}>
       <UserAvatar name={c.display_name} path={c.avatar_path} seed={c.account_id} size={44} />
       <div className="flex1">
-        <div className="row-title truncate">{c.display_name}</div>
+        <div className="row-title name-badges">
+          <span className="truncate">{c.display_name}</span>
+          <OfficialBadge label={c.official} />
+        </div>
         <div className="row-sub truncate">{c.about || formatAccountNumber(c.number)}</div>
       </div>
       {c.blocked && (

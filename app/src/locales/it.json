@@ -1388,5 +1388,20 @@
     "requiredBody": "Questa versione di {{appName}} ({{current}}) non è più supportata. Aggiorna alla {{version}} per continuare a usarla.",
     "now": "Aggiorna",
     "later": "Più tardi"
+  },
+  "official": {
+    "badge": "Account ufficiale · {{label}}",
+    "title": "Account ufficiale",
+    "hint": "Il gestore di {{server}} garantisce per questo account. Nomi, emoji e testo del profilo non possono aggiungere questo badge."
+  },
+  "notices": {
+    "title": "Avvisi",
+    "from": "Questi avvisi arrivano dal gestore di {{server}}, il server su cui si trova il tuo account. Sono firmati dal server e verificati dall'app. Non sono messaggi di chat: nessuno può rispondere.",
+    "empty": "Nessun avviso",
+    "emptyHint": "Gli annunci del gestore di {{server}}, come una manutenzione programmata o un aggiornamento obbligatorio, compariranno qui.",
+    "delete": "Elimina avviso",
+    "new": "Nuovo",
+    "notifyTitle": "{{server}} · Avviso",
+    "hidden": "Nuovo avviso dal server"
   }
 }

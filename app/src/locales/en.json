@@ -1376,5 +1376,20 @@
     "requiredBody": "This version of {{appName}} ({{current}}) is no longer supported. Update to {{version}} to keep using it.",
     "now": "Update",
     "later": "Later"
+  },
+  "official": {
+    "badge": "Official account · {{label}}",
+    "title": "Official account",
+    "hint": "The operator of {{server}} vouches for this account. Names, emoji and profile text can't add this badge."
+  },
+  "notices": {
+    "title": "Notices",
+    "from": "These notices come from the operator of {{server}}, the server your account is on. They are signed by the server and checked by the app. They are not chat messages: nobody can reply to them.",
+    "empty": "No notices",
+    "emptyHint": "Announcements from the operator of {{server}}, such as planned maintenance or a required update, will appear here.",
+    "delete": "Delete notice",
+    "new": "New",
+    "notifyTitle": "{{server}} · Notice",
+    "hidden": "New notice from the server"
   }
 }

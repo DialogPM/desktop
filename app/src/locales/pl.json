@@ -1416,5 +1416,20 @@
     "requiredBody": "Ta wersja aplikacji {{appName}} ({{current}}) nie jest już obsługiwana. Zaktualizuj do wersji {{version}}, aby dalej z niej korzystać.",
     "now": "Aktualizuj",
     "later": "Później"
+  },
+  "official": {
+    "badge": "Konto oficjalne · {{label}}",
+    "title": "Konto oficjalne",
+    "hint": "Operator {{server}} poręcza za to konto. Nazwa, emoji ani tekst profilu nie mogą dodać tej odznaki."
+  },
+  "notices": {
+    "title": "Komunikaty",
+    "from": "Te komunikaty pochodzą od operatora {{server}}, serwera, na którym jest twoje konto. Są podpisane przez serwer i sprawdzane przez aplikację. To nie są wiadomości czatu: nikt nie może na nie odpowiedzieć.",
+    "empty": "Brak komunikatów",
+    "emptyHint": "Tutaj pojawią się ogłoszenia operatora {{server}}, na przykład o planowanej konserwacji lub wymaganej aktualizacji.",
+    "delete": "Usuń komunikat",
+    "new": "Nowy",
+    "notifyTitle": "{{server}} · Komunikat",
+    "hidden": "Nowy komunikat z serwera"
   }
 }

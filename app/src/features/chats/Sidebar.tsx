@@ -12,15 +12,18 @@ import { formatListTime } from "../../lib/format";
 import { useIsMobile, useLocale } from "../../lib/hooks";
 import { isolate, previewText } from "../../lib/messageText";
 import type { Conversation, Message } from "../../lib/types";
-import { openConversation, openSettings } from "../../store/actions";
+import { openConversation, openNotices, openSettings } from "../../store/actions";
 import { setApp, useApp, type ChatFilter } from "../../store/app";
 import { accountQueryKind } from "./accountLookup";
 import { AccountLookupRow } from "./AccountLookupRow";
 import { ChatListItem } from "./ChatListItem";
+import { ConvOfficialBadge } from "./ConvOfficialBadge";
 import { openMyQr } from "./MyQrModal";
 import { NewChatPane } from "./NewChatPane";
 import { NewGroupPane } from "./NewGroupPane";
 import { StarredPane } from "./StarredPane";
+import { NoticesPane } from "../notices/NoticesPane";
+import { useNotices } from "../../store/notices";
 import { openJoinLink } from "../groups/InviteDialogs";
 import { isRequest } from "../conversation/requestActions";
 import { dndUntilText, useDnd } from "../../lib/dnd";
@@ -32,6 +35,7 @@ export function Sidebar() {
   if (sidebar === "new_chat") return <NewChatPane />;
   if (sidebar === "new_group") return <NewGroupPane />;
   if (sidebar === "starred") return <StarredPane />;
+  if (sidebar === "notices") return <NoticesPane />;
   return <ChatsPane />;
 }
 
@@ -52,6 +56,7 @@ function ChatsPane() {
   const filter = useApp((s) => s.chatFilter);
   const temporary = useApp((s) => s.temporaryMode);
   const dndUntil = useDnd((s) => s.until);
+  const noticesSupported = useNotices((s) => s.supported);
   const [query, setQuery] = useState("");
   const q = query.trim().toLowerCase();
 
@@ -131,6 +136,7 @@ function ChatsPane() {
                 onClick: toggleDnd,
               },
               { key: "starred", label: t("star.title"), icon: <IconStar size={18} />, onClick: () => setApp({ sidebar: "starred" }) },
+              ...(noticesSupported ? [{ key: "notices", label: t("notices.title"), icon: <Icon name="bell" size={18} />, onClick: openNotices }] : []),
               {
                 key: "archived",
                 label: t("chats.filter.archived"),
@@ -280,6 +286,7 @@ function SearchResults({
             <div className="chat-row-body">
               <div className="chat-row-top">
                 <span className="chat-row-name">{c.title}</span>
+                <ConvOfficialBadge conversationId={c.id} />
                 <span className="chat-row-time">{formatListTime(m.sent_at, locale, t)}</span>
               </div>
               <div className="chat-row-bottom">

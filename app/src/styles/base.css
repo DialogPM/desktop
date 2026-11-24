@@ -301,6 +301,55 @@ button {
   color: var(--muted);
 }
 
+/* Official account badge (components/OfficialBadge.tsx): a filled rosette in the brand color,
+   drawn by the app next to a name. Kept apart from .shield-mark (verified safety number). */
+.official-mark {
+  color: var(--accent);
+  display: inline-flex;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+/* A name followed by its badges, in rows whose title is otherwise a single truncated line. */
+.name-badges {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.official-line {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.official-line-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 13.5px;
+  color: var(--accent-text);
+}
+
+.official-line-title {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.official-line-label {
+  font-weight: 600;
+  min-width: 0;
+}
+
+.official-line-hint {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
 /* Toggle switch (42x25 track, 19px knob). */
 .switch {
   width: 42px;

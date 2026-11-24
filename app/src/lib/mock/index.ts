@@ -143,6 +143,23 @@ function startSession() {
   later(900, () => setConnection(navigator.onLine === false ? "offline" : "online"));
   // A first incoming message a little after start, then occasionally.
   later(15_000, () => simulateIncoming("conv-luca", "Are you coming tomorrow? 🚆"));
+  // A notice from the server operator, to see how one arrives.
+  later(25_000, () => {
+    const d = data();
+    if (d.notices.some((n) => n.id === 3)) return;
+    const now = Date.now();
+    const n = {
+      id: 3,
+      title: "Update required",
+      body: `This version of ${BRAND_NAME} will stop working on the server next month.\nPlease update the app from Settings → About.`,
+      created_at: now,
+      received_at: now,
+      read: false,
+    };
+    d.notices.unshift(n);
+    emit("notice", clone(n));
+    emit("notices_changed", { unread: d.notices.filter((x) => !x.read).length });
+  });
   const loop = () => {
     later(75_000 + Math.random() * 60_000, () => {
       const pool = ["conv-hiking", "conv-maria", "conv-luca", "conv-family"];
@@ -863,6 +880,27 @@ export const mockBackend: Backend = {
     emit("kt_alerts", []);
   },
 
+  // --- notices from the server operator ----------------------------------------
+  async listNotices() {
+    await latency();
+    const notices = data().notices;
+    return { notices: clone(notices), unread: notices.filter((n) => !n.read).length };
+  },
+  async markNoticesRead() {
+    await latency();
+    data().notices.forEach((n) => (n.read = true));
+    emit("notices_changed", { unread: 0 });
+    return { unread: 0 };
+  },
+  async deleteNotice(req) {
+    await latency();
+    const d = data();
+    if (!d.notices.some((n) => n.id === req.id)) fail("not_found", "Notice not found");
+    d.notices = d.notices.filter((n) => n.id !== req.id);
+    emit("notices_changed", { unread: d.notices.filter((n) => !n.read).length });
+    return {};
+  },
+
   // --- profile ---------------------------------------------------------------
   async getProfile() {
     await latency();
@@ -904,6 +942,7 @@ export const mockBackend: Backend = {
       display_name: isMe ? `${e.profile_name || formatNumber(e.number)} (You)` : (known?.display_name ?? (e.username ? `@${e.username}` : formatNumber(e.number))),
       avatar_path: known?.avatar_path ?? e.avatar_path,
       is_me: isMe,
+      official: isMe ? (data().profile.official ?? null) : (known?.official ?? e.official ?? null),
     };
   },
   async addContactByQuery(req) {

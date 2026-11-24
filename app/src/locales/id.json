@@ -1356,5 +1356,20 @@
     "requiredBody": "Versi {{appName}} ini ({{current}}) tidak lagi didukung. Perbarui ke versi {{version}} untuk terus menggunakannya.",
     "now": "Perbarui",
     "later": "Nanti"
+  },
+  "official": {
+    "badge": "Akun resmi · {{label}}",
+    "title": "Akun resmi",
+    "hint": "Operator {{server}} menjamin akun ini. Nama, emoji, dan teks profil tidak dapat menambahkan lencana ini."
+  },
+  "notices": {
+    "title": "Pemberitahuan",
+    "from": "Pemberitahuan ini berasal dari operator {{server}}, server tempat akun Anda berada. Pemberitahuan ditandatangani oleh server dan diperiksa oleh aplikasi. Ini bukan pesan obrolan: tidak ada yang bisa membalasnya.",
+    "empty": "Tidak ada pemberitahuan",
+    "emptyHint": "Pengumuman dari operator {{server}}, seperti pemeliharaan terjadwal atau pembaruan wajib, akan muncul di sini.",
+    "delete": "Hapus pemberitahuan",
+    "new": "Baru",
+    "notifyTitle": "{{server}} · Pemberitahuan",
+    "hidden": "Pemberitahuan baru dari server"
   }
 }

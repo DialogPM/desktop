@@ -63,6 +63,16 @@
   }
 }
 
+/* The name and, for official accounts, the badge (drawn by the app, see OfficialBadge.tsx). */
+.call-name-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+  min-width: 0;
+}
+
 .call-name {
   font-size: 22px;
   font-weight: 700;

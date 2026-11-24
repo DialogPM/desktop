@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextAreaField, TextField, ToggleRow } from "../../components/Field";
 import { Icon } from "../../components/Icon";
+import { OfficialBadge } from "../../components/OfficialBadge";
 import { UserAvatar } from "../../components/UserAvatar";
 import i18n from "../../i18n";
 import { api } from "../../lib/api";
@@ -116,7 +117,11 @@ function MemberRow({ m, group, amAdmin }: { m: GroupMember; group: GroupInfo; am
     <button type="button" className="member-row" disabled={m.is_me}>
       <UserAvatar name={avatarName} path={avatarPath} seed={m.is_me ? "me" : m.account_id} size={40} />
       <div className="flex1">
-        <div className="member-name truncate">{name}</div>
+        <div className="member-name name-badges">
+          <span className="truncate">{name}</span>
+          {/* Verified by our core only (member list, else our contact or own profile); never from the group. */}
+          <OfficialBadge label={m.official !== undefined ? m.official : m.is_me ? profile?.official : contact?.official} />
+        </div>
         <div className="member-status truncate">{status}</div>
       </div>
       {m.role === "admin" && <span className="badge-soft">{t("group.admin")}</span>}

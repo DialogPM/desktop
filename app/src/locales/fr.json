@@ -1376,5 +1376,20 @@
     "requiredBody": "Cette version de {{appName}} ({{current}}) n'est plus prise en charge. Passez à la version {{version}} pour continuer à l'utiliser.",
     "now": "Mettre à jour",
     "later": "Plus tard"
+  },
+  "official": {
+    "badge": "Compte officiel · {{label}}",
+    "title": "Compte officiel",
+    "hint": "L'opérateur de {{server}} se porte garant de ce compte. Un nom, un emoji ou un texte de profil ne peut pas ajouter ce badge."
+  },
+  "notices": {
+    "title": "Avis",
+    "from": "Ces avis proviennent de l'opérateur de {{server}}, le serveur de votre compte. Ils sont signés par le serveur et vérifiés par l'application. Ce ne sont pas des messages de discussion : personne ne peut y répondre.",
+    "empty": "Aucun avis",
+    "emptyHint": "Les annonces de l'opérateur de {{server}}, comme une maintenance prévue ou une mise à jour obligatoire, apparaîtront ici.",
+    "delete": "Supprimer l'avis",
+    "new": "Nouveau",
+    "notifyTitle": "{{server}} · Avis",
+    "hidden": "Nouvel avis du serveur"
   }
 }

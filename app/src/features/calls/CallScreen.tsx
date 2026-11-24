@@ -5,6 +5,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../../components/Icon";
+import { ConvOfficialBadge } from "../chats/ConvOfficialBadge";
 import { UserAvatar } from "../../components/UserAvatar";
 import { formatDuration } from "../../lib/format";
 import {
@@ -226,7 +227,10 @@ function VideoCall({ call, elapsed }: { call: CallState; elapsed: number }) {
           <Icon name="lock" size={13} />
           {t("call.encrypted")}
         </div>
-        <div className="call-name">{call.peerName}</div>
+        <div className="call-name-line">
+          <div className="call-name">{call.peerName}</div>
+          <ConvOfficialBadge conversationId={call.conversationId} size={20} />
+        </div>
         <div className="call-status" data-active={call.phase === "active"}>
           {statusText(call, elapsed, t)}
         </div>
@@ -281,7 +285,10 @@ export function CallScreen() {
         <div className="call-avatar" data-pulse={call.phase !== "active"}>
           <UserAvatar name={call.peerName} path={call.peerAvatar} seed={call.conversationId} size={112} />
         </div>
-        <div className="call-name">{call.peerName}</div>
+        <div className="call-name-line">
+          <div className="call-name">{call.peerName}</div>
+          <ConvOfficialBadge conversationId={call.conversationId} size={20} />
+        </div>
         <div className="call-status" data-active={call.phase === "active"}>
           {statusText(call, elapsed, t)}
         </div>

@@ -38,6 +38,8 @@ import type {
   LoggedOutEvent,
   Mention,
   Message,
+  Notice,
+  NoticeList,
   MessageDeletedEvent,
   MessageEvent,
   MessageInfo,
@@ -56,9 +58,10 @@ import type {
   UpdateGroupRequest,
 } from "./types";
 
-const call = <T>(cmd: string, req?: unknown): Promise<T> =>
+/** `quiet`: an optional feature the UI hides when the native side lacks it (no "outdated" warning). */
+const call = <T>(cmd: string, req?: unknown, quiet = false): Promise<T> =>
   invoke<T>(cmd, req === undefined ? undefined : { req }).catch((e: unknown) => {
-    reportIfMissingCommand(e);
+    if (!quiet) reportIfMissingCommand(e);
     throw e;
   });
 
@@ -210,6 +213,13 @@ export const backend = {
   ktContactStatus: (req: { account_id: string }) => call<KtContactStatus>("kt_contact_status", req),
   ktCheckNow: () => call<KtOverview>("kt_check_now"),
   ktDismissAlerts: () => call<void>("kt_dismiss_alerts"),
+
+  // --- notices from the server operator (signed, checked by the core) ---------
+  // An older core does not know these commands: the UI then shows no notices, quietly.
+  /** Every stored notice, newest first, and how many are unread. */
+  listNotices: () => call<NoticeList>("list_notices", undefined, true),
+  markNoticesRead: () => call<{ unread: number }>("mark_notices_read", undefined, true),
+  deleteNotice: (req: { id: number }) => call<Record<string, never>>("delete_notice", req, true),
 
   // --- profile --------------------------------------------------------------
   getProfile: () => call<Profile>("get_profile"),
@@ -428,6 +438,10 @@ export interface EventPayloads {
   media_check: MediaCheck;
   /** A signed update of the desktop app is available (only in builds with updates enabled). */
   update_available: { version: string; notes: string | null };
+  /** A notice from the server operator was received and passed the signature check. */
+  notice: Notice;
+  /** The number of unread notices changed (read or deleted here or on another device). */
+  notices_changed: { unread: number };
 }
 
 /** A device with a security key that does not belong to the account was refused. */

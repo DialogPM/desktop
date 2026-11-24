@@ -29,6 +29,7 @@
 @import "./misc-late.css";
 @import "../features/conversation/conversation-late.css";
 @import "../features/groups/groups.css";
+@import "../features/notices/notices.css";
 @import "../features/calls/group-call.css";
 @import "../features/chats/chats-late.css";
 @import "../features/conversation/markdown.css";

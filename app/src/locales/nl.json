@@ -1376,5 +1376,20 @@
     "requiredBody": "Deze versie van {{appName}} ({{current}}) wordt niet meer ondersteund. Werk bij naar {{version}} om de app te blijven gebruiken.",
     "now": "Bijwerken",
     "later": "Later"
+  },
+  "official": {
+    "badge": "Officieel account · {{label}}",
+    "title": "Officieel account",
+    "hint": "De beheerder van {{server}} staat in voor dit account. Namen, emoji en profieltekst kunnen deze badge niet toevoegen."
+  },
+  "notices": {
+    "title": "Mededelingen",
+    "from": "Deze mededelingen komen van de beheerder van {{server}}, de server waarop je account staat. Ze zijn door de server ondertekend en door de app gecontroleerd. Het zijn geen chatberichten: niemand kan erop reageren.",
+    "empty": "Geen mededelingen",
+    "emptyHint": "Mededelingen van de beheerder van {{server}}, zoals gepland onderhoud of een verplichte update, verschijnen hier.",
+    "delete": "Mededeling verwijderen",
+    "new": "Nieuw",
+    "notifyTitle": "{{server}} · Mededeling",
+    "hidden": "Nieuwe mededeling van de server"
   }
 }

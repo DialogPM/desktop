@@ -102,7 +102,11 @@ export function MainLayout() {
     else if (sidebar === "settings") {
       pane = <SettingsMenu />;
       tabbar = true;
-    } else if (sidebar !== "chats") pane = <Sidebar />;
+    } else if (sidebar !== "chats") {
+      pane = <Sidebar />;
+      // Notices are one of the tabs.
+      tabbar = sidebar === "notices";
+    }
     else if (active && infoOpen) pane = <InfoPanel conversationId={active} />;
     else if (active) pane = <ConversationView key={active} conversationId={active} />;
     else {

@@ -1396,5 +1396,20 @@
     "requiredBody": "Această versiune de {{appName}} ({{current}}) nu mai este acceptată. Actualizează la {{version}} pentru a continua.",
     "now": "Actualizează",
     "later": "Mai târziu"
+  },
+  "official": {
+    "badge": "Cont oficial · {{label}}",
+    "title": "Cont oficial",
+    "hint": "Operatorul {{server}} garantează pentru acest cont. Numele, emoji-urile și textul din profil nu pot adăuga această insignă."
+  },
+  "notices": {
+    "title": "Anunțuri",
+    "from": "Aceste anunțuri vin de la operatorul {{server}}, serverul pe care e contul tău. Sunt semnate de server și verificate de aplicație. Nu sunt mesaje de chat: nimeni nu le poate răspunde.",
+    "empty": "Niciun anunț",
+    "emptyHint": "Anunțurile operatorului {{server}}, cum ar fi o mentenanță planificată sau o actualizare obligatorie, vor apărea aici.",
+    "delete": "Șterge anunțul",
+    "new": "Nou",
+    "notifyTitle": "{{server}} · Anunț",
+    "hidden": "Anunț nou de la server"
   }
 }

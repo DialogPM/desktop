@@ -7,14 +7,19 @@ import { modals } from "@mantine/modals";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { api } from "../../lib/api";
+import { OfficialLine } from "../../components/OfficialLine";
 import type { Conversation } from "../../lib/types";
 import { attempt, loadMessages, setBlocked } from "../../store/actions";
+import { usePeerOfficial } from "../../store/selectors";
 import { removeLocally } from "./requestActions";
 
 export function RequestBar({ conv }: { conv: Conversation }) {
   const { t } = useTranslation();
   const [busy, setBusy] = useState(false);
   const group = conv.kind === "group";
+  // Only the badge the core verified says who this is; the name in the title is whatever the
+  // sender chose, so a stranger's request never gets anything more than that.
+  const official = usePeerOfficial(conv);
 
   const accept = async () => {
     setBusy(true);
@@ -55,6 +60,7 @@ export function RequestBar({ conv }: { conv: Conversation }) {
     <div className="request-bar">
       <div className="request-bar-text">
         <strong>{t(group ? "request.groupTitle" : "request.title", { name: conv.title })}</strong>
+        <OfficialLine label={official} explain />
         <span>{t(group ? "request.groupBody" : "request.body")}</span>
       </div>
       <div className="request-bar-actions">

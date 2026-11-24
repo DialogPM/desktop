@@ -1376,5 +1376,20 @@
     "requiredBody": "Esta versión de {{appName}} ({{current}}) ya no es compatible. Actualiza a la {{version}} para seguir usándola.",
     "now": "Actualizar",
     "later": "Más tarde"
+  },
+  "official": {
+    "badge": "Cuenta oficial · {{label}}",
+    "title": "Cuenta oficial",
+    "hint": "El operador de {{server}} avala esta cuenta. Los nombres, los emojis y el texto del perfil no pueden añadir esta insignia."
+  },
+  "notices": {
+    "title": "Avisos",
+    "from": "Estos avisos vienen del operador de {{server}}, el servidor en el que está tu cuenta. Están firmados por el servidor y la app los comprueba. No son mensajes de chat: nadie puede responderlos.",
+    "empty": "No hay avisos",
+    "emptyHint": "Los anuncios del operador de {{server}}, como un mantenimiento programado o una actualización obligatoria, aparecerán aquí.",
+    "delete": "Eliminar aviso",
+    "new": "Nuevo",
+    "notifyTitle": "{{server}} · Aviso",
+    "hidden": "Nuevo aviso del servidor"
   }
 }

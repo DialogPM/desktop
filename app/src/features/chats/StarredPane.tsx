@@ -11,6 +11,7 @@ import type { Message } from "../../lib/types";
 import { openConversation } from "../../store/actions";
 import { setApp, useApp } from "../../store/app";
 import { starMessage } from "../conversation/messageActions";
+import { ConvOfficialBadge } from "./ConvOfficialBadge";
 
 /** Starred messages of every chat (this device only, a week each). */
 export function StarredPane() {
@@ -58,6 +59,7 @@ export function StarredPane() {
                 <div className="chat-row-body">
                   <div className="chat-row-top">
                     <span className="chat-row-name">{c.title}</span>
+                    <ConvOfficialBadge conversationId={c.id} />
                     <span className="chat-row-time">{formatListTime(m.sent_at, locale, t)}</span>
                   </div>
                   <div className="chat-row-bottom">

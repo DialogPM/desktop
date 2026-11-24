@@ -1356,5 +1356,20 @@
     "requiredBody": "Phiên bản {{appName}} này ({{current}}) không còn được hỗ trợ. Hãy cập nhật lên {{version}} để tiếp tục sử dụng.",
     "now": "Cập nhật",
     "later": "Để sau"
+  },
+  "official": {
+    "badge": "Tài khoản chính thức · {{label}}",
+    "title": "Tài khoản chính thức",
+    "hint": "Đơn vị vận hành {{server}} bảo đảm cho tài khoản này. Tên, emoji hay nội dung hồ sơ không thể thêm huy hiệu này."
+  },
+  "notices": {
+    "title": "Thông báo hệ thống",
+    "from": "Các thông báo hệ thống này đến từ đơn vị vận hành {{server}}, máy chủ chứa tài khoản của bạn. Chúng được máy chủ ký và được ứng dụng kiểm tra. Đây không phải tin nhắn trò chuyện: không ai có thể trả lời.",
+    "empty": "Không có thông báo hệ thống",
+    "emptyHint": "Thông báo từ đơn vị vận hành {{server}}, chẳng hạn bảo trì theo lịch hoặc yêu cầu cập nhật, sẽ hiện ở đây.",
+    "delete": "Xóa thông báo",
+    "new": "Mới",
+    "notifyTitle": "{{server}} · Thông báo hệ thống",
+    "hidden": "Thông báo hệ thống mới từ máy chủ"
   }
 }

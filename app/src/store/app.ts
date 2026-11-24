@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { useAppLock } from "../lib/appLock";
 import { applyCallSettings, DEFAULT_CALL_SETTINGS } from "../lib/callSettings";
 import { applyDnd } from "../lib/dnd";
+import { resetNotices } from "./notices";
 import type {
   AccountDetails,
   AppState,
@@ -20,7 +21,7 @@ import type {
 } from "../lib/types";
 
 export type ChatFilter = "all" | "unread" | "groups" | "archived" | "requests";
-export type SidebarView = "chats" | "settings" | "new_chat" | "new_group" | "starred";
+export type SidebarView = "chats" | "settings" | "new_chat" | "new_group" | "starred" | "notices";
 export type SettingsSection =
   | "profile"
   | "account"
@@ -234,4 +235,5 @@ export function resetSession() {
   useAppLock.setState({ enabled: false, locked: false });
   applyDnd(0);
   applyCallSettings(DEFAULT_CALL_SETTINGS);
+  resetNotices();
 }

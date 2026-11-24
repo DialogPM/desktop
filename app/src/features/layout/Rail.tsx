@@ -8,7 +8,8 @@ import { AccountSwitcher } from "./AccountSwitcher";
 import { useAppearance } from "../../lib/appearance";
 import { dndUntilText, useDnd } from "../../lib/dnd";
 import { toggleDnd } from "../settings/dndDialog";
-import { openSettings } from "../../store/actions";
+import { openNotices, openSettings } from "../../store/actions";
+import { useNotices } from "../../store/notices";
 import { setApp, useApp } from "../../store/app";
 import { useUnreadChats } from "../../store/selectors";
 import { openMyQr } from "../chats/MyQrModal";
@@ -27,9 +28,11 @@ export function Rail() {
   const toggleScheme = useAppearance((s) => s.toggleScheme);
   const scheme = useAppearance((s) => s.scheme);
   const dndUntil = useDnd((s) => s.until);
-  const inChats = sidebar !== "settings";
+  const inChats = sidebar !== "settings" && sidebar !== "notices";
+  // Shown only with a core that knows notices (an older one has none to show).
+  const notices = useNotices((s) => (s.supported ? s.unread : -1));
 
-  const item = (label: string, icon: "chat" | "qr" | "gear", active: boolean, onClick: () => void, badge?: number) => (
+  const item = (label: string, icon: "chat" | "qr" | "gear" | "bell", active: boolean, onClick: () => void, badge?: number) => (
     <Tooltip label={label} position="right">
       <button type="button" className="rail-btn" data-active={active} onClick={onClick} aria-label={label}>
         <Icon name={icon} size={21} />
@@ -44,6 +47,7 @@ export function Rail() {
         <Icon name="chat" size={21} />
       </div>
       {item(t("chats.title"), "chat", inChats, () => setApp({ sidebar: "chats", settingsSection: null }), unread)}
+      {notices >= 0 && item(t("notices.title"), "bell", sidebar === "notices", openNotices, notices)}
       {item(t("qr.title"), "qr", false, () => openMyQr())}
       {item(t("settings.title"), "gear", sidebar === "settings", () => openSettings(useApp.getState().settingsSection ?? "account"))}
       <div style={{ flex: 1 }} />
@@ -71,7 +75,8 @@ export function TabBar() {
   const { t } = useTranslation();
   const sidebar = useApp((s) => s.sidebar);
   const unread = useUnreadChats();
-  const tab = (label: string, icon: "chat" | "qr" | "gear", active: boolean, onClick: () => void, badge?: number) => (
+  const notices = useNotices((s) => (s.supported ? s.unread : -1));
+  const tab = (label: string, icon: "chat" | "qr" | "gear" | "bell", active: boolean, onClick: () => void, badge?: number) => (
     <button type="button" data-active={active} onClick={onClick}>
       <span className="tabbar-pill">
         <Icon name={icon} size={21} />
@@ -82,7 +87,8 @@ export function TabBar() {
   );
   return (
     <nav className="tabbar">
-      {tab(t("chats.title"), "chat", sidebar !== "settings", () => setApp({ sidebar: "chats", settingsSection: null }), unread)}
+      {tab(t("chats.title"), "chat", sidebar !== "settings" && sidebar !== "notices", () => setApp({ sidebar: "chats", settingsSection: null }), unread)}
+      {notices >= 0 && tab(t("notices.title"), "bell", sidebar === "notices", openNotices, notices)}
       {tab(t("qr.title"), "qr", false, () => openMyQr())}
       {tab(t("settings.title"), "gear", sidebar === "settings", () => openSettings(null))}
     </nav>
