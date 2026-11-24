@@ -155,6 +155,7 @@ function UsernameLinkSection() {
 export function UsernameCard() {
   const { t } = useTranslation();
   const username = useApp((s) => s.details?.username ?? null);
+  const webLinks = useApp((s) => userLinksAvailable(s.appState?.account?.server_url));
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);
@@ -262,12 +263,21 @@ export function UsernameCard() {
         ) : username ? (
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <UsernameText username={username} />
-            <CopyButton value={`@${username}`}>
-              {({ copied, copy }) => (
-                <button type="button" className="icon-btn" onClick={copy} aria-label={t("common.copy")}>
-                  <Icon name={copied ? "check" : "copy"} size={15} />
-                </button>
-              )}
+            {/* On the official server copying the username copies its public link
+                (dialog.pm/@name), ready to send to someone; elsewhere the plain @name. */}
+            <CopyButton value={webLinks ? userLink(username) : `@${username}`}>
+              {({ copied, copy }) =>
+                webLinks ? (
+                  <button type="button" className="chip-btn" onClick={copy} data-copy-user-link>
+                    <Icon name={copied ? "check" : "copy"} size={15} />
+                    {copied ? t("qr.linkCopied") : t("qr.copyLink")}
+                  </button>
+                ) : (
+                  <button type="button" className="icon-btn" onClick={copy} aria-label={t("common.copy")}>
+                    <Icon name={copied ? "check" : "copy"} size={15} />
+                  </button>
+                )
+              }
             </CopyButton>
             <span style={{ flex: 1 }} />
             <button type="button" className="chip-btn" data-tone="sunk" onClick={startEdit} disabled={busy}>
