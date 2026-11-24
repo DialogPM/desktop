@@ -514,3 +514,35 @@
   display: flex;
   padding: 0;
 }
+
+/* Registration: the optional seed passphrase, folded under "Advanced". */
+.adv-toggle {
+  align-self: flex-start;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+}
+
+.adv-toggle svg {
+  transition: transform 0.15s ease;
+}
+
+.adv-toggle[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+
+.adv-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}

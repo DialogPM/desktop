@@ -222,6 +222,19 @@
       "ready": "Sua conta está pronta",
       "reveal": "Mostrar frase"
     },
+    "seedPass": {
+      "advanced": "Avançado",
+      "title": "25.ª palavra (opcional)",
+      "hint": "Uma frase-passe escolhida por si que passa a fazer parte da frase de recuperação. A conta só poderá ser recuperada com as 24 palavras e esta frase-passe.",
+      "label": "25.ª palavra",
+      "confirm": "Repita a 25.ª palavra",
+      "mismatch": "As duas não coincidem",
+      "spaces": "Não pode começar nem terminar com um espaço",
+      "warning": "Não é guardada em lado nenhum e não pode ser redefinida. Se a esquecer, a conta nunca poderá ser recuperada.",
+      "notShown": "Também definiu uma 25.ª palavra. Não é mostrada aqui: guarde-a separada das 24 palavras.",
+      "recoverLabel": "25.ª palavra (se definiu uma)",
+      "recoverHint": "Deixe vazio se não definiu uma ao criar a conta."
+    },
     "login": {
       "title": "Entrar",
       "subtitle": "Use seu número de conta e sua senha. Este dispositivo será adicionado à sua conta.",
@@ -401,6 +414,9 @@
     "mask": "Anonimizar minha voz nas mensagens de voz",
     "maskHint": "Sua voz é alterada neste dispositivo antes do envio (tom e timbre, diferentes em cada mensagem), então o original nunca sai do dispositivo. Suas palavras, sotaque e jeito de falar continuam. Vale apenas para este dispositivo.",
     "maskOn": "Sua voz será anonimizada",
+    "maskToggleOn": "Voz anonimizada: a sua voz original não é enviada",
+    "maskToggleOff": "Voz anonimizada desativada",
+    "maskRestarted": "A gravação recomeçou",
     "maskProcessing": "Anonimizando a voz…",
     "maskError": "Não foi possível anonimizar a voz, então a mensagem não foi enviada.",
     "maskTry": "Ouça como fica",

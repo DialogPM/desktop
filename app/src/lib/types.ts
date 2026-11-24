@@ -34,6 +34,8 @@ export interface AppState {
   default_server_url: string;
   /** Recovery phrase of a just-created account not yet confirmed by the user. */
   pending_mnemonic?: string[] | null;
+  /** The account has a seed passphrase ("25th word"): recovery needs it besides the words. */
+  seed_passphrase?: boolean;
   /** The local database is locked with the account password. */
   local_protected: boolean;
   /** "Remember the password on this device" is on: the data opens at startup without it. */
@@ -44,6 +46,8 @@ export interface RegisterResult {
   account: AccountInfo;
   /** 24 BIP39 words. Shown to the user exactly once. */
   mnemonic: string[];
+  /** A seed passphrase was set; it is not part of the words shown. */
+  seed_passphrase?: boolean;
 }
 
 export type ConnectionState = "connecting" | "online" | "offline";

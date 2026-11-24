@@ -43,7 +43,7 @@ export function App() {
     return (
       <Onboarding
         defaultServer={appState.default_server_url}
-        resume={{ account: appState.account, mnemonic: appState.pending_mnemonic }}
+        resume={{ account: appState.account, mnemonic: appState.pending_mnemonic, seed_passphrase: appState.seed_passphrase }}
       />
     );
   }

@@ -225,6 +225,19 @@
       "ready": "Il tuo account è pronto",
       "reveal": "Mostra la frase"
     },
+    "seedPass": {
+      "advanced": "Avanzate",
+      "title": "25ª parola (facoltativa)",
+      "hint": "Una passphrase scelta da te che diventa parte della frase di recupero. L’account potrà essere recuperato solo con le 24 parole e questa passphrase.",
+      "label": "25ª parola",
+      "confirm": "Ripeti la 25ª parola",
+      "mismatch": "Le due non coincidono",
+      "spaces": "Non può iniziare o finire con uno spazio",
+      "warning": "Non viene salvata da nessuna parte e non può essere reimpostata. Se la dimentichi, l’account non potrà mai essere recuperato.",
+      "notShown": "Hai impostato anche una 25ª parola. Non è mostrata qui: conservala separata dalle 24 parole.",
+      "recoverLabel": "25ª parola (se ne hai impostata una)",
+      "recoverHint": "Lascia vuoto se non ne hai impostata una alla creazione dell’account."
+    },
     "login": {
       "title": "Accedi",
       "subtitle": "Usa il numero di account e la password. Questo dispositivo verrà aggiunto al tuo account.",
@@ -404,6 +417,9 @@
     "mask": "Anonimizza la mia voce nei messaggi vocali",
     "maskHint": "La tua voce viene modificata su questo dispositivo prima dell'invio (tono e timbro, diversi per ogni messaggio), quindi l'originale non lascia mai il dispositivo. Le parole, l'accento e il modo di parlare restano. Vale solo per questo dispositivo.",
     "maskOn": "La tua voce sarà anonimizzata",
+    "maskToggleOn": "Voce anonimizzata: la tua voce originale non viene inviata",
+    "maskToggleOff": "Voce anonimizzata disattivata",
+    "maskRestarted": "La registrazione è ricominciata",
     "maskProcessing": "Anonimizzazione della voce…",
     "maskError": "Non è stato possibile anonimizzare la voce, quindi il messaggio non è stato inviato.",
     "maskTry": "Ascolta come suona",

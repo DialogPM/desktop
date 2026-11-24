@@ -222,6 +222,19 @@
       "ready": "Your account is ready",
       "reveal": "Show phrase"
     },
+    "seedPass": {
+      "advanced": "Advanced",
+      "title": "25th word (optional)",
+      "hint": "A passphrase you choose that becomes part of your recovery phrase. The account can then be recovered only with the 24 words and this passphrase.",
+      "label": "25th word",
+      "confirm": "Repeat the 25th word",
+      "mismatch": "The two do not match",
+      "spaces": "It cannot start or end with a space",
+      "warning": "It is not saved anywhere and cannot be reset. If you forget it, the account can never be recovered.",
+      "notShown": "You also set a 25th word. It is not shown here: keep it separate from the 24 words.",
+      "recoverLabel": "25th word (if you set one)",
+      "recoverHint": "Leave empty if you did not set one when you created the account."
+    },
     "login": {
       "title": "Log in",
       "subtitle": "Use your account number and password. This device will be added to your account.",
@@ -401,6 +414,9 @@
     "mask": "Anonymize my voice in voice messages",
     "maskHint": "Your voice is changed on this device before sending (pitch and timbre, different for every message), so the original never leaves the device. Your words, accent and way of speaking stay. Applies to this device only.",
     "maskOn": "Your voice will be anonymized",
+    "maskToggleOn": "Anonymized voice: your original voice is not sent",
+    "maskToggleOff": "Anonymized voice off",
+    "maskRestarted": "The recording started again",
     "maskProcessing": "Anonymizing the voice…",
     "maskError": "The voice could not be anonymized, so the message was not sent.",
     "maskTry": "Hear how it sounds",

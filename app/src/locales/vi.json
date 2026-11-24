@@ -219,6 +219,19 @@
       "ready": "Tài khoản của bạn đã sẵn sàng",
       "reveal": "Hiện cụm từ"
     },
+    "seedPass": {
+      "advanced": "Nâng cao",
+      "title": "Từ thứ 25 (tùy chọn)",
+      "hint": "Một cụm mật khẩu do bạn chọn, trở thành một phần của cụm từ khôi phục. Khi đó tài khoản chỉ có thể được khôi phục bằng 24 từ và cụm mật khẩu này.",
+      "label": "Từ thứ 25",
+      "confirm": "Nhập lại từ thứ 25",
+      "mismatch": "Hai giá trị không khớp",
+      "spaces": "Không được bắt đầu hoặc kết thúc bằng dấu cách",
+      "warning": "Nó không được lưu ở đâu cả và không thể đặt lại. Nếu bạn quên, tài khoản sẽ không bao giờ khôi phục được.",
+      "notShown": "Bạn cũng đã đặt từ thứ 25. Nó không được hiển thị ở đây: hãy cất riêng với 24 từ.",
+      "recoverLabel": "Từ thứ 25 (nếu bạn đã đặt)",
+      "recoverHint": "Để trống nếu bạn không đặt khi tạo tài khoản."
+    },
     "login": {
       "title": "Đăng nhập",
       "subtitle": "Dùng số tài khoản và mật khẩu của bạn. Thiết bị này sẽ được thêm vào tài khoản.",
@@ -398,6 +411,9 @@
     "mask": "Ẩn danh giọng nói của tôi trong tin nhắn thoại",
     "maskHint": "Giọng nói của bạn được thay đổi ngay trên thiết bị này trước khi gửi (cao độ và âm sắc, khác nhau ở mỗi tin nhắn), nên bản gốc không bao giờ rời khỏi thiết bị. Lời nói, giọng vùng miền và cách nói của bạn vẫn giữ nguyên. Chỉ áp dụng cho thiết bị này.",
     "maskOn": "Giọng nói của bạn sẽ được ẩn danh",
+    "maskToggleOn": "Giọng nói ẩn danh: giọng gốc của bạn không được gửi đi",
+    "maskToggleOff": "Đã tắt giọng nói ẩn danh",
+    "maskRestarted": "Đã bắt đầu ghi âm lại",
     "maskProcessing": "Đang ẩn danh giọng nói…",
     "maskError": "Không ẩn danh được giọng nói nên tin nhắn chưa được gửi.",
     "maskTry": "Nghe thử kết quả",

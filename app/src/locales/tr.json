@@ -222,6 +222,19 @@
       "ready": "Hesabınız hazır",
       "reveal": "İfadeyi göster"
     },
+    "seedPass": {
+      "advanced": "Gelişmiş",
+      "title": "25. kelime (isteğe bağlı)",
+      "hint": "Seçtiğiniz ve kurtarma ifadenizin parçası olan bir parola. Hesap yalnızca 24 kelime ve bu parolayla kurtarılabilir.",
+      "label": "25. kelime",
+      "confirm": "25. kelimeyi tekrarlayın",
+      "mismatch": "İkisi eşleşmiyor",
+      "spaces": "Boşlukla başlayamaz veya bitemez",
+      "warning": "Hiçbir yerde saklanmaz ve sıfırlanamaz. Unutursanız hesap bir daha asla kurtarılamaz.",
+      "notShown": "Bir 25. kelime de belirlediniz. Burada gösterilmez: 24 kelimeden ayrı saklayın.",
+      "recoverLabel": "25. kelime (belirlediyseniz)",
+      "recoverHint": "Hesabı oluştururken belirlemediyseniz boş bırakın."
+    },
     "login": {
       "title": "Giriş yap",
       "subtitle": "Hesap numaranızı ve parolanızı kullanın. Bu cihaz hesabınıza eklenecek.",
@@ -401,6 +414,9 @@
     "mask": "Sesli mesajlarda sesimi anonimleştir",
     "maskHint": "Sesiniz göndermeden önce bu cihazda değiştirilir (perde ve tını, her mesajda farklı), böylece orijinali cihazdan asla çıkmaz. Sözcükleriniz, aksanınız ve konuşma tarzınız aynı kalır. Yalnızca bu cihaz için geçerlidir.",
     "maskOn": "Sesiniz anonimleştirilecek",
+    "maskToggleOn": "Anonim ses: özgün sesiniz gönderilmez",
+    "maskToggleOff": "Anonim ses kapalı",
+    "maskRestarted": "Kayıt yeniden başladı",
     "maskProcessing": "Ses anonimleştiriliyor…",
     "maskError": "Ses anonimleştirilemedi, bu yüzden mesaj gönderilmedi.",
     "maskTry": "Nasıl duyulduğunu dinleyin",

@@ -580,7 +580,7 @@ export const mockBackend: Backend = {
     d.details.account = { account_id: ME_ID, number: randomNumber(), device_id: 1, server_url: req.server_url };
     d.devices[0].name = req.device_name;
     const mnemonic = Array.from({ length: 24 }, () => WORDS[Math.floor(Math.random() * WORDS.length)]);
-    return { account: clone(d.details.account), mnemonic };
+    return { account: clone(d.details.account), mnemonic, seed_passphrase: !!req.seed_passphrase };
   },
   async login(req) {
     await sleep(800);

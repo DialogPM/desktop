@@ -1,8 +1,9 @@
 // Records a voice note and shows a live waveform and timer. The "1" button before sending
 // makes it a view-once voice message (played a single time, then erased: engine/view_once.rs).
-// The ✨ button picks a voice effect for this note (lib/voiceFx.ts); "anonymous" (the default
-// when "anonymized voice" is on, lib/voiceMask.ts) is done by the core's voice_mask.rs. If the
-// effect fails nothing is sent (never the original voice).
+// The ✨ button (the only one for effects) opens the list of voice effects for this note
+// (lib/voiceFx.ts); "anonymous" (the default when "anonymized voice" is on, lib/voiceMask.ts)
+// is done by the core's voice_mask.rs. If the effect fails nothing is sent (never the original
+// voice).
 //
 // Audio is captured as raw PCM through Web Audio and encoded as WAV (lib/wav.ts) instead of
 // using MediaRecorder: WebKit's MediaRecorder (macOS and Linux webviews) can report a format
@@ -13,7 +14,8 @@
 // opened, sending only digital silence meanwhile. The recorder shows "starting the microphone"
 // and starts the timer only with the first real sound, so nothing said after it shows is lost.
 
-import { Menu, Tooltip } from "@mantine/core";
+import { Tooltip } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import { IconSparkles } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import { useEffect, useRef, useState } from "react";
@@ -43,6 +45,25 @@ function downsample(levels: number[], n: number): number[] {
   }
   const max = Math.max(...out, 0.01);
   return out.map((v) => Math.max(0.05, Math.min(1, v / max)));
+}
+
+/** The effects to choose from, one row each; a new effect only needs an entry in VOICE_EFFECTS. */
+function VoiceEffectPicker({ current, onPick }: { current: VoiceEffect; onPick: (e: VoiceEffect) => void }) {
+  const { t } = useTranslation();
+  return (
+    <div className="fx-list" role="listbox" aria-label={t("voiceFx.title")}>
+      {VOICE_EFFECTS.map((e) => (
+        <button key={e} type="button" className="fx-item" role="option" aria-selected={e === current} onClick={() => onPick(e)}>
+          <span className="fx-emoji" aria-hidden>
+            {VOICE_EFFECT_EMOJI[e]}
+          </span>
+          <span className="fx-name">{t(`voiceFx.${e}`)}</span>
+          <span className="fx-note">{e === "anonymous" ? t("voice.maskToggleOn") : ""}</span>
+          {e === current && <Icon name="check" size={18} />}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 interface Props {
@@ -233,36 +254,35 @@ export function VoiceRecorder({ onCancel, onSend }: Props) {
           ))}
         </div>
       </div>
-      <Menu position="top" withinPortal shadow="md" disabled={masking}>
-        <Menu.Target>
-          <button
-            type="button"
-            className="composer-round"
-            disabled={masking}
-            style={{ background: effect !== "none" ? "var(--accent)" : "var(--sunk)", color: effect !== "none" ? "var(--on-accent)" : undefined }}
-            aria-label={t("voiceFx.title")}
-            title={effect !== "none" ? t(`voiceFx.${effect}`) : t("voiceFx.title")}
-          >
-            {effect !== "none" ? <span style={{ fontSize: 18 }}>{VOICE_EFFECT_EMOJI[effect]}</span> : <IconSparkles size={20} stroke={1.8} />}
-          </button>
-        </Menu.Target>
-        <Menu.Dropdown>
-          <Menu.Label>{t("voiceFx.title")}</Menu.Label>
-          {VOICE_EFFECTS.map((e) => (
-            <Menu.Item
-              key={e}
-              leftSection={<span style={{ fontSize: 18 }}>{VOICE_EFFECT_EMOJI[e]}</span>}
-              style={e === effect ? { fontWeight: 700 } : undefined}
-              onClick={() => {
-                effectRef.current = e;
-                setEffect(e);
-              }}
-            >
-              {t(`voiceFx.${e}`)}
-            </Menu.Item>
-          ))}
-        </Menu.Dropdown>
-      </Menu>
+      <Tooltip label={effect !== "none" ? `${t("voiceFx.title")}: ${t(`voiceFx.${effect}`)}` : t("voiceFx.title")}>
+        <button
+          type="button"
+          className="composer-round"
+          disabled={masking}
+          style={{ background: effect !== "none" ? "var(--accent)" : "var(--sunk)", color: effect !== "none" ? "var(--on-accent)" : undefined }}
+          aria-haspopup="dialog"
+          aria-label={t("voiceFx.title")}
+          data-voice-fx={effect}
+          onClick={() =>
+            modals.open({
+              title: t("voiceFx.title"),
+              size: 420,
+              children: (
+                <VoiceEffectPicker
+                  current={effect}
+                  onPick={(e) => {
+                    effectRef.current = e;
+                    setEffect(e);
+                    modals.closeAll();
+                  }}
+                />
+              ),
+            })
+          }
+        >
+          <IconSparkles size={20} stroke={1.8} />
+        </button>
+      </Tooltip>
       <Tooltip label={viewOnce ? t("viewOnce.voiceToggleOn") : t("viewOnce.voiceToggle")} multiline maw={260}>
         <button
           type="button"

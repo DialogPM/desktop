@@ -316,6 +316,7 @@ function RevealMnemonicForm() {
   const [words, setWords] = useState<string[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const withPhrase = useApp((s) => !!s.appState?.seed_passphrase);
 
   const submit = async () => {
     setBusy(true);
@@ -337,6 +338,14 @@ function RevealMnemonicForm() {
           {t("settings.account.recoveryShown")}
         </div>
         <SeedGrid words={words} />
+        {withPhrase && (
+          <div className="notice" data-tone="warn">
+            <span>
+              <Icon name="alert" size={16} />
+            </span>
+            <span>{t("onboarding.seedPass.notShown")}</span>
+          </div>
+        )}
         <div className="notice" data-tone="warn">
           <span>
             <Icon name="alert" size={16} />

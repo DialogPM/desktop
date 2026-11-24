@@ -222,6 +222,19 @@
       "ready": "Dein Konto ist bereit",
       "reveal": "Phrase anzeigen"
     },
+    "seedPass": {
+      "advanced": "Erweitert",
+      "title": "25. Wort (optional)",
+      "hint": "Eine von dir gewählte Passphrase, die Teil deiner Wiederherstellungsphrase wird. Das Konto lässt sich dann nur mit den 24 Wörtern und dieser Passphrase wiederherstellen.",
+      "label": "25. Wort",
+      "confirm": "25. Wort wiederholen",
+      "mismatch": "Die beiden stimmen nicht überein",
+      "spaces": "Darf nicht mit einem Leerzeichen beginnen oder enden",
+      "warning": "Es wird nirgends gespeichert und kann nicht zurückgesetzt werden. Wenn du es vergisst, kann das Konto nie wiederhergestellt werden.",
+      "notShown": "Du hast auch ein 25. Wort festgelegt. Es wird hier nicht angezeigt: Bewahre es getrennt von den 24 Wörtern auf.",
+      "recoverLabel": "25. Wort (falls festgelegt)",
+      "recoverHint": "Leer lassen, wenn du beim Erstellen des Kontos keines festgelegt hast."
+    },
     "login": {
       "title": "Anmelden",
       "subtitle": "Verwende deine Kontonummer und dein Passwort. Dieses Gerät wird zu deinem Konto hinzugefügt.",
@@ -401,6 +414,9 @@
     "mask": "Meine Stimme in Sprachnachrichten anonymisieren",
     "maskHint": "Deine Stimme wird vor dem Senden auf diesem Gerät verändert (Tonhöhe und Klangfarbe, bei jeder Nachricht anders), sodass das Original das Gerät nie verlässt. Deine Worte, dein Akzent und deine Sprechweise bleiben erhalten. Gilt nur für dieses Gerät.",
     "maskOn": "Deine Stimme wird anonymisiert",
+    "maskToggleOn": "Anonymisierte Stimme: Deine Originalstimme wird nicht gesendet",
+    "maskToggleOff": "Anonymisierte Stimme aus",
+    "maskRestarted": "Die Aufnahme wurde neu gestartet",
     "maskProcessing": "Stimme wird anonymisiert…",
     "maskError": "Die Stimme konnte nicht anonymisiert werden, daher wurde die Nachricht nicht gesendet.",
     "maskTry": "Hör dir an, wie es klingt",

@@ -222,6 +222,19 @@
       "ready": "Je account is klaar",
       "reveal": "Zin tonen"
     },
+    "seedPass": {
+      "advanced": "Geavanceerd",
+      "title": "25e woord (optioneel)",
+      "hint": "Een wachtwoordzin die je zelf kiest en die deel wordt van je herstelzin. Het account kan dan alleen worden hersteld met de 24 woorden en deze wachtwoordzin.",
+      "label": "25e woord",
+      "confirm": "Herhaal het 25e woord",
+      "mismatch": "De twee komen niet overeen",
+      "spaces": "Mag niet met een spatie beginnen of eindigen",
+      "warning": "Het wordt nergens opgeslagen en kan niet worden gereset. Als je het vergeet, kan het account nooit meer worden hersteld.",
+      "notShown": "Je hebt ook een 25e woord ingesteld. Het wordt hier niet getoond: bewaar het gescheiden van de 24 woorden.",
+      "recoverLabel": "25e woord (als je er een hebt ingesteld)",
+      "recoverHint": "Laat leeg als je er geen hebt ingesteld bij het aanmaken van het account."
+    },
     "login": {
       "title": "Inloggen",
       "subtitle": "Gebruik je accountnummer en wachtwoord. Dit apparaat wordt aan je account toegevoegd.",
@@ -401,6 +414,9 @@
     "mask": "Mijn stem anonimiseren in spraakberichten",
     "maskHint": "Je stem wordt vóór het verzenden op dit apparaat veranderd (toonhoogte en klankkleur, voor elk bericht anders), zodat het origineel het apparaat nooit verlaat. Je woorden, accent en manier van spreken blijven behouden. Geldt alleen voor dit apparaat.",
     "maskOn": "Je stem wordt geanonimiseerd",
+    "maskToggleOn": "Geanonimiseerde stem: je oorspronkelijke stem wordt niet verzonden",
+    "maskToggleOff": "Geanonimiseerde stem uit",
+    "maskRestarted": "De opname is opnieuw gestart",
     "maskProcessing": "Stem anonimiseren…",
     "maskError": "De stem kon niet worden geanonimiseerd, dus het bericht is niet verzonden.",
     "maskTry": "Hoor hoe het klinkt",

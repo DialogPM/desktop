@@ -452,3 +452,49 @@
   height: 64px;
   border-radius: 19px;
 }
+
+/* Voice effect list (VoiceRecorder, opened from the ✨ button). */
+.fx-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fx-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.fx-item:hover,
+.fx-item[aria-selected="true"] {
+  background: var(--sunk);
+}
+
+.fx-emoji {
+  font-size: 22px;
+  width: 28px;
+  text-align: center;
+}
+
+.fx-name {
+  font-weight: 600;
+}
+
+.fx-note {
+  flex: 1;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.fx-item svg {
+  color: var(--accent-text);
+}

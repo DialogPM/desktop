@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AccountNumberInput } from "../../components/AccountNumberInput";
+import { PasswordField } from "../../components/Field";
 import { Icon } from "../../components/Icon";
 import { PasswordPairFields } from "../../components/PasswordPairFields";
 import { api } from "../../lib/api";
@@ -23,6 +24,7 @@ export function RecoverForm({ serverUrl, onBack }: { serverUrl: string; onBack: 
   const [number, setNumber] = useState("");
   const [words, setWords] = useState<string[]>(() => Array(WORD_COUNT).fill(""));
   const pair = usePasswordPair();
+  const [phrase, setPhrase] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const refs = useRef<(HTMLInputElement | null)[]>([]);
@@ -57,6 +59,7 @@ export function RecoverForm({ serverUrl, onBack }: { serverUrl: string; onBack: 
         mnemonic: words.map((w) => w.trim().toLowerCase()),
         new_password: pair.password,
         device_name: defaultDeviceName(),
+        ...(phrase ? { seed_passphrase: phrase } : {}),
       });
       await enterApp();
     } catch (e) {
@@ -118,6 +121,14 @@ export function RecoverForm({ serverUrl, onBack }: { serverUrl: string; onBack: 
           ))}
         </div>
       </div>
+      <PasswordField
+        label={t("onboarding.seedPass.recoverLabel")}
+        description={t("onboarding.seedPass.recoverHint")}
+        value={phrase}
+        onChange={(e) => setPhrase(e.currentTarget.value)}
+        autoComplete="off"
+        placeholder=""
+      />
       <PasswordPairFields pair={pair} size="lg" />
       {error && <div className="error-text">{error}</div>}
       <button type="submit" className="btn btn-primary" disabled={!valid || busy}>

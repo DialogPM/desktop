@@ -219,6 +219,19 @@
       "ready": "Akun Anda siap",
       "reveal": "Tampilkan frasa"
     },
+    "seedPass": {
+      "advanced": "Lanjutan",
+      "title": "Kata ke-25 (opsional)",
+      "hint": "Frasa sandi pilihan Anda yang menjadi bagian dari frasa pemulihan. Akun hanya dapat dipulihkan dengan 24 kata dan frasa sandi ini.",
+      "label": "Kata ke-25",
+      "confirm": "Ulangi kata ke-25",
+      "mismatch": "Keduanya tidak cocok",
+      "spaces": "Tidak boleh diawali atau diakhiri dengan spasi",
+      "warning": "Tidak disimpan di mana pun dan tidak dapat diatur ulang. Jika Anda lupa, akun tidak akan pernah dapat dipulihkan.",
+      "notShown": "Anda juga menetapkan kata ke-25. Kata itu tidak ditampilkan di sini: simpan terpisah dari 24 kata.",
+      "recoverLabel": "Kata ke-25 (jika Anda menetapkannya)",
+      "recoverHint": "Kosongkan jika Anda tidak menetapkannya saat membuat akun."
+    },
     "login": {
       "title": "Masuk",
       "subtitle": "Gunakan nomor akun dan kata sandi Anda. Perangkat ini akan ditambahkan ke akun Anda.",
@@ -398,6 +411,9 @@
     "mask": "Anonimkan suara saya di pesan suara",
     "maskHint": "Suara Anda diubah di perangkat ini sebelum dikirim (nada dan timbre, berbeda untuk setiap pesan), sehingga suara asli tidak pernah meninggalkan perangkat. Kata-kata, aksen, dan cara bicara Anda tetap sama. Hanya berlaku untuk perangkat ini.",
     "maskOn": "Suara Anda akan dianonimkan",
+    "maskToggleOn": "Suara dianonimkan: suara asli Anda tidak dikirim",
+    "maskToggleOff": "Suara anonim dimatikan",
+    "maskRestarted": "Perekaman dimulai lagi",
     "maskProcessing": "Menganonimkan suara…",
     "maskError": "Suara tidak dapat dianonimkan, sehingga pesan tidak dikirim.",
     "maskTry": "Dengarkan hasilnya",

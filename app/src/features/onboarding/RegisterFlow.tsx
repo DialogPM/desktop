@@ -1,7 +1,7 @@
 import { CopyButton } from "@mantine/core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CheckBox } from "../../components/Field";
+import { CheckBox, PasswordField } from "../../components/Field";
 import { Icon } from "../../components/Icon";
 import { PasswordPairFields } from "../../components/PasswordPairFields";
 import { SeedGrid } from "../../components/SeedGrid";
@@ -32,14 +32,29 @@ export function RegisterFlow({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [savedIt, setSavedIt] = useState(false);
+  // Optional seed passphrase (the "25th word"), under Advanced.
+  const [advanced, setAdvanced] = useState(false);
+  const [phrase, setPhrase] = useState("");
+  const [phrase2, setPhrase2] = useState("");
+  const usePhrase = advanced && phrase.length > 0;
+  const phraseSpaces = phrase !== phrase.trim();
+  const phraseMismatch = phrase2.length > 0 && phrase2 !== phrase;
+  const phraseOk = !advanced || phrase.length === 0 || (!phraseSpaces && phrase === phrase2);
 
   const register = async () => {
-    if (!pair.valid) return;
+    if (!pair.valid || !phraseOk) return;
     setBusy(true);
     setError(null);
     try {
-      const res = await api.register({ server_url: serverUrl, password: pair.password, device_name: defaultDeviceName() });
+      const res = await api.register({
+        server_url: serverUrl,
+        password: pair.password,
+        device_name: defaultDeviceName(),
+        ...(usePhrase ? { seed_passphrase: phrase } : {}),
+      });
       pair.reset();
+      setPhrase("");
+      setPhrase2("");
       setResult(res);
       onStage(1);
     } catch (e) {
@@ -88,8 +103,46 @@ export function RegisterFlow({
           </span>
           <span>{t("onboarding.register.passwordHint")}</span>
         </div>
+        <button type="button" className="adv-toggle" aria-expanded={advanced} onClick={() => setAdvanced((v) => !v)}>
+          <Icon name="chevron" size={16} />
+          {t("onboarding.seedPass.advanced")}
+        </button>
+        {advanced && (
+          <div className="adv-box">
+            <div>
+              <h3 className="onb-h3">{t("onboarding.seedPass.title")}</h3>
+              <p className="onb-lead" style={{ fontSize: 13.5 }}>
+                {t("onboarding.seedPass.hint")}
+              </p>
+            </div>
+            <PasswordField
+              label={t("onboarding.seedPass.label")}
+              value={phrase}
+              onChange={(e) => setPhrase(e.currentTarget.value)}
+              autoComplete="off"
+              placeholder=""
+              error={phraseSpaces ? t("onboarding.seedPass.spaces") : null}
+            />
+            {phrase.length > 0 && (
+              <PasswordField
+                label={t("onboarding.seedPass.confirm")}
+                value={phrase2}
+                onChange={(e) => setPhrase2(e.currentTarget.value)}
+                autoComplete="off"
+                placeholder=""
+                error={phraseMismatch ? t("onboarding.seedPass.mismatch") : null}
+              />
+            )}
+            <div className="notice" data-tone="warn">
+              <span>
+                <Icon name="alert" size={16} />
+              </span>
+              <span>{t("onboarding.seedPass.warning")}</span>
+            </div>
+          </div>
+        )}
         {error && <div className="error-text">{error}</div>}
-        <button type="submit" className="btn btn-primary" disabled={!pair.valid || busy}>
+        <button type="submit" className="btn btn-primary" disabled={!pair.valid || !phraseOk || busy}>
           {busy ? t("onboarding.register.creating") : t("onboarding.register.create")}
         </button>
       </form>
@@ -123,6 +176,14 @@ export function RegisterFlow({
         </p>
       </div>
       <SeedGrid words={result.mnemonic} />
+      {result.seed_passphrase && (
+        <div className="notice" data-tone="warn">
+          <span>
+            <Icon name="alert" size={16} />
+          </span>
+          <span>{t("onboarding.seedPass.notShown")}</span>
+        </div>
+      )}
       <button type="button" className="check-row" role="checkbox" aria-checked={savedIt} onClick={() => setSavedIt((v) => !v)}>
         <CheckBox on={savedIt} />
         {t("onboarding.seed.savedIt")}

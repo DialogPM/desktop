@@ -225,6 +225,19 @@
       "ready": "Contul tău e gata",
       "reveal": "Arată fraza"
     },
+    "seedPass": {
+      "advanced": "Avansat",
+      "title": "Al 25-lea cuvânt (opțional)",
+      "hint": "O parolă aleasă de tine care devine parte din fraza de recuperare. Contul va putea fi recuperat doar cu cele 24 de cuvinte și această parolă.",
+      "label": "Al 25-lea cuvânt",
+      "confirm": "Repetă al 25-lea cuvânt",
+      "mismatch": "Cele două nu coincid",
+      "spaces": "Nu poate începe sau se termina cu spațiu",
+      "warning": "Nu este salvat nicăieri și nu poate fi resetat. Dacă îl uiți, contul nu mai poate fi recuperat niciodată.",
+      "notShown": "Ai setat și un al 25-lea cuvânt. Nu apare aici: păstrează-l separat de cele 24 de cuvinte.",
+      "recoverLabel": "Al 25-lea cuvânt (dacă ai setat unul)",
+      "recoverHint": "Lasă gol dacă nu ai setat unul la crearea contului."
+    },
     "login": {
       "title": "Autentificare",
       "subtitle": "Folosește numărul de cont și parola. Acest dispozitiv va fi adăugat la contul tău.",
@@ -404,6 +417,9 @@
     "mask": "Anonimizează vocea în mesajele vocale",
     "maskHint": "Vocea ta este modificată pe acest dispozitiv înainte de trimitere (ton și timbru, diferit la fiecare mesaj), deci originalul nu pleacă de pe dispozitiv. Cuvintele, accentul și felul de a vorbi rămân. Se aplică doar pe acest dispozitiv.",
     "maskOn": "Vocea va fi anonimizată",
+    "maskToggleOn": "Voce anonimizată: vocea ta originală nu se trimite",
+    "maskToggleOff": "Voce anonimizată dezactivată",
+    "maskRestarted": "Înregistrarea a pornit din nou",
     "maskProcessing": "Se anonimizează vocea…",
     "maskError": "Vocea nu a putut fi anonimizată, așa că mesajul nu a fost trimis.",
     "maskTry": "Ascultă cum sună",

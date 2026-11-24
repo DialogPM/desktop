@@ -222,6 +222,19 @@
       "ready": "Votre compte est prêt",
       "reveal": "Afficher la phrase"
     },
+    "seedPass": {
+      "advanced": "Avancé",
+      "title": "25e mot (facultatif)",
+      "hint": "Une phrase secrète de votre choix qui devient une partie de votre phrase de récupération. Le compte ne pourra alors être récupéré qu’avec les 24 mots et cette phrase secrète.",
+      "label": "25e mot",
+      "confirm": "Répétez le 25e mot",
+      "mismatch": "Les deux ne correspondent pas",
+      "spaces": "Il ne peut pas commencer ni finir par une espace",
+      "warning": "Il n’est enregistré nulle part et ne peut pas être réinitialisé. Si vous l’oubliez, le compte ne pourra jamais être récupéré.",
+      "notShown": "Vous avez aussi défini un 25e mot. Il n’est pas affiché ici : conservez-le séparément des 24 mots.",
+      "recoverLabel": "25e mot (si vous en avez défini un)",
+      "recoverHint": "Laissez vide si vous n’en avez pas défini à la création du compte."
+    },
     "login": {
       "title": "Se connecter",
       "subtitle": "Utilisez votre numéro de compte et votre mot de passe. Cet appareil sera ajouté à votre compte.",
@@ -401,6 +414,9 @@
     "mask": "Anonymiser ma voix dans les messages vocaux",
     "maskHint": "Votre voix est modifiée sur cet appareil avant l'envoi (hauteur et timbre, différents pour chaque message), de sorte que l'original ne quitte jamais l'appareil. Vos mots, votre accent et votre façon de parler restent. S'applique uniquement à cet appareil.",
     "maskOn": "Votre voix sera anonymisée",
+    "maskToggleOn": "Voix anonymisée : votre voix d’origine n’est pas envoyée",
+    "maskToggleOff": "Voix anonymisée désactivée",
+    "maskRestarted": "L’enregistrement a recommencé",
     "maskProcessing": "Anonymisation de la voix…",
     "maskError": "Impossible d'anonymiser la voix, le message n'a donc pas été envoyé.",
     "maskTry": "Écouter le résultat",

@@ -228,6 +228,19 @@
       "ready": "Twoje konto jest gotowe",
       "reveal": "Pokaż frazę"
     },
+    "seedPass": {
+      "advanced": "Zaawansowane",
+      "title": "25. słowo (opcjonalne)",
+      "hint": "Wybrane przez Ciebie hasło, które staje się częścią frazy odzyskiwania. Konto będzie można odzyskać tylko za pomocą 24 słów i tego hasła.",
+      "label": "25. słowo",
+      "confirm": "Powtórz 25. słowo",
+      "mismatch": "Wpisy nie są zgodne",
+      "spaces": "Nie może zaczynać się ani kończyć spacją",
+      "warning": "Nie jest nigdzie zapisywane i nie można go zresetować. Jeśli je zapomnisz, konta nigdy nie da się odzyskać.",
+      "notShown": "Ustawiono także 25. słowo. Nie jest tu pokazywane: przechowuj je oddzielnie od 24 słów.",
+      "recoverLabel": "25. słowo (jeśli zostało ustawione)",
+      "recoverHint": "Pozostaw puste, jeśli nie ustawiono go przy tworzeniu konta."
+    },
     "login": {
       "title": "Zaloguj się",
       "subtitle": "Użyj numeru konta i hasła. To urządzenie zostanie dodane do twojego konta.",
@@ -407,6 +420,9 @@
     "mask": "Anonimizuj mój głos w wiadomościach głosowych",
     "maskHint": "Twój głos jest zmieniany na tym urządzeniu przed wysłaniem (wysokość i barwa, inne dla każdej wiadomości), więc oryginał nigdy nie opuszcza urządzenia. Twoje słowa, akcent i sposób mówienia pozostają. Dotyczy tylko tego urządzenia.",
     "maskOn": "Twój głos zostanie zanonimizowany",
+    "maskToggleOn": "Głos zanonimizowany: Twój oryginalny głos nie jest wysyłany",
+    "maskToggleOff": "Anonimizacja głosu wyłączona",
+    "maskRestarted": "Nagrywanie zaczęło się od nowa",
     "maskProcessing": "Anonimizowanie głosu…",
     "maskError": "Nie udało się zanonimizować głosu, więc wiadomość nie została wysłana.",
     "maskTry": "Posłuchaj, jak to brzmi",

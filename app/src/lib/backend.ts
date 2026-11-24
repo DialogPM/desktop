@@ -71,7 +71,7 @@ export const backend = {
   getState: () => call<AppState>("get_state"),
   /** Validates a server URL and returns its info (works for default and custom servers). */
   checkServer: (url: string) => call<ServerInfo>("check_server", { url }),
-  register: (req: { server_url: string; password: string; device_name: string }) =>
+  register: (req: { server_url: string; password: string; device_name: string; seed_passphrase?: string }) =>
     call<RegisterResult>("register", req),
   login: (req: { server_url: string; number: string; password: string; device_name: string; totp?: string }) =>
     call<AccountInfo>("login", req),
@@ -81,6 +81,7 @@ export const backend = {
     mnemonic: string[];
     new_password: string;
     device_name: string;
+    seed_passphrase?: string;
   }) => call<AccountInfo>("recover", req),
   /** Unlinks this device on the server and wipes all local data. */
   logout: () => call<void>("logout"),
