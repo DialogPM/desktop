@@ -1223,6 +1223,7 @@
     "downloadBody": "Ini dikirim oleh seseorang yang belum Anda terima. Unduh file hanya dari orang yang Anda percayai."
   },
   "groupCall": {
+    "screenNotAll": "Beberapa orang dalam panggilan memakai versi aplikasi yang lebih lama dan tidak dapat melihat layar Anda.",
     "start": "Panggilan suara grup",
     "startVideo": "Panggilan video grup",
     "videoHint": "Panggilan video grup (dengan lebih dari {{count}} orang, audio berfungsi lebih baik)",

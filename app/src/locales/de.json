@@ -1239,6 +1239,7 @@
     "downloadBody": "Das wurde von jemandem gesendet, den du noch nicht angenommen hast. Lade nur Dateien von Personen herunter, denen du vertraust."
   },
   "groupCall": {
+    "screenNotAll": "Einige Personen im Anruf verwenden eine ältere Version der App und können deinen Bildschirm nicht sehen.",
     "start": "Gruppen-Sprachanruf",
     "startVideo": "Gruppen-Videoanruf",
     "videoHint": "Gruppen-Videoanruf (bei mehr als {{count}} Personen funktioniert Audio besser)",

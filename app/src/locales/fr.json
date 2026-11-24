@@ -1239,6 +1239,7 @@
     "downloadBody": "Ceci a été envoyé par quelqu'un que vous n'avez pas encore accepté. Ne téléchargez que des fichiers de personnes de confiance."
   },
   "groupCall": {
+    "screenNotAll": "Certaines personnes de l'appel utilisent une ancienne version de l'application et ne peuvent pas voir votre écran.",
     "start": "Appel vocal de groupe",
     "startVideo": "Appel vidéo de groupe",
     "videoHint": "Appel vidéo de groupe (au-delà de {{count}} personnes, l'audio fonctionne mieux)",

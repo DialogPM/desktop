@@ -1251,6 +1251,7 @@
     "downloadBody": "È stato inviato da qualcuno che non hai ancora accettato. Scarica solo da persone di cui ti fidi."
   },
   "groupCall": {
+    "screenNotAll": "Alcune persone nella chiamata usano una versione precedente dell'app e non possono vedere il tuo schermo.",
     "start": "Chiamata vocale di gruppo",
     "startVideo": "Videochiamata di gruppo",
     "videoHint": "Videochiamata di gruppo (con più di {{count}} persone l'audio funziona meglio)",

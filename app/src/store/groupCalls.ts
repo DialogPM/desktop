@@ -5,6 +5,12 @@
 // the participant list; for every other participant we keep one peer connection. The device
 // with the smaller (account_id, device_id) makes the offer of a pair, so late joiners and
 // people already in the call never offer to each other at the same time.
+//
+// Screen sharing (a computer shares, everyone watches): every pair has a video section, also
+// in a voice call (it carries nothing until someone shares), so a screen needs no new offer.
+// The screen takes the camera's place on that section and the camera comes back when sharing
+// stops; "media" `{screen: bool}` tells the others what the video is. A pair with an app from
+// before this (a voice call it offered has no video section) simply does not get the screen.
 
 import { BRAND_NAME } from "../brand";
 import { notifications } from "@mantine/notifications";
@@ -18,7 +24,7 @@ import { blockedByCallSettings, callsAllowed, relayCandidate, relayOnly } from "
 import { showNotification } from "../lib/platform";
 import { startRingtone } from "../lib/sounds";
 import { getApp } from "./app";
-import { callsSupported, hasTurn, iceServers, localMedia, useCall } from "./calls";
+import { callsSupported, hasTurn, iceServers, localMedia, screenShareSupported, useCall } from "./calls";
 import { audioSenders, CallVoiceFx, useCallAudioPrefs, type VoiceEffect } from "../lib/voiceFx";
 import { prioritizeAudio, tuned } from "../lib/callAudio";
 
@@ -46,6 +52,8 @@ export interface GroupPeer {
   avatar: string | null;
   stream: MediaStream | null;
   cameraOn: boolean;
+  /** Their video is their screen, not their camera. */
+  screenOn: boolean;
   connected: boolean;
   speaking: boolean;
 }
@@ -66,6 +74,8 @@ export interface GroupCallUi {
   /** AI noise reduction of our microphone (starts from the setting, lib/voiceFx.ts). */
   denoise: boolean;
   cameraOn: boolean;
+  /** We are sharing our screen (its video replaces the camera's on the wire). */
+  screenOn: boolean;
   localStream: MediaStream | null;
   speaking: boolean;
   peers: Record<string, GroupPeer>;
@@ -123,6 +133,8 @@ interface Session {
   callId: string;
   me: { accountId: string; deviceId: number } | null;
   stream: MediaStream | null;
+  /** Our screen while we share it. */
+  screen: MediaStream | null;
   servers: RTCIceServer[] | null;
   pairs: Map<string, Pair>;
   retries: Map<string, number>;
@@ -202,11 +214,13 @@ function newPair(accountId: string, deviceId: number, relay: boolean): Pair | nu
   }
   const pc = new RTCPeerConnection({ iceServers: s.servers, iceTransportPolicy });
   const offerer = isOfferer(s.me, { accountId, deviceId });
-  for (const track of s.stream.getTracks()) pc.addTrack(track.kind === "audio" ? s.fx.outgoing(track) : track, s.stream);
-  // A video call without our own camera still receives the others' video.
-  if (offerer && useGroupCall.getState().call?.video && s.stream.getVideoTracks().length === 0) {
-    pc.addTransceiver("video", { direction: "recvonly" });
-  }
+  for (const track of s.stream.getAudioTracks()) pc.addTrack(s.fx.outgoing(track), s.stream);
+  // The video section carries our screen while we share it, else our camera. Without either
+  // it is still there (the offerer creates it here, the other side opens its half in
+  // `openVideoSection`): it receives the others' video and can carry a screen later.
+  const video = s.screen?.getVideoTracks()[0] ?? s.stream.getVideoTracks()[0];
+  if (video) pc.addTrack(video, s.stream);
+  else if (offerer) pc.addTransceiver("video", { direction: "sendrecv" });
   const audio = new Audio();
   audio.autoplay = true;
   const pair: Pair = {
@@ -282,6 +296,7 @@ function newPair(accountId: string, deviceId: number, relay: boolean): Pair | nu
                 avatar,
                 stream: null,
                 cameraOn: st.call.peers[key]?.cameraOn ?? true,
+                screenOn: st.call.peers[key]?.screenOn ?? false,
                 connected: false,
                 speaking: false,
               },
@@ -376,14 +391,34 @@ function reoffer(s: Session, pair: Pair) {
   }, 1500);
 }
 
+/** The transceiver of the pair's video section, if it has one. */
+function videoSection(pair: Pair): RTCRtpTransceiver | undefined {
+  return pair.pc.getTransceivers().find((t) => t.receiver.track.kind === "video");
+}
+
+/** Answering side, after the offer is set: a video section we send nothing on yet is opened
+ *  for sending, so that our screen can go out on it later without a new offer. */
+function openVideoSection(pair: Pair) {
+  const tx = videoSection(pair);
+  if (tx && !tx.sender.track && (tx.direction === "recvonly" || tx.direction === "inactive")) tx.direction = "sendrecv";
+}
+
+/** What our video is, for a pair that just came up (the defaults are: camera on in a video
+ *  call, no screen). */
+function announceMedia(pair: Pair) {
+  const call = useGroupCall.getState().call;
+  if (!call) return;
+  if (call.video && !call.cameraOn) void signal(pair, "media", { camera: false });
+  if (call.screenOn) void signal(pair, "media", { screen: true });
+}
+
 async function makeOffer(pair: Pair) {
   const s = session;
   const offer = tuned(await pair.pc.createOffer());
   await pair.pc.setLocalDescription(offer);
   if (session !== s || s?.pairs.get(pair.key) !== pair) return;
   await signal(pair, "offer", { sdp: offer.sdp, video: useGroupCall.getState().call?.video ?? false });
-  const call = useGroupCall.getState().call;
-  if (call?.video && !call.cameraOn) void signal(pair, "media", { camera: false });
+  announceMedia(pair);
 }
 
 async function applyRemoteIce(pair: Pair) {
@@ -423,7 +458,7 @@ function syncParticipants(info: GroupCallInfo) {
       const key = keyOf(p.account_id, p.device_id);
       if (p.me || peers[key]) continue;
       const { name, avatar } = peerName(p.account_id, info.conversation_id);
-      peers[key] = { key, accountId: p.account_id, deviceId: p.device_id, name, avatar, stream: null, cameraOn: info.video, connected: false, speaking: false };
+      peers[key] = { key, accountId: p.account_id, deviceId: p.device_id, name, avatar, stream: null, cameraOn: info.video, screenOn: false, connected: false, speaking: false };
     }
     return { call: { ...st.call, peers } };
   });
@@ -444,6 +479,11 @@ function cleanup() {
   for (const pair of [...s.pairs.values()]) closePair(pair);
   s.fx.stop();
   s.stream?.getTracks().forEach((t) => t.stop());
+  s.screen?.getTracks().forEach((t) => {
+    t.onended = null;
+    t.stop();
+  });
+  s.screen = null;
   session = null;
   useGroupCall.setState({ call: null });
 }
@@ -454,6 +494,7 @@ function newSession(conversationId: string, callId: string): Session {
     callId,
     me: null,
     stream: null,
+    screen: null,
     servers: null,
     pairs: new Map(),
     retries: new Map(),
@@ -484,6 +525,7 @@ function uiFor(info: GroupCallInfo, phase: GroupCallUi["phase"]): GroupCallUi {
     voiceEffect: "none",
     denoise: false,
     cameraOn: info.video,
+    screenOn: false,
     localStream: null,
     speaking: false,
     peers: {},
@@ -689,6 +731,83 @@ export function toggleGroupCamera() {
   for (const pair of session.pairs.values()) void signal(pair, "media", { camera: cameraOn });
 }
 
+const SCREEN: MediaTrackConstraints = { frameRate: { ideal: 15, max: 30 } };
+
+/** Puts `track` (our screen, our camera, or nothing) on the video section of a pair. False
+ *  when the pair has none (an app from before screen sharing in group calls). */
+async function sendVideo(pair: Pair, track: MediaStreamTrack | null): Promise<boolean> {
+  const tx = videoSection(pair);
+  if (!tx) return false;
+  try {
+    await tx.sender.replaceTrack(track);
+    return true;
+  } catch (e) {
+    console.warn("group call: video track", e);
+    return false;
+  }
+}
+
+/** Shares our screen with everyone in the call (the system asks which screen or window). */
+export async function startGroupScreenShare() {
+  const s = session;
+  const call = useGroupCall.getState().call;
+  if (!s || !call || s.ended || call.phase !== "active" || call.screenOn) return;
+  if (!screenShareSupported()) {
+    notifications.show({ color: "red", message: i18n.t("call.screenError") });
+    return;
+  }
+  let stream: MediaStream;
+  try {
+    stream = await navigator.mediaDevices.getDisplayMedia({ video: SCREEN, audio: false });
+  } catch (e) {
+    // Cancelled in the system's picker: nothing to say.
+    if (!(e instanceof DOMException && e.name === "NotAllowedError")) {
+      console.warn("screen share", e);
+      notifications.show({ color: "red", message: i18n.t("call.screenError") });
+    }
+    return;
+  }
+  const track = stream.getVideoTracks()[0];
+  if (session !== s || s.ended || !track || s.screen) {
+    stream.getTracks().forEach((t) => t.stop());
+    return;
+  }
+  // Text stays sharp: resolution before frame rate when bandwidth is short.
+  track.contentHint = "detail";
+  s.screen = stream;
+  // Ended from the system's own "stop sharing" control.
+  track.onended = () => {
+    if (session === s && s.screen === stream) void stopGroupScreenShare();
+  };
+  setCall({ screenOn: true });
+  let missed = 0;
+  for (const pair of [...s.pairs.values()]) {
+    if (await sendVideo(pair, track)) void signal(pair, "media", { screen: true });
+    else missed++;
+  }
+  if (missed > 0 && session === s && s.screen === stream) {
+    notifications.show({ color: "yellow", message: i18n.t("groupCall.screenNotAll") });
+  }
+}
+
+/** Stops sharing our screen; our camera (if any) is back on the wire. */
+export async function stopGroupScreenShare() {
+  const s = session;
+  if (!s || !s.screen) return;
+  const stream = s.screen;
+  s.screen = null;
+  stream.getTracks().forEach((t) => {
+    t.onended = null;
+    t.stop();
+  });
+  setCall({ screenOn: false });
+  if (s.ended) return;
+  const camera = s.stream?.getVideoTracks()[0] ?? null;
+  for (const pair of [...s.pairs.values()]) {
+    if (await sendVideo(pair, camera)) void signal(pair, "media", { screen: false });
+  }
+}
+
 /** Loads the call in progress of a conversation (for the banner when it is opened). */
 export async function refreshGroupCall(conversationId: string) {
   try {
@@ -776,11 +895,12 @@ export async function handleGroupCallSignal(ev: GroupCallSignalEvent) {
       pair = newPair(ev.account_id, ev.device_id, participantRelay(ev)) ?? undefined;
       if (!pair) return;
       await pair.pc.setRemoteDescription({ type: "offer", sdp });
+      openVideoSection(pair);
       const answer = tuned(await pair.pc.createAnswer());
       await pair.pc.setLocalDescription(answer);
       if (session !== s || s.pairs.get(key) !== pair) return;
       await signal(pair, "answer", { sdp: answer.sdp });
-      if (call.video && !useGroupCall.getState().call?.cameraOn) void signal(pair, "media", { camera: false });
+      announceMedia(pair);
       await applyRemoteIce(pair);
       flushLocalIce(pair);
       return;
@@ -818,6 +938,7 @@ export async function handleGroupCallSignal(ev: GroupCallSignalEvent) {
     }
     case "media":
       if (typeof ev.data?.camera === "boolean") setPeer(key, { cameraOn: ev.data.camera });
+      if (typeof ev.data?.screen === "boolean") setPeer(key, { screenOn: ev.data.screen });
       return;
     case "hangup":
       if (!pair) return;

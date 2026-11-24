@@ -70,6 +70,17 @@
   background: #000;
 }
 
+/* A shared screen: a row of its own, shown whole. */
+.gcall-tile[data-screen="true"] {
+  grid-column: 1 / -1;
+  grid-row: span 2;
+  min-height: min(56vh, 520px);
+}
+
+.gcall-tile[data-screen="true"] .gcall-video {
+  object-fit: contain;
+}
+
 .gcall-video[data-mirror="true"] {
   transform: scaleX(-1);
 }

@@ -1223,6 +1223,7 @@
     "downloadBody": "Tệp này do một người bạn chưa chấp nhận gửi. Chỉ tải tệp từ những người bạn tin tưởng."
   },
   "groupCall": {
+    "screenNotAll": "Một số người trong cuộc gọi đang dùng phiên bản ứng dụng cũ hơn và không thể xem màn hình của bạn.",
     "start": "Gọi thoại nhóm",
     "startVideo": "Gọi video nhóm",
     "videoHint": "Gọi video nhóm (khi có hơn {{count}} người, gọi thoại sẽ ổn định hơn)",

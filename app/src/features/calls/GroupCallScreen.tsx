@@ -1,6 +1,7 @@
 // Group call screen: ringing (join / decline), then a grid of participants with video tiles or
-// avatars, a speaking indicator, and mute / camera / leave controls. Plus the "call in
-// progress" banner shown in the group conversation.
+// avatars, a speaking indicator, and mute / camera / screen / leave controls. A screen someone
+// shares gets a large tile of its own row. Plus the "call in progress" banner shown in the
+// group conversation.
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,13 +10,15 @@ import { UserAvatar } from "../../components/UserAvatar";
 import { useCallSettings } from "../../lib/callSettings";
 import { formatDuration } from "../../lib/format";
 import { useApp } from "../../store/app";
-import { useCall } from "../../store/calls";
+import { screenShareSupported, useCall } from "../../store/calls";
 import {
   declineGroupCall,
   joinGroupCall,
   leaveGroupCall,
   refreshGroupCall,
   setGroupVoiceEffect,
+  startGroupScreenShare,
+  stopGroupScreenShare,
   toggleGroupCamera,
   toggleGroupMute,
   useGroupCall,
@@ -38,16 +41,20 @@ function useElapsed(since: number | null): number {
 
 function Tile({ peer, video }: { peer: GroupPeer; video: boolean }) {
   const { t } = useTranslation();
-  const showVideo = video && peer.cameraOn && !!peer.stream && peer.stream.getVideoTracks().length > 0;
+  const hasVideo = !!peer.stream && peer.stream.getVideoTracks().length > 0;
+  // A shared screen is shown whole (not cropped to the tile), also in a voice call.
+  const screen = peer.screenOn && hasVideo;
+  const showVideo = screen || (video && peer.cameraOn && hasVideo);
   return (
-    <div className="gcall-tile" data-speaking={peer.speaking}>
+    <div className="gcall-tile" data-speaking={peer.speaking} data-screen={screen || undefined}>
       {showVideo ? (
         <StreamVideo stream={peer.stream!} className="gcall-video" />
       ) : (
         <UserAvatar name={peer.name} path={peer.avatar} seed={peer.accountId} size={72} />
       )}
       <div className="gcall-tile-name">
-        <span>{peer.name}</span>
+        {screen && <Icon name="screen" size={13} />}
+        <span>{screen ? t("call.peerScreen", { name: peer.name }) : peer.name}</span>
         {!peer.connected && <span className="gcall-tile-state">{t("call.connecting")}</span>}
       </div>
     </div>
@@ -114,7 +121,8 @@ export function GroupCallScreen() {
   const elapsed = useElapsed(call?.joinedAt ?? null);
   if (!call) return null;
   if (call.phase === "incoming") return <Incoming call={call} />;
-  const peers = Object.values(call.peers);
+  // Shared screens first: they take a row of their own.
+  const peers = Object.values(call.peers).sort((a, b) => Number(b.screenOn) - Number(a.screenOn));
   const hasCamera = !!call.localStream && call.localStream.getVideoTracks().length > 0;
   const count = peers.length + 1;
   return (
@@ -130,6 +138,15 @@ export function GroupCallScreen() {
             ? `${formatDuration(elapsed)} · ${t("groupCall.participants", { count, max: call.maxParticipants })}`
             : t("call.connecting")}
         </div>
+        {call.screenOn && (
+          <div className="call-sharing" role="status">
+            <Icon name="screen" size={14} />
+            {t("call.sharingScreen")}
+            <button type="button" className="link-btn" onClick={() => void stopGroupScreenShare()}>
+              {t("call.stopSharing")}
+            </button>
+          </div>
+        )}
       </div>
       <div className="gcall-grid" data-count={Math.min(count, 9)}>
         <SelfTile call={call} />
@@ -165,6 +182,21 @@ export function GroupCallScreen() {
           >
             <Icon name={call.cameraOn ? "video" : "videooff"} size={24} />
             <span>{call.cameraOn ? t("call.cameraOff") : t("call.cameraOn")}</span>
+          </button>
+        )}
+        {screenShareSupported() && (
+          <button
+            type="button"
+            className="call-btn"
+            data-tone="soft"
+            data-on={call.screenOn}
+            onClick={() => void (call.screenOn ? stopGroupScreenShare() : startGroupScreenShare())}
+            disabled={call.phase !== "active"}
+            aria-pressed={call.screenOn}
+            aria-label={call.screenOn ? t("call.stopSharing") : t("call.shareScreen")}
+          >
+            <Icon name="screen" size={24} />
+            <span>{call.screenOn ? t("call.stopSharing") : t("call.shareScreen")}</span>
           </button>
         )}
         <button type="button" className="call-btn" data-tone="danger" onClick={() => void leaveGroupCall()} aria-label={t("groupCall.leave")}>

@@ -1239,6 +1239,7 @@
     "downloadBody": "Dit is verzonden door iemand die je nog niet hebt geaccepteerd. Download alleen bestanden van mensen die je vertrouwt."
   },
   "groupCall": {
+    "screenNotAll": "Sommige mensen in het gesprek gebruiken een oudere versie van de app en kunnen je scherm niet zien.",
     "start": "Groepsspraakoproep",
     "startVideo": "Groepsvideo-oproep",
     "videoHint": "Groepsvideo-oproep (met meer dan {{count}} personen werkt audio beter)",

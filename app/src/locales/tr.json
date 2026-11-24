@@ -1239,6 +1239,7 @@
     "downloadBody": "Bu, henüz kabul etmediğiniz biri tarafından gönderildi. Yalnızca güvendiğiniz kişilerden dosya indirin."
   },
   "groupCall": {
+    "screenNotAll": "Aramadaki bazı kişiler uygulamanın eski bir sürümünü kullanıyor ve ekranınızı göremiyor.",
     "start": "Grup sesli araması",
     "startVideo": "Grup görüntülü araması",
     "videoHint": "Grup görüntülü araması ({{count}} kişiden fazlasıyla ses daha iyi çalışır)",

@@ -1271,6 +1271,7 @@
     "downloadBody": "To zostało wysłane przez kogoś, kogo jeszcze nie zaakceptowano. Pobieraj pliki tylko od zaufanych osób."
   },
   "groupCall": {
+    "screenNotAll": "Niektóre osoby w rozmowie używają starszej wersji aplikacji i nie widzą Twojego ekranu.",
     "start": "Grupowe połączenie głosowe",
     "startVideo": "Grupowe połączenie wideo",
     "videoHint": "Grupowe połączenie wideo (przy ponad {{count}} osobach lepiej sprawdza się dźwięk)",

@@ -1239,6 +1239,7 @@
     "downloadBody": "Isto foi enviado por alguém que você ainda não aceitou. Baixe arquivos somente de pessoas em quem você confia."
   },
   "groupCall": {
+    "screenNotAll": "Algumas pessoas na chamada usam uma versão anterior da aplicação e não conseguem ver o seu ecrã.",
     "start": "Chamada de voz em grupo",
     "startVideo": "Chamada de vídeo em grupo",
     "videoHint": "Chamada de vídeo em grupo (com mais de {{count}} pessoas, o áudio funciona melhor)",

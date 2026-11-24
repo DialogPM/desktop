@@ -1239,6 +1239,7 @@
     "downloadBody": "This was sent by someone you have not accepted yet. Only download files from people you trust."
   },
   "groupCall": {
+    "screenNotAll": "Some people in the call use an older version of the app and can't see your screen.",
     "start": "Group voice call",
     "startVideo": "Group video call",
     "videoHint": "Group video call (with more than {{count}} people, audio works better)",

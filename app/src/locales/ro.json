@@ -1255,6 +1255,7 @@
     "downloadBody": "Fișierul a fost trimis de cineva pe care nu l-ai acceptat încă. Descarcă doar de la oameni în care ai încredere."
   },
   "groupCall": {
+    "screenNotAll": "Unele persoane din apel folosesc o versiune mai veche a aplicației și nu îți pot vedea ecranul.",
     "start": "Apel vocal de grup",
     "startVideo": "Apel video de grup",
     "videoHint": "Apel video de grup (cu mai mult de {{count}} persoane, audio merge mai bine)",
