@@ -865,6 +865,8 @@
       "linkShow": "Show link & QR code",
       "linkHide": "Hide",
       "linkHint": "Anyone who scans this code or opens the link can find you by your username. The link itself does not contain your account number.",
+      "webLink": "Web link",
+      "webLinkHint": "Anyone who opens this link reaches the conversation with you, or the page to get the app. It contains your username, visible to anyone who sees it.",
       "linkReset": "Reset link",
       "linkResetConfirm": "Reset your username link? The current link and QR code will stop working.",
       "linkResetDone": "New username link created"
@@ -1412,5 +1414,13 @@
     "new": "New",
     "notifyTitle": "{{server}} · Notice",
     "hidden": "New notice from the server"
+  },
+  "userLink": {
+    "openTitle": "Start a conversation?",
+    "openBody": "This link leads to {{name}}. Do you want to start a conversation?",
+    "open": "Open conversation",
+    "notFound": "There is no account named {{name}}.",
+    "otherServer": "This link is for accounts on {{server}}. Your account is on another server.",
+    "self": "This is your own link."
   }
 }

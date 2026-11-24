@@ -26,6 +26,14 @@
       <uap:VisualElements DisplayName="Dialog" Description="End-to-end encrypted messenger"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" />
+      <!-- Username links: dialog://u/<name> (src/links.rs). -->
+      <Extensions>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="dialog">
+            <uap:DisplayName>Dialog</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>

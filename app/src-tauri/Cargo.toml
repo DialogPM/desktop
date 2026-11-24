@@ -18,6 +18,10 @@ tauri = { version = "2", features = [] }
 tauri-plugin-dialog = "2"
 tauri-plugin-notification = "2"
 tauri-plugin-opener = "2"
+# Username links (dialog://u/<name>, src/links.rs).
+tauri-plugin-deep-link = "2"
+# Windows and Linux start the app again to open a link: the running copy takes it (src/lib.rs).
+tauri-plugin-single-instance = "2"
 # Signed auto-updates: the plugin is registered only when an updater public key and endpoint
 # are set at build time (src/updater.rs, docs/DESKTOP-UPDATER.md).
 tauri-plugin-updater = "2.10"

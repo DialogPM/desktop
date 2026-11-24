@@ -850,6 +850,8 @@
       "linkShow": "Hiện liên kết & mã QR",
       "linkHide": "Ẩn",
       "linkHint": "Bất kỳ ai quét mã này hoặc mở liên kết đều có thể tìm thấy bạn qua tên người dùng. Bản thân liên kết không chứa số tài khoản của bạn.",
+      "webLink": "Liên kết web",
+      "webLinkHint": "Ai mở liên kết này sẽ đến cuộc trò chuyện với bạn hoặc trang tải ứng dụng. Liên kết chứa tên người dùng của bạn, ai thấy nó cũng thấy tên.",
       "linkReset": "Đặt lại liên kết",
       "linkResetConfirm": "Đặt lại liên kết tên người dùng? Liên kết và mã QR hiện tại sẽ ngừng hoạt động.",
       "linkResetDone": "Đã tạo liên kết tên người dùng mới"
@@ -1392,5 +1394,13 @@
     "new": "Mới",
     "notifyTitle": "{{server}} · Thông báo hệ thống",
     "hidden": "Thông báo hệ thống mới từ máy chủ"
+  },
+  "userLink": {
+    "openTitle": "Bắt đầu cuộc trò chuyện?",
+    "openBody": "Liên kết này dẫn đến {{name}}. Bạn có muốn bắt đầu cuộc trò chuyện không?",
+    "open": "Mở cuộc trò chuyện",
+    "notFound": "Không có tài khoản nào tên {{name}}.",
+    "otherServer": "Liên kết này dành cho tài khoản trên {{server}}. Tài khoản của bạn ở máy chủ khác.",
+    "self": "Đây là liên kết của chính bạn."
   }
 }

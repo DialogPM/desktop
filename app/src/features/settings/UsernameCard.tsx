@@ -8,6 +8,7 @@ import { Icon } from "../../components/Icon";
 import { QrCode } from "../../components/QrCode";
 import { api, parseError } from "../../lib/api";
 import { shareQr } from "../../lib/share";
+import { USER_LINK_HOST, userLink, userLinksAvailable } from "../../lib/userLinkParse";
 import type { UsernameLink } from "../../lib/types";
 import { discriminatorOf, discriminatorValid, nicknameOf, withRandomDiscriminator } from "../../lib/username";
 import { errorText, notifyOk } from "../../store/actions";
@@ -42,6 +43,7 @@ function UsernameLinkSection() {
   const [link, setLink] = useState<UsernameLink | null>(null);
   const [error, setError] = useState<string | null>(null);
   const qrRef = useRef<HTMLDivElement>(null);
+  const webLinks = useApp((s) => userLinksAvailable(s.appState?.account?.server_url));
 
   useEffect(() => {
     if (!open) return;
@@ -126,6 +128,25 @@ function UsernameLinkSection() {
           {t("settings.username.linkHide")}
         </button>
       </div>
+      {link && webLinks && (
+        <div className="web-link">
+          <div className="list-card-title">{t("settings.username.webLink")}</div>
+          <div className="web-link-value mono-num">
+            {USER_LINK_HOST}/@{link.username}
+          </div>
+          <div className="hint" style={{ fontSize: 13, textAlign: "center", maxWidth: 320, lineHeight: 1.45 }}>
+            {t("settings.username.webLinkHint")}
+          </div>
+          <CopyButton value={userLink(link.username)}>
+            {({ copied, copy }) => (
+              <button type="button" className="chip-btn" onClick={copy} data-web-link>
+                <Icon name={copied ? "check" : "copy"} size={15} />
+                {copied ? t("qr.linkCopied") : t("qr.copyLink")}
+              </button>
+            )}
+          </CopyButton>
+        </div>
+      )}
     </div>
   );
 }

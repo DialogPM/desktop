@@ -325,3 +325,21 @@ button.list-card-row:hover {
   height: 64px;
   border-radius: 19px;
 }
+
+/* Username card: the public web link (dialog.pm/@name) under the QR code. */
+.web-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 6px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.web-link-value {
+  color: var(--accent-text);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}

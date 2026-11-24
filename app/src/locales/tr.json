@@ -865,6 +865,8 @@
       "linkShow": "Bağlantıyı ve QR kodunu göster",
       "linkHide": "Gizle",
       "linkHint": "Bu kodu tarayan veya bağlantıyı açan herkes sizi kullanıcı adınızla bulabilir. Bağlantının kendisi hesap numaranızı içermez.",
+      "webLink": "Web bağlantısı",
+      "webLinkHint": "Bu bağlantıyı açan herkes sizinle sohbete veya uygulamayı indirme sayfasına ulaşır. Bağlantı, onu gören herkesin görebileceği kullanıcı adınızı içerir.",
       "linkReset": "Bağlantıyı sıfırla",
       "linkResetConfirm": "Kullanıcı adı bağlantınız sıfırlansın mı? Mevcut bağlantı ve QR kodu çalışmayı durduracak.",
       "linkResetDone": "Yeni kullanıcı adı bağlantısı oluşturuldu"
@@ -1412,5 +1414,13 @@
     "new": "Yeni",
     "notifyTitle": "{{server}} · Duyuru",
     "hidden": "Sunucudan yeni duyuru"
+  },
+  "userLink": {
+    "openTitle": "Sohbet başlatılsın mı?",
+    "openBody": "Bu bağlantı {{name}} kişisine gidiyor. Sohbet başlatmak ister misiniz?",
+    "open": "Sohbeti aç",
+    "notFound": "{{name}} adında bir hesap yok.",
+    "otherServer": "Bu bağlantı {{server}} üzerindeki hesaplar içindir. Hesabınız başka bir sunucuda.",
+    "self": "Bu sizin kendi bağlantınız."
   }
 }

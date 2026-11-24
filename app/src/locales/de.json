@@ -865,6 +865,8 @@
       "linkShow": "Link & QR-Code anzeigen",
       "linkHide": "Ausblenden",
       "linkHint": "Jeder, der diesen Code scannt oder den Link öffnet, kann dich über deinen Benutzernamen finden. Der Link selbst enthält deine Kontonummer nicht.",
+      "webLink": "Weblink",
+      "webLinkHint": "Wer diesen Link öffnet, gelangt zur Unterhaltung mit dir oder zur Download-Seite der App. Er enthält deinen Benutzernamen, sichtbar für alle, die ihn sehen.",
       "linkReset": "Link zurücksetzen",
       "linkResetConfirm": "Benutzername-Link zurücksetzen? Der aktuelle Link und QR-Code funktionieren dann nicht mehr.",
       "linkResetDone": "Neuer Benutzername-Link erstellt"
@@ -1412,5 +1414,13 @@
     "new": "Neu",
     "notifyTitle": "{{server}} · Mitteilung",
     "hidden": "Neue Mitteilung vom Server"
+  },
+  "userLink": {
+    "openTitle": "Unterhaltung beginnen?",
+    "openBody": "Dieser Link führt zu {{name}}. Möchtest du eine Unterhaltung beginnen?",
+    "open": "Unterhaltung öffnen",
+    "notFound": "Es gibt kein Konto mit dem Namen {{name}}.",
+    "otherServer": "Dieser Link ist für Konten auf {{server}}. Dein Konto ist auf einem anderen Server.",
+    "self": "Das ist dein eigener Link."
   }
 }

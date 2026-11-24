@@ -865,6 +865,8 @@
       "linkShow": "Link en QR-code tonen",
       "linkHide": "Verbergen",
       "linkHint": "Iedereen die deze code scant of de link opent, kan je vinden via je gebruikersnaam. De link zelf bevat je accountnummer niet.",
+      "webLink": "Weblink",
+      "webLinkHint": "Wie deze link opent, komt bij het gesprek met jou of bij de downloadpagina van de app. De link bevat je gebruikersnaam, zichtbaar voor iedereen die hem ziet.",
       "linkReset": "Link resetten",
       "linkResetConfirm": "Je gebruikersnaamlink resetten? De huidige link en QR-code werken dan niet meer.",
       "linkResetDone": "Nieuwe gebruikersnaamlink aangemaakt"
@@ -1412,5 +1414,13 @@
     "new": "Nieuw",
     "notifyTitle": "{{server}} · Mededeling",
     "hidden": "Nieuwe mededeling van de server"
+  },
+  "userLink": {
+    "openTitle": "Een gesprek beginnen?",
+    "openBody": "Deze link leidt naar {{name}}. Wil je een gesprek beginnen?",
+    "open": "Gesprek openen",
+    "notFound": "Er is geen account met de naam {{name}}.",
+    "otherServer": "Deze link is voor accounts op {{server}}. Jouw account staat op een andere server.",
+    "self": "Dit is je eigen link."
   }
 }

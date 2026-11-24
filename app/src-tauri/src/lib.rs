@@ -3,6 +3,7 @@
 mod attention;
 mod badge;
 mod idle;
+mod links;
 #[cfg(target_os = "macos")]
 mod mac_notify;
 mod commands;
@@ -250,7 +251,30 @@ pub fn run() {
     if updates {
         builder = builder.plugin(updater::plugin());
     }
+    // Windows and Linux start the app again to open a link (links.rs): the copy already
+    // running takes it and comes to the front, and the new one exits. Not with a data folder
+    // of its own (CHATAPP_DATA_DIR), where several copies run side by side on purpose.
+    // macOS hands a link to the running app by itself.
+    if !cfg!(target_os = "macos") && std::env::var_os("CHATAPP_DATA_DIR").filter(|v| !v.is_empty()).is_none() {
+        builder = builder.plugin(tauri_plugin_single_instance::init(|app, args, _cwd| {
+            let mut link = false;
+            for arg in &args {
+                if arg.starts_with("dialog://") {
+                    links::deliver(app, arg);
+                    link = true;
+                }
+            }
+            if !link {
+                if let Some(window) = app.get_webview_window("main") {
+                    let _ = window.unminimize();
+                    let _ = window.show();
+                    let _ = window.set_focus();
+                }
+            }
+        }));
+    }
     builder
+        .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_opener::init())
@@ -269,6 +293,26 @@ pub fn run() {
             let data_dir = data_dir(app.handle())?;
             std::fs::create_dir_all(&data_dir)?;
             app.manage(picked::Picked::default());
+            app.manage(links::Links::default());
+            {
+                use tauri_plugin_deep_link::DeepLinkExt;
+                // An AppImage has no installer to register the scheme.
+                #[cfg(target_os = "linux")]
+                if let Err(e) = app.deep_link().register_all() {
+                    log::warn!("cannot register the dialog:// scheme: {e}");
+                }
+                if let Ok(Some(urls)) = app.deep_link().get_current() {
+                    for url in urls {
+                        links::deliver(app.handle(), url.as_str());
+                    }
+                }
+                let handle = app.handle().clone();
+                app.deep_link().on_open_url(move |event| {
+                    for url in event.urls() {
+                        links::deliver(&handle, url.as_str());
+                    }
+                });
+            }
             // Starts on the start screen (a blank profile); the accounts on this computer are
             // opened from there with their password (profiles.rs).
             let profiles = profiles::Profiles::start(

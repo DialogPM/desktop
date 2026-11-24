@@ -895,6 +895,8 @@
       "linkShow": "Pokaż link i kod QR",
       "linkHide": "Ukryj",
       "linkHint": "Każdy, kto zeskanuje ten kod lub otworzy link, może cię znaleźć po nazwie użytkownika. Sam link nie zawiera twojego numeru konta.",
+      "webLink": "Link internetowy",
+      "webLinkHint": "Każdy, kto otworzy ten link, trafi do rozmowy z Tobą albo na stronę pobierania aplikacji. Link zawiera Twoją nazwę użytkownika, widoczną dla każdego, kto go zobaczy.",
       "linkReset": "Zresetuj link",
       "linkResetConfirm": "Zresetować link do nazwy użytkownika? Obecny link i kod QR przestaną działać.",
       "linkResetDone": "Utworzono nowy link do nazwy użytkownika"
@@ -1452,5 +1454,13 @@
     "new": "Nowy",
     "notifyTitle": "{{server}} · Komunikat",
     "hidden": "Nowy komunikat z serwera"
+  },
+  "userLink": {
+    "openTitle": "Rozpocząć rozmowę?",
+    "openBody": "Ten link prowadzi do {{name}}. Chcesz rozpocząć rozmowę?",
+    "open": "Otwórz rozmowę",
+    "notFound": "Nie ma konta o nazwie {{name}}.",
+    "otherServer": "Ten link dotyczy kont na {{server}}. Twoje konto jest na innym serwerze.",
+    "self": "To Twój własny link."
   }
 }

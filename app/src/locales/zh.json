@@ -850,6 +850,8 @@
       "linkShow": "显示链接和二维码",
       "linkHide": "隐藏",
       "linkHint": "任何扫描此二维码或打开此链接的人都可以通过你的用户名找到你。链接本身不包含你的账号。",
+      "webLink": "网页链接",
+      "webLinkHint": "任何打开此链接的人都会进入与你的对话,或进入应用下载页面。链接包含你的用户名,看到它的人都能看到。",
       "linkReset": "重置链接",
       "linkResetConfirm": "重置你的用户名链接？当前的链接和二维码将失效。",
       "linkResetDone": "已创建新的用户名链接"
@@ -1392,5 +1394,13 @@
     "new": "新",
     "notifyTitle": "{{server}} · 公告",
     "hidden": "来自服务器的新公告"
+  },
+  "userLink": {
+    "openTitle": "开始对话?",
+    "openBody": "此链接指向 {{name}}。要开始对话吗?",
+    "open": "打开对话",
+    "notFound": "没有名为 {{name}} 的账号。",
+    "otherServer": "此链接适用于 {{server}} 上的账号。你的账号在另一台服务器上。",
+    "self": "这是你自己的链接。"
   }
 }

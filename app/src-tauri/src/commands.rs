@@ -175,7 +175,7 @@ forward!(
     list_notices,
     mark_notices_read,
     delete_notice,
-    ; extra: [crate::media::read_media, crate::picked::pick_files, crate::picked::pick_save_path, crate::sounds::play_sound, crate::sounds::stop_sound, crate::badge::set_unread_badge, crate::attention::notify_permission, crate::attention::notify_show, crate::attention::call_attention, crate::updater::update_install, crate::updater::update_status, crate::updater::update_check, ui_log, voice_mask,
+    ; extra: [crate::media::read_media, crate::picked::pick_files, crate::picked::pick_save_path, crate::sounds::play_sound, crate::sounds::stop_sound, crate::badge::set_unread_badge, crate::attention::notify_permission, crate::attention::notify_show, crate::attention::call_attention, crate::updater::update_install, crate::updater::update_status, crate::updater::update_check, crate::links::take_launch_link, ui_log, voice_mask,
         crate::profiles::profiles_list, crate::profiles::profile_open, crate::profiles::profile_open_by_number, crate::profiles::profile_close,
         crate::profiles::profile_forget, crate::profiles::profile_current, crate::profiles::profile_set_visible, crate::profiles::profiles_check_revoked, crate::profiles::profile_switch,
         crate::profiles::profile_open_auto, crate::profiles::profiles_auto_open]

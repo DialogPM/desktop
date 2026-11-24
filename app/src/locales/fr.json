@@ -865,6 +865,8 @@
       "linkShow": "Afficher le lien et le code QR",
       "linkHide": "Masquer",
       "linkHint": "Toute personne qui scanne ce code ou ouvre le lien peut vous trouver par votre nom d'utilisateur. Le lien lui-même ne contient pas votre numéro de compte.",
+      "webLink": "Lien web",
+      "webLinkHint": "Toute personne qui ouvre ce lien arrive à la conversation avec vous ou à la page de téléchargement de l’app. Il contient votre nom d’utilisateur, visible par quiconque le voit.",
       "linkReset": "Réinitialiser le lien",
       "linkResetConfirm": "Réinitialiser le lien de votre nom d'utilisateur ? Le lien et le code QR actuels cesseront de fonctionner.",
       "linkResetDone": "Nouveau lien de nom d'utilisateur créé"
@@ -1412,5 +1414,13 @@
     "new": "Nouveau",
     "notifyTitle": "{{server}} · Avis",
     "hidden": "Nouvel avis du serveur"
+  },
+  "userLink": {
+    "openTitle": "Démarrer une conversation ?",
+    "openBody": "Ce lien mène à {{name}}. Voulez-vous démarrer une conversation ?",
+    "open": "Ouvrir la conversation",
+    "notFound": "Aucun compte ne porte le nom {{name}}.",
+    "otherServer": "Ce lien concerne les comptes de {{server}}. Votre compte est sur un autre serveur.",
+    "self": "C’est votre propre lien."
   }
 }

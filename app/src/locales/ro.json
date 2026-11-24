@@ -880,6 +880,8 @@
       "linkShow": "Arată linkul și codul QR",
       "linkHide": "Ascunde",
       "linkHint": "Oricine scanează acest cod sau deschide linkul te poate găsi după numele de utilizator. Linkul în sine nu conține numărul tău de cont.",
+      "webLink": "Link web",
+      "webLinkHint": "Oricine deschide acest link ajunge la conversația cu tine sau la pagina de descărcare a aplicației. Linkul conține numele tău de utilizator, vizibil pentru oricine îl vede.",
       "linkReset": "Resetează linkul",
       "linkResetConfirm": "Resetezi linkul numelui de utilizator? Linkul și codul QR actuale nu vor mai funcționa.",
       "linkResetDone": "A fost creat un link nou"
@@ -1432,5 +1434,13 @@
     "new": "Nou",
     "notifyTitle": "{{server}} · Anunț",
     "hidden": "Anunț nou de la server"
+  },
+  "userLink": {
+    "openTitle": "Începi o conversație?",
+    "openBody": "Acest link duce la {{name}}. Vrei să începi o conversație?",
+    "open": "Deschide conversația",
+    "notFound": "Nu există niciun cont cu numele {{name}}.",
+    "otherServer": "Acest link este pentru conturi de pe {{server}}. Contul tău este pe alt server.",
+    "self": "Acesta este linkul tău."
   }
 }

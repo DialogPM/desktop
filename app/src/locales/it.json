@@ -877,6 +877,8 @@
       "linkShow": "Mostra link e codice QR",
       "linkHide": "Nascondi",
       "linkHint": "Chi scansiona questo codice o apre il link può trovarti tramite il nome utente. Il link non contiene il tuo numero di account.",
+      "webLink": "Link web",
+      "webLinkHint": "Chi apre questo link arriva alla conversazione con te o alla pagina per scaricare l’app. Contiene il tuo nome utente, visibile a chiunque lo veda.",
       "linkReset": "Reimposta link",
       "linkResetConfirm": "Reimpostare il link del nome utente? Il link e il codice QR attuali smetteranno di funzionare.",
       "linkResetDone": "Nuovo link creato"
@@ -1424,5 +1426,13 @@
     "new": "Nuovo",
     "notifyTitle": "{{server}} · Avviso",
     "hidden": "Nuovo avviso dal server"
+  },
+  "userLink": {
+    "openTitle": "Iniziare una conversazione?",
+    "openBody": "Questo link porta a {{name}}. Vuoi iniziare una conversazione?",
+    "open": "Apri conversazione",
+    "notFound": "Non esiste alcun account chiamato {{name}}.",
+    "otherServer": "Questo link è per gli account su {{server}}. Il tuo account è su un altro server.",
+    "self": "Questo è il tuo link."
   }
 }

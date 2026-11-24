@@ -11,6 +11,7 @@ import { bootstrap } from "./store/actions";
 import { useApp } from "./store/app";
 import { startEventBridge } from "./store/events";
 import { startRemoteWipeWatcher } from "./lib/remoteWipe";
+import { startUserLinks } from "./lib/userLinks";
 
 export function App() {
   const appState = useApp((s) => s.appState);
@@ -21,11 +22,13 @@ export function App() {
     const stop = startEventBridge();
     const stopLock = startAppLockWatcher();
     const stopWipe = startRemoteWipeWatcher();
+    const stopLinks = startUserLinks();
     void bootstrap();
     return () => {
       stop();
       stopLock();
       stopWipe();
+      stopLinks();
     };
   }, []);
 

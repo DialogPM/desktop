@@ -850,6 +850,8 @@
       "linkShow": "Tampilkan tautan & kode QR",
       "linkHide": "Sembunyikan",
       "linkHint": "Siapa pun yang memindai kode ini atau membuka tautannya dapat menemukan Anda lewat nama pengguna. Tautan itu sendiri tidak memuat nomor akun Anda.",
+      "webLink": "Tautan web",
+      "webLinkHint": "Siapa pun yang membuka tautan ini akan sampai ke percakapan dengan Anda atau ke halaman unduh aplikasi. Tautan ini memuat nama pengguna Anda, terlihat oleh siapa pun yang melihatnya.",
       "linkReset": "Reset tautan",
       "linkResetConfirm": "Reset tautan nama pengguna Anda? Tautan dan kode QR saat ini tidak akan berfungsi lagi.",
       "linkResetDone": "Tautan nama pengguna baru dibuat"
@@ -1392,5 +1394,13 @@
     "new": "Baru",
     "notifyTitle": "{{server}} · Pemberitahuan",
     "hidden": "Pemberitahuan baru dari server"
+  },
+  "userLink": {
+    "openTitle": "Mulai percakapan?",
+    "openBody": "Tautan ini mengarah ke {{name}}. Ingin memulai percakapan?",
+    "open": "Buka percakapan",
+    "notFound": "Tidak ada akun bernama {{name}}.",
+    "otherServer": "Tautan ini untuk akun di {{server}}. Akun Anda ada di server lain.",
+    "self": "Ini tautan Anda sendiri."
   }
 }
