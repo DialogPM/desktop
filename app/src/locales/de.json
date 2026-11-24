@@ -791,6 +791,8 @@
       "title": "Über",
       "hint": "Version, Server, Lizenz",
       "version": "Version {{version}}",
+      "checkUpdates": "Nach Updates suchen",
+      "upToDate": "Du hast die neueste Version.",
       "server": "Server",
       "security": "Sicherheit",
       "signal": "Nachrichten, Anhänge und Gruppenchats sind mit dem Signal-Protokoll Ende-zu-Ende-verschlüsselt (X3DH, Double Ratchet und Sender Keys für Gruppen). Nur du und die Personen, mit denen du schreibst, können sie lesen; der Server leitet nur verschlüsselte Daten weiter.",
@@ -1013,6 +1015,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} ist verfügbar.",
     "updateInstall": "Installieren und neu starten",
+    "updateDownloading": "Update wird heruntergeladen… {{percent}} %",
+    "updateInstalling": "Update wird installiert…",
     "newDeviceTitle": "Neues Gerät verbunden",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Wenn du das nicht warst, entferne das Gerät und ändere dein Passwort.",

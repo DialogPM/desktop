@@ -791,6 +791,8 @@
       "title": "Hakkında",
       "hint": "Sürüm, sunucu, lisans",
       "version": "Sürüm {{version}}",
+      "checkUpdates": "Güncellemeleri denetle",
+      "upToDate": "En son sürümü kullanıyorsunuz.",
       "server": "Sunucu",
       "security": "Güvenlik",
       "signal": "Mesajlar, ekler ve grup sohbetleri Signal Protokolü ile (X3DH, Double Ratchet ve gruplar için Sender Keys) uçtan uca şifrelenir. Onları yalnızca siz ve konuştuğunuz kişiler okuyabilir; sunucu yalnızca şifreli verileri aktarır.",
@@ -1013,6 +1015,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} kullanıma sunuldu.",
     "updateInstall": "Yükle ve yeniden başlat",
+    "updateDownloading": "Güncelleme indiriliyor… %{{percent}}",
+    "updateInstalling": "Güncelleme yükleniyor…",
     "newDeviceTitle": "Yeni cihaz bağlandı",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Bu siz değilseniz bağlantısını kaldırın ve parolanızı değiştirin.",

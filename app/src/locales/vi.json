@@ -777,6 +777,8 @@
       "title": "Giới thiệu",
       "hint": "Phiên bản, máy chủ, giấy phép",
       "version": "Phiên bản {{version}}",
+      "checkUpdates": "Kiểm tra bản cập nhật",
+      "upToDate": "Bạn đang dùng phiên bản mới nhất.",
       "server": "Máy chủ",
       "security": "Bảo mật",
       "signal": "Tin nhắn, tệp đính kèm và trò chuyện nhóm được mã hóa đầu cuối bằng Signal Protocol (X3DH, Double Ratchet và Sender Keys cho nhóm). Chỉ bạn và những người bạn trò chuyện cùng mới đọc được; máy chủ chỉ chuyển tiếp dữ liệu đã mã hóa.",
@@ -998,6 +1000,8 @@
   "security": {
     "updateAvailable": "Đã có {{appName}} {{version}}.",
     "updateInstall": "Cài đặt và khởi động lại",
+    "updateDownloading": "Đang tải bản cập nhật… {{percent}}%",
+    "updateInstalling": "Đang cài đặt bản cập nhật…",
     "newDeviceTitle": "Thiết bị mới đã kết nối",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Nếu không phải bạn, hãy hủy liên kết thiết bị đó và đổi mật khẩu.",

@@ -791,6 +791,8 @@
       "title": "Sobre",
       "hint": "Versão, servidor, licença",
       "version": "Versão {{version}}",
+      "checkUpdates": "Procurar atualizações",
+      "upToDate": "Tem a versão mais recente.",
       "server": "Servidor",
       "security": "Segurança",
       "signal": "Mensagens, anexos e conversas em grupo são protegidos com criptografia de ponta a ponta pelo Signal Protocol (X3DH, Double Ratchet e Sender Keys para grupos). Só você e as pessoas com quem você conversa podem lê-los; o servidor apenas retransmite dados criptografados.",
@@ -1013,6 +1015,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} está disponível.",
     "updateInstall": "Instalar e reiniciar",
+    "updateDownloading": "A transferir a atualização… {{percent}}%",
+    "updateInstalling": "A instalar a atualização…",
     "newDeviceTitle": "Novo dispositivo conectado",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Se não foi você, desconecte-o e altere sua senha.",

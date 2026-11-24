@@ -847,6 +847,8 @@
       "title": "حول",
       "hint": "الإصدار، الخادم، الترخيص",
       "version": "الإصدار {{version}}",
+      "checkUpdates": "التحقق من وجود تحديثات",
+      "upToDate": "لديك أحدث إصدار.",
       "server": "الخادم",
       "security": "الأمان",
       "signal": "الرسائل والمرفقات ودردشات المجموعات مشفّرة تشفيرًا تامًا بين الطرفين باستخدام Signal Protocol ‏(X3DH وDouble Ratchet وSender Keys للمجموعات). لا يمكن قراءتها إلا لك وللأشخاص الذين تتحدث معهم؛ أما الخادم فينقل البيانات المشفّرة فقط.",
@@ -1073,6 +1075,8 @@
   "security": {
     "updateAvailable": "يتوفر {{appName}} {{version}}.",
     "updateInstall": "التثبيت وإعادة التشغيل",
+    "updateDownloading": "جارٍ تنزيل التحديث… {{percent}}%",
+    "updateInstalling": "جارٍ تثبيت التحديث…",
     "newDeviceTitle": "تم توصيل جهاز جديد",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "إذا لم تكن أنت، فألغِ ربطه وغيّر كلمة المرور.",

@@ -10,6 +10,7 @@ import { api, onEvent } from "../../lib/api";
 import { formatDateTime } from "../../lib/format";
 import { useLocale } from "../../lib/hooks";
 import { showNotification } from "../../lib/platform";
+import { installUpdate, startUpdater, useUpdater } from "../../lib/updater";
 import type { LoginRequestInfo, NewDeviceAlert } from "../../lib/types";
 import { attempt, openSettings } from "../../store/actions";
 
@@ -124,33 +125,34 @@ export function LoginRequestPrompt() {
   );
 }
 
-/** A signed desktop update is available (builds with updates enabled only). */
+/** A signed desktop update is available (copies of the app that update themselves only). */
 export function UpdateBanner() {
   const { t } = useTranslation();
-  const [version, setVersion] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
-  useCoreEvent<{ version: string }>(
-    (h) => onEvent("update_available", h),
-    (u) => setVersion(u.version),
-  );
-  if (!version) return null;
+  const update = useUpdater((s) => s.available);
+  const installing = useUpdater((s) => s.installing);
+  const percent = useUpdater((s) => s.percent);
+  const [dismissed, setDismissed] = useState<string | null>(null);
+  useEffect(startUpdater, []);
+  if (!update || (!installing && dismissed === update.version)) return null;
   return (
     <div className="banner banner-sync" role="status">
-      <span>{t("security.updateAvailable", { version })}</span>
-      <button
-        type="button"
-        className="chip-btn"
-        disabled={busy}
-        onClick={() => {
-          setBusy(true);
-          void attempt(() => api.installUpdate()).finally(() => setBusy(false));
-        }}
-      >
-        {t("security.updateInstall")}
-      </button>
-      <button type="button" className="chip-btn" onClick={() => setVersion(null)}>
-        {t("security.dismiss")}
-      </button>
+      <span>
+        {!installing
+          ? t("security.updateAvailable", { version: update.version })
+          : percent === null || percent >= 100
+            ? t("security.updateInstalling")
+            : t("security.updateDownloading", { percent })}
+      </span>
+      {!installing && (
+        <>
+          <button type="button" className="chip-btn" onClick={() => void attempt(installUpdate)}>
+            {t("security.updateInstall")}
+          </button>
+          <button type="button" className="chip-btn" onClick={() => setDismissed(update.version)}>
+            {t("security.dismiss")}
+          </button>
+        </>
+      )}
     </div>
   );
 }

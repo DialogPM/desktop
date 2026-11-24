@@ -791,6 +791,8 @@
       "title": "Over",
       "hint": "Versie, server, licentie",
       "version": "Versie {{version}}",
+      "checkUpdates": "Zoeken naar updates",
+      "upToDate": "Je hebt de nieuwste versie.",
       "server": "Server",
       "security": "Beveiliging",
       "signal": "Berichten, bijlagen en groepschats zijn end-to-end versleuteld met het Signal-protocol (X3DH, de Double Ratchet en Sender Keys voor groepen). Alleen jij en de mensen met wie je praat kunnen ze lezen; de server geeft alleen versleutelde gegevens door.",
@@ -1013,6 +1015,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} is beschikbaar.",
     "updateInstall": "Installeren en herstarten",
+    "updateDownloading": "Update wordt gedownload… {{percent}}%",
+    "updateInstalling": "Update wordt geïnstalleerd…",
     "newDeviceTitle": "Nieuw apparaat verbonden",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Was jij dit niet? Ontkoppel het apparaat en wijzig je wachtwoord.",

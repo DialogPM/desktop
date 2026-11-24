@@ -5,6 +5,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { reportIfMissingCommand } from "./staleBinary";
 import { listen, type UnlistenFn } from "@tauri-apps/api/event";
+import type { UpdateStatus } from "./updater";
 import type {
   AccountDetails,
   AccountInfo,
@@ -203,8 +204,13 @@ export const backend = {
   answerLoginRequest: (req: { id: string; approve: boolean }) => call<void>("answer_login_request", req),
   setLoginApproval: (req: { enabled: boolean }) => call<void>("set_login_approval", req),
   /** Downloads, verifies (signature) and installs the update announced by update_available,
-   * then restarts. Errors with "forbidden" in builds without update signing. */
+   * then restarts (event: update_progress). Errors with "forbidden" in a copy of the app that
+   * does not update itself. */
   installUpdate: () => call<void>("update_install"),
+  /** Whether this copy of the app updates itself, and the update the last check found. */
+  updateStatus: () => call<UpdateStatus>("update_status"),
+  /** Looks for an update now. */
+  checkUpdate: () => call<UpdateStatus>("update_check"),
   /** Reports an account for spam to the server and (by default) blocks it. */
   reportSpam: (req: { account_id: string; block?: boolean }) => call<Contact>("report_spam", req),
   // Key transparency (docs/KEY-TRANSPARENCY.md); alerts also arrive as the kt_alerts event.
@@ -438,6 +444,8 @@ export interface EventPayloads {
   media_check: MediaCheck;
   /** A signed update of the desktop app is available (only in builds with updates enabled). */
   update_available: { version: string; notes: string | null };
+  /** Download of the update being installed (total: null when the size is unknown). */
+  update_progress: { downloaded: number; total: number | null };
   /** A notice from the server operator was received and passed the signature check. */
   notice: Notice;
   /** The number of unread notices changed (read or deleted here or on another device). */

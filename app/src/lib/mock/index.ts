@@ -855,6 +855,12 @@ export const mockBackend: Backend = {
     await latency();
     data().details.login_approval = req.enabled;
   },
+  async updateStatus() {
+    return { enabled: false, available: null };
+  },
+  async checkUpdate() {
+    return { enabled: false, available: null };
+  },
   async installUpdate() {
     await latency();
     return fail("forbidden", "updates are not configured in this build");

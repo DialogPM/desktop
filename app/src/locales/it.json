@@ -803,6 +803,8 @@
       "title": "Informazioni",
       "hint": "Versione, server, licenza",
       "version": "Versione {{version}}",
+      "checkUpdates": "Cerca aggiornamenti",
+      "upToDate": "Hai la versione più recente.",
       "server": "Server",
       "security": "Sicurezza",
       "signal": "Messaggi, allegati e chat di gruppo sono crittografati end-to-end con il Signal Protocol (X3DH, Double Ratchet e Sender Keys per i gruppi). Solo tu e le persone con cui parli potete leggerli; il server inoltra solo dati crittografati.",
@@ -1025,6 +1027,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} è disponibile.",
     "updateInstall": "Installa e riavvia",
+    "updateDownloading": "Download dell'aggiornamento… {{percent}}%",
+    "updateInstalling": "Installazione dell'aggiornamento…",
     "newDeviceTitle": "Nuovo dispositivo collegato",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Se non sei stato tu, scollegalo e cambia la password.",

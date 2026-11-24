@@ -791,6 +791,8 @@
       "title": "À propos",
       "hint": "Version, serveur, licence",
       "version": "Version {{version}}",
+      "checkUpdates": "Rechercher des mises à jour",
+      "upToDate": "Vous avez la dernière version.",
       "server": "Serveur",
       "security": "Sécurité",
       "signal": "Les messages, pièces jointes et discussions de groupe sont chiffrés de bout en bout avec le protocole Signal (X3DH, le Double Ratchet et les Sender Keys pour les groupes). Seuls vous et vos interlocuteurs pouvez les lire ; le serveur ne fait que relayer des données chiffrées.",
@@ -1013,6 +1015,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} est disponible.",
     "updateInstall": "Installer et redémarrer",
+    "updateDownloading": "Téléchargement de la mise à jour… {{percent}} %",
+    "updateInstalling": "Installation de la mise à jour…",
     "newDeviceTitle": "Nouvel appareil connecté",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Si ce n'était pas vous, dissociez-le et changez votre mot de passe.",

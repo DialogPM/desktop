@@ -777,6 +777,8 @@
       "title": "Tentang",
       "hint": "Versi, server, lisensi",
       "version": "Versi {{version}}",
+      "checkUpdates": "Periksa pembaruan",
+      "upToDate": "Anda memiliki versi terbaru.",
       "server": "Server",
       "security": "Keamanan",
       "signal": "Pesan, lampiran, dan chat grup dienkripsi secara end-to-end dengan Signal Protocol (X3DH, Double Ratchet, dan Sender Keys untuk grup). Hanya Anda dan orang yang Anda ajak bicara yang dapat membacanya; server hanya meneruskan data terenkripsi.",
@@ -998,6 +1000,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} tersedia.",
     "updateInstall": "Instal dan mulai ulang",
+    "updateDownloading": "Mengunduh pembaruan… {{percent}}%",
+    "updateInstalling": "Memasang pembaruan…",
     "newDeviceTitle": "Perangkat baru terhubung",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Jika ini bukan Anda, putuskan tautannya dan ubah kata sandi Anda.",

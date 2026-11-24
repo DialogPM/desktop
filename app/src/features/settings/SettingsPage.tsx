@@ -19,6 +19,7 @@ import { useIsMobile } from "../../lib/hooks";
 import { openExternal, pickedPath, pickFiles } from "../../lib/platform";
 import type { PrivacySettings } from "../../lib/types";
 import { useScreenProtection } from "../../lib/screenProtection";
+import { checkForUpdate, installUpdate, startUpdater, useUpdater } from "../../lib/updater";
 import { attempt, errorText, goBack, notifyOk, openSettings } from "../../store/actions";
 import { getApp, setApp, useApp, type SettingsSection } from "../../store/app";
 import { AccountSection } from "./AccountSection";
@@ -828,6 +829,17 @@ function AboutSection() {
   const { t } = useTranslation();
   const server = useApp((s) => s.serverInfo);
   const serverUrl = useApp((s) => s.details?.account.server_url);
+  const updates = useUpdater((s) => s.enabled);
+  const update = useUpdater((s) => s.available);
+  const installing = useUpdater((s) => s.installing);
+  const [checking, setChecking] = useState(false);
+  useEffect(startUpdater, []);
+  const checkNow = async () => {
+    setChecking(true);
+    const found = await attempt(checkForUpdate);
+    setChecking(false);
+    if (found === null) notifyOk(t("settings.about.upToDate"));
+  };
   return (
     <>
       <div className="about-hero">
@@ -843,6 +855,24 @@ function AboutSection() {
         </div>
       </div>
       <div className="list-card">
+        {updates && (
+          <button
+            type="button"
+            className="list-card-row"
+            disabled={checking || installing}
+            onClick={() => void (update ? attempt(installUpdate) : checkNow())}
+          >
+            <span className="ic">
+              <Icon name="download" size={19} />
+            </span>
+            <div className="flex1">
+              <div className="list-card-title">
+                {update ? t("security.updateInstall") : t("settings.about.checkUpdates")}
+              </div>
+              {update && <div className="list-card-sub">{t("security.updateAvailable", { version: update.version })}</div>}
+            </div>
+          </button>
+        )}
         <div className="list-card-row">
           <span className="ic">
             <Icon name="server" size={19} />

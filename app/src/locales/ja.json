@@ -777,6 +777,8 @@
       "title": "このアプリについて",
       "hint": "バージョン、サーバー、ライセンス",
       "version": "バージョン {{version}}",
+      "checkUpdates": "アップデートを確認",
+      "upToDate": "最新バージョンです。",
       "server": "サーバー",
       "security": "セキュリティ",
       "signal": "メッセージ、添付ファイル、グループチャットは Signal プロトコル（X3DH、Double Ratchet、グループ用の Sender Keys）でエンドツーエンド暗号化されています。読むことができるのは、あなたとやり取りの相手だけです。サーバーは暗号化されたデータを中継するだけです。",
@@ -998,6 +1000,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} が利用可能です。",
     "updateInstall": "インストールして再起動",
+    "updateDownloading": "アップデートをダウンロード中… {{percent}}%",
+    "updateInstalling": "アップデートをインストール中…",
     "newDeviceTitle": "新しい端末が接続されました",
     "newDeviceBody": "{{name}}（{{platform}}） · {{date}}",
     "newDeviceHint": "心当たりがない場合は、リンクを解除してパスワードを変更してください。",

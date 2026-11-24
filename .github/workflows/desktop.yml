@@ -8,6 +8,10 @@ name: Desktop builds
 # APPLE_CERTIFICATE (base64 .p12), APPLE_CERTIFICATE_PASSWORD, APPLE_API_KEY, APPLE_API_ISSUER
 # and APPLE_API_KEY_P8 (App Store Connect API key) are set; otherwise an ad-hoc signature.
 # Windows and Linux builds are not code-signed.
+# Self-updates (docs/DESKTOP-UPDATER.md): with the secrets TAURI_SIGNING_PRIVATE_KEY and
+# TAURI_SIGNING_PRIVATE_KEY_PASSWORD and the variable DIALOG_UPDATER_PUBKEY the build signs
+# update packages, and a release also publishes their manifest (latest.json). Without them the
+# apps are built with updates off.
 
 on:
   workflow_dispatch:
@@ -135,7 +139,30 @@ jobs:
           # commit is tested by ci.yml (which has MySQL and MinIO for the e2e tests), so the
           # three installer builds do not repeat it.
           SKIP_TESTS: "1"
-        run: pnpm tauri build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          UPDATER_PUBKEY: ${{ vars.DIALOG_UPDATER_PUBKEY }}
+        run: |
+          $extra = @()
+          if ($env:TAURI_SIGNING_PRIVATE_KEY -and $env:UPDATER_PUBKEY) {
+            # The app only accepts updates signed with this key, announced by the manifest of
+            # the latest release of this repository (src-tauri/src/updater.rs).
+            $endpoint = "https://github.com/${{ github.repository }}/releases/latest/download/latest.json"
+            $env:DIALOG_UPDATER_PUBKEY = $env:UPDATER_PUBKEY
+            $env:DIALOG_UPDATER_ENDPOINT = $endpoint
+            @{
+              bundle  = @{ createUpdaterArtifacts = $true }
+              plugins = @{ updater = @{ pubkey = $env:UPDATER_PUBKEY; endpoints = @($endpoint) } }
+            } | ConvertTo-Json -Depth 5 | Set-Content -Encoding utf8NoBOM updater.conf.json
+            $extra = @("--config", "updater.conf.json")
+            Write-Host "Update signing enabled."
+          } else {
+            Remove-Item Env:TAURI_SIGNING_PRIVATE_KEY -ErrorAction SilentlyContinue
+            Remove-Item Env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD -ErrorAction SilentlyContinue
+            Write-Host "No update signing key: the app is built with updates off."
+          }
+          pnpm tauri build --target ${{ matrix.target }} --bundles ${{ matrix.bundles }} @extra
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       # tauri notarizes the .app; the .dmg around it is notarized and stapled here, so Gatekeeper
       # also accepts the downloaded disk image.
       - name: Notarize the disk image
@@ -153,6 +180,8 @@ jobs:
           mkdir -p dist-installers
           dir=target/${{ matrix.target }}/release/bundle
           find "$dir" -maxdepth 2 \( -name '*.msi' -o -name '*.exe' -o -name '*.dmg' -o -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' \) -exec cp {} dist-installers/ \;
+          # Signed update packages and signatures (builds with update signing only).
+          find "$dir" -maxdepth 2 \( -name '*.app.tar.gz' -o -name '*.sig' \) -exec cp {} dist-installers/ \;
           if [ -d "$dir/macos" ]; then
             (cd "$dir/macos" && ditto -c -k --keepParent Dialog.app "$GITHUB_WORKSPACE/dist-installers/Dialog-macos-universal.app.zip")
           fi
@@ -193,4 +222,45 @@ jobs:
             gh release upload "${{ github.ref_name }}" -R ${{ github.repository }} --clobber dist/*/*
           else
             gh release create "${{ github.ref_name }}" -R ${{ github.repository }} --title "Dialog ${{ github.ref_name }}" --generate-notes dist/*/*
+          fi
+      # The manifest the installed apps read (docs/DESKTOP-UPDATER.md). Uploaded last, so it
+      # never names a file that is not there yet. Only the installs that update themselves are
+      # listed: the Windows setup program, the AppImage and the macOS app.
+      - name: Publish the update manifest
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import datetime, glob, json, os, sys
+          tag, repo = os.environ["TAG"], os.environ["REPO"]
+          def package(pattern, *targets):
+              found = [f for f in glob.glob("dist/*/" + pattern) if os.path.exists(f + ".sig")]
+              if len(found) != 1:
+                  return {}
+              name = os.path.basename(found[0])
+              entry = {
+                  "signature": open(found[0] + ".sig").read().strip(),
+                  "url": f"https://github.com/{repo}/releases/download/{tag}/{name}",
+              }
+              return {t: entry for t in targets}
+          platforms = {}
+          platforms.update(package("*.app.tar.gz", "darwin-aarch64", "darwin-x86_64"))
+          platforms.update(package("*_x64-setup.exe", "windows-x86_64-nsis"))
+          platforms.update(package("*_amd64.AppImage", "linux-x86_64-appimage"))
+          if not platforms:
+              print("No signed update packages in this build: no manifest.")
+              sys.exit(0)
+          manifest = {
+              "version": tag.lstrip("v"),
+              "notes": f"https://github.com/{repo}/releases/tag/{tag}",
+              "pub_date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "platforms": platforms,
+          }
+          json.dump(manifest, open("latest.json", "w"), indent=2)
+          print(json.dumps({**manifest, "platforms": sorted(platforms)}, indent=2))
+          PY
+          if [ -f latest.json ]; then
+            gh release upload "$TAG" -R "$REPO" --clobber latest.json
           fi

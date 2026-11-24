@@ -777,6 +777,8 @@
       "title": "정보",
       "hint": "버전, 서버, 라이선스",
       "version": "버전 {{version}}",
+      "checkUpdates": "업데이트 확인",
+      "upToDate": "최신 버전을 사용 중입니다.",
       "server": "서버",
       "security": "보안",
       "signal": "메시지, 첨부 파일, 그룹 대화는 Signal 프로토콜(X3DH, Double Ratchet, 그룹용 Sender Keys)로 종단간 암호화됩니다. 나와 대화 상대만 읽을 수 있으며, 서버는 암호화된 데이터만 중계합니다.",
@@ -998,6 +1000,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} 버전을 사용할 수 있습니다.",
     "updateInstall": "설치 후 다시 시작",
+    "updateDownloading": "업데이트 다운로드 중… {{percent}}%",
+    "updateInstalling": "업데이트 설치 중…",
     "newDeviceTitle": "새 기기가 연결되었습니다",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "본인이 아니라면 연결을 해제하고 비밀번호를 변경하세요.",

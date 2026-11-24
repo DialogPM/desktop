@@ -819,6 +819,8 @@
       "title": "Informacje",
       "hint": "Wersja, serwer, licencja",
       "version": "Wersja {{version}}",
+      "checkUpdates": "Sprawdź aktualizacje",
+      "upToDate": "Masz najnowszą wersję.",
       "server": "Serwer",
       "security": "Bezpieczeństwo",
       "signal": "Wiadomości, załączniki i czaty grupowe są szyfrowane metodą end-to-end za pomocą protokołu Signal (X3DH, Double Ratchet i Sender Keys dla grup). Tylko ty i osoby, z którymi rozmawiasz, możecie je przeczytać; serwer jedynie przekazuje zaszyfrowane dane.",
@@ -1043,6 +1045,8 @@
   "security": {
     "updateAvailable": "Dostępna jest wersja {{appName}} {{version}}.",
     "updateInstall": "Zainstaluj i uruchom ponownie",
+    "updateDownloading": "Pobieranie aktualizacji… {{percent}}%",
+    "updateInstalling": "Instalowanie aktualizacji…",
     "newDeviceTitle": "Połączono nowe urządzenie",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Jeśli to nie ty, odłącz je i zmień hasło.",

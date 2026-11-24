@@ -777,6 +777,8 @@
       "title": "关于",
       "hint": "版本、服务器、许可证",
       "version": "版本 {{version}}",
+      "checkUpdates": "检查更新",
+      "upToDate": "已是最新版本。",
       "server": "服务器",
       "security": "安全",
       "signal": "消息、附件和群组聊天均使用 Signal 协议（X3DH、Double Ratchet 以及用于群组的 Sender Keys）进行端到端加密。只有你和与你聊天的人能够阅读；服务器仅转发加密数据。",
@@ -998,6 +1000,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} 可供更新。",
     "updateInstall": "安装并重启",
+    "updateDownloading": "正在下载更新… {{percent}}%",
+    "updateInstalling": "正在安装更新…",
     "newDeviceTitle": "已连接新设备",
     "newDeviceBody": "{{name}}（{{platform}}）· {{date}}",
     "newDeviceHint": "如果这不是你本人的操作，请取消关联该设备并更改密码。",

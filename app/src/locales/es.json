@@ -791,6 +791,8 @@
       "title": "Acerca de",
       "hint": "Versión, servidor, licencia",
       "version": "Versión {{version}}",
+      "checkUpdates": "Buscar actualizaciones",
+      "upToDate": "Tienes la última versión.",
       "server": "Servidor",
       "security": "Seguridad",
       "signal": "Los mensajes, archivos adjuntos y chats de grupo están cifrados de extremo a extremo con el Protocolo Signal (X3DH, el Double Ratchet y Sender Keys para grupos). Solo tú y las personas con las que hablas pueden leerlos; el servidor solo retransmite datos cifrados.",
@@ -1013,6 +1015,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} está disponible.",
     "updateInstall": "Instalar y reiniciar",
+    "updateDownloading": "Descargando la actualización… {{percent}} %",
+    "updateInstalling": "Instalando la actualización…",
     "newDeviceTitle": "Nuevo dispositivo conectado",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Si no fuiste tú, desvincúlalo y cambia tu contraseña.",

@@ -791,6 +791,8 @@
       "title": "About",
       "hint": "Version, server, license",
       "version": "Version {{version}}",
+      "checkUpdates": "Check for updates",
+      "upToDate": "You have the latest version.",
       "server": "Server",
       "security": "Security",
       "signal": "Messages, attachments and group chats are end-to-end encrypted with the Signal Protocol (X3DH, the Double Ratchet and Sender Keys for groups). Only you and the people you talk to can read them; the server only relays encrypted data.",
@@ -1013,6 +1015,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} is available.",
     "updateInstall": "Install and restart",
+    "updateDownloading": "Downloading the update… {{percent}}%",
+    "updateInstalling": "Installing the update…",
     "newDeviceTitle": "New device connected",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "If this wasn't you, unlink it and change your password.",

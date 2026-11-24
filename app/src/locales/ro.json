@@ -805,6 +805,8 @@
       "title": "Despre",
       "hint": "Versiune, server, licență",
       "version": "Versiunea {{version}}",
+      "checkUpdates": "Caută actualizări",
+      "upToDate": "Ai cea mai nouă versiune.",
       "server": "Server",
       "security": "Securitate",
       "signal": "Mesajele, atașamentele și conversațiile de grup sunt criptate integral cu Signal Protocol (X3DH, Double Ratchet și Sender Keys pentru grupuri). Doar tu și persoanele cu care vorbești le puteți citi; serverul transmite doar date criptate.",
@@ -1028,6 +1030,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} este disponibil.",
     "updateInstall": "Instalează și repornește",
+    "updateDownloading": "Se descarcă actualizarea… {{percent}}%",
+    "updateInstalling": "Se instalează actualizarea…",
     "newDeviceTitle": "Dispozitiv nou conectat",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "Dacă nu ai fost tu, deconectează-l și schimbă parola.",

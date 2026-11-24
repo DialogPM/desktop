@@ -791,6 +791,8 @@
       "title": "درباره",
       "hint": "نسخه، سرور، مجوز",
       "version": "نسخهٔ {{version}}",
+      "checkUpdates": "بررسی به‌روزرسانی",
+      "upToDate": "شما آخرین نسخه را دارید.",
       "server": "سرور",
       "security": "امنیت",
       "signal": "پیام‌ها، پیوست‌ها و گفتگوهای گروهی با Signal Protocol (X3DH، Double Ratchet و Sender Keys برای گروه‌ها) رمزگذاری سرتاسری می‌شوند. فقط شما و افرادی که با آن‌ها گفتگو می‌کنید می‌توانید آن‌ها را بخوانید؛ سرور فقط داده‌های رمزگذاری‌شده را جابه‌جا می‌کند.",
@@ -1013,6 +1015,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} در دسترس است.",
     "updateInstall": "نصب و راه‌اندازی دوباره",
+    "updateDownloading": "در حال دریافت به‌روزرسانی… {{percent}}٪",
+    "updateInstalling": "در حال نصب به‌روزرسانی…",
     "newDeviceTitle": "دستگاه جدید متصل شد",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "اگر این شما نبودید، پیوند آن را لغو کنید و گذرواژهٔ خود را تغییر دهید.",

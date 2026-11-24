@@ -791,6 +791,8 @@
       "title": "ऐप के बारे में",
       "hint": "संस्करण, सर्वर, लाइसेंस",
       "version": "संस्करण {{version}}",
+      "checkUpdates": "अपडेट जाँचें",
+      "upToDate": "आपके पास नवीनतम संस्करण है।",
       "server": "सर्वर",
       "security": "सुरक्षा",
       "signal": "संदेश, अटैचमेंट और ग्रुप चैट Signal Protocol (X3DH, Double Ratchet और ग्रुप के लिए Sender Keys) से एंड-टू-एंड एन्क्रिप्टेड हैं। केवल आप और जिनसे आप बात करते हैं, वही इन्हें पढ़ सकते हैं; सर्वर केवल एन्क्रिप्टेड डेटा आगे पहुँचाता है।",
@@ -1013,6 +1015,8 @@
   "security": {
     "updateAvailable": "{{appName}} {{version}} उपलब्ध है।",
     "updateInstall": "इंस्टॉल करें और रीस्टार्ट करें",
+    "updateDownloading": "अपडेट डाउनलोड हो रहा है… {{percent}}%",
+    "updateInstalling": "अपडेट इंस्टॉल हो रहा है…",
     "newDeviceTitle": "नया डिवाइस कनेक्ट हुआ",
     "newDeviceBody": "{{name}} ({{platform}}) · {{date}}",
     "newDeviceHint": "अगर यह आप नहीं थे, तो इसे अनलिंक करें और अपना पासवर्ड बदलें।",

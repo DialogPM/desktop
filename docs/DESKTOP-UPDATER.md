@@ -1,8 +1,8 @@
 # Desktop auto-updates (signed)
 
-Gap analysis item 6.3. The desktop app includes `tauri-plugin-updater`, but it is **off** in
-every build unless the build sets an update signing public key and an update endpoint. Code:
-`app/src-tauri/src/updater.rs`.
+The desktop app includes `tauri-plugin-updater`. It is **off** unless the build sets an update
+signing public key and an update endpoint, and in every copy that a store or the system
+updates. Code: `app/src-tauri/src/updater.rs`, `app/src/lib/updater.ts`.
 
 ## How it works
 
@@ -11,13 +11,25 @@ every build unless the build sets an update signing public key and an update end
     text from the `.pub` file);
   - `DIALOG_UPDATER_ENDPOINT`: `https://…` URL of the update manifest; it may contain
     `{{target}}`, `{{arch}}` and `{{current_version}}`. Plain `http://` is refused.
-- Without both, the plugin is not even registered. With both, the app checks once at start
-  and the UI shows a banner ("Dialog X is available"); installing happens only when the user
-  clicks it (`update_install` command).
+- Without both, the plugin is not even registered.
+- **Only copies that can replace themselves update themselves**: the Windows setup program
+  (NSIS), the AppImage and the macOS app outside the App Store. The same binary also ships as
+  `.msi` (repackaged for the Microsoft Store), `.deb` (repackaged as a snap) and `.rpm`; those
+  are updated by the store or by the system, and in them the updater stays off. They keep the
+  prompt that opens the download page when the server announces a newer version.
+- With updates on, the app asks the endpoint at start and every 6 hours. A newer version shows
+  a banner ("Dialog X is available") and a row in Settings → About; nothing is downloaded or
+  installed until the user clicks ("Install and restart", command `update_install`). The UI
+  then shows the download progress, and the app restarts into the new version. When the server
+  announces a required version, the same signed update is installed from that prompt.
 - **Signature verification is mandatory**: the plugin checks the minisign signature of every
   downloaded update against the built-in public key and refuses anything else. There is no
   setting to turn this off. The web view gets no `updater:` permission, so page script cannot
-  drive the updater with other parameters.
+  drive the updater with other parameters. An update is only accepted when its version is
+  higher than the installed one, so the endpoint cannot roll an install back.
+- What the endpoint sees: one HTTPS request for the manifest (address, time, and the app's
+  user agent), like opening the release page in a browser. No account or device identifier is
+  sent.
 
 ## Generating and keeping the key (owner, once)
 
@@ -40,38 +52,67 @@ This writes `dialog-updater.key` (private, password-protected) and `dialog-updat
 - The public key (`.pub` content) is not secret: set it as `DIALOG_UPDATER_PUBKEY` in the
   release build environment (e.g. a GitHub Actions variable).
 
-## Signing a release
+## Releases built by GitHub Actions
+
+`.github/workflows/desktop.yml` signs when the repository has all three:
+
+| Kind | Name | Value |
+| --- | --- | --- |
+| secret | `TAURI_SIGNING_PRIVATE_KEY` | content of `dialog-updater.key` |
+| secret | `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` | its password |
+| variable | `DIALOG_UPDATER_PUBKEY` | content of `dialog-updater.key.pub` |
+
+The build then bakes in the public key and the endpoint
+`https://github.com/<owner>/<repo>/releases/latest/download/latest.json`, and writes the update
+packages with their `.sig` files: `Dialog.app.tar.gz` (macOS, universal), the NSIS setup
+program (Windows) and the AppImage (Linux). On a version tag the `release` job uploads them
+with the installers and, last, the manifest:
+
+```json
+{
+  "version": "0.1.5",
+  "notes": "https://github.com/DialogPM/desktop/releases/tag/v0.1.5",
+  "pub_date": "2026-11-24T12:00:00Z",
+  "platforms": {
+    "darwin-aarch64": { "signature": "<content of the .sig>", "url": "https://github.com/DialogPM/desktop/releases/download/v0.1.5/Dialog.app.tar.gz" },
+    "darwin-x86_64": { "signature": "…", "url": "…/Dialog.app.tar.gz" },
+    "windows-x86_64-nsis": { "signature": "…", "url": "…/Dialog_0.1.5_x64-setup.exe" },
+    "linux-x86_64-appimage": { "signature": "…", "url": "…/Dialog_0.1.5_amd64.AppImage" }
+  }
+}
+```
+
+Without the secrets the workflow builds exactly as before, with updates off.
+
+Notes:
+
+- The first release built with the key has to be installed by hand; from then on the app
+  updates itself. Earlier versions have no updater.
+- A draft or a pre-release is not "latest": installed apps only see a published release.
+- GitHub hosts the files but cannot change what gets installed: a package that is not signed
+  with the key is refused by the app.
+- CI holds the signing key in this setup. Whoever can change the workflow on the release
+  branch, or read the repository secrets, can sign an update: keep the repository's write
+  access and its Actions settings as tight as the key itself.
+
+## Signing a release by hand
 
 ```sh
 export TAURI_SIGNING_PRIVATE_KEY="$(cat /path/to/dialog-updater.key)"
 export TAURI_SIGNING_PRIVATE_KEY_PASSWORD='…'
 export DIALOG_UPDATER_PUBKEY="$(cat /path/to/dialog-updater.key.pub)"
-export DIALOG_UPDATER_ENDPOINT='https://updates.example.com/dialog/{{target}}/{{arch}}/{{current_version}}'
-cd app && pnpm tauri build   # with "createUpdaterArtifacts": true in bundle config for releases
+export DIALOG_UPDATER_ENDPOINT='https://updates.example.com/dialog/latest.json'
+cat > updater.conf.json <<JSON
+{"bundle": {"createUpdaterArtifacts": true},
+ "plugins": {"updater": {"pubkey": "$DIALOG_UPDATER_PUBKEY", "endpoints": ["$DIALOG_UPDATER_ENDPOINT"]}}}
+JSON
+cd app && pnpm tauri build --config ../updater.conf.json
 ```
 
-Tauri then writes the update bundles and their `.sig` files. Publish a manifest at the
-endpoint, for example:
+Tauri then writes the update packages and their `.sig` files; publish a manifest like the one
+above at the endpoint.
 
-```json
-{
-  "version": "0.2.0",
-  "notes": "…",
-  "pub_date": "2026-11-01T12:00:00Z",
-  "platforms": {
-    "darwin-aarch64": { "signature": "<content of the .sig>", "url": "https://updates.example.com/Dialog_0.2.0_aarch64.app.tar.gz" },
-    "windows-x86_64": { "signature": "<content of the .sig>", "url": "https://updates.example.com/Dialog_0.2.0_x64-setup.exe" }
-  }
-}
-```
+## Still missing
 
-Recommended: sign releases on a dedicated, offline-capable machine (not in CI) and upload the
-signed artifacts; if CI must sign, use a protected environment with required reviewers, and
-keep the private key only in that environment's secrets.
-
-## Still to do before the first public release
-
-- Add `"createUpdaterArtifacts": true` to `bundle` in `app/src-tauri/tauri.conf.json` for release
-  builds (it fails without `TAURI_SIGNING_PRIVATE_KEY`, so it is not set by default).
-- OS code signing / notarization (Apple Developer ID, Windows Authenticode) is separate from the
-  update signature and still missing (`desktop.yml` builds ad-hoc signed apps).
+- Windows Authenticode signing is separate from the update signature and still missing
+  (SmartScreen warns on the first install; updates themselves are verified by the app).
