@@ -1,23 +1,19 @@
 // What a conversation with a bot shows instead of the usual composer:
 // - never started: the bot's card and "Start" (BotLanding + BotStartBar);
-// - started: the commands composer when the bot has commands, else Mute / Stop (the design);
+// - started: a text composer, with the bot's commands after "/" when it has any (Mute and Stop are in the bot's info);
 // - stopped or deleted: a note, and "Start" again when possible.
 
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../../components/Icon";
 import { UserAvatar } from "../../components/UserAvatar";
-import { isMuted } from "../../lib/format";
 import { useIsMobile } from "../../lib/hooks";
 import type { BotInfo, Conversation } from "../../lib/types";
-import { patchConversation, sendText } from "../../store/actions";
+import { sendText } from "../../store/actions";
 import { BotBadge } from "./BotBadge";
-import { confirmStopBot, startBot } from "./botActions";
+import { startBot } from "./botActions";
 import { commandQuery, matchingCommands } from "./botText";
 import "./bots.css";
-
-/** Far enough ahead to mean "until I turn it back on". */
-const MUTE_FOREVER = 8_640_000_000_000;
 
 export function BotLanding({ conv, bot }: { conv: Conversation; bot: BotInfo }) {
   const { t } = useTranslation();
@@ -99,21 +95,7 @@ export function BotFooter({ conv, bot }: { conv: Conversation; bot: BotInfo }) {
       </div>
     );
   }
-  if (bot.commands.length > 0) return <BotComposer key={conv.id} conv={conv} bot={bot} />;
-  const muted = isMuted(conv);
-  return (
-    <div className="bot-foot">
-      <div className="bot-foot-row">
-        <button type="button" className="bot-foot-btn" onClick={() => void patchConversation(conv.id, { muted_until: muted ? null : MUTE_FOREVER })}>
-          <Icon name={muted ? "mute" : "bell"} size={17} />
-          {muted ? t("bots.unmute") : t("bots.silent")}
-        </button>
-        <button type="button" className="bot-foot-btn" data-tone="danger" data-bot-stop onClick={() => confirmStopBot(bot)}>
-          {t("bots.stop")}
-        </button>
-      </div>
-    </div>
-  );
+  return <BotComposer key={conv.id} conv={conv} bot={bot} />;
 }
 
 /** Text only, with the bot's commands offered after "/". */
@@ -149,18 +131,20 @@ function BotComposer({ conv, bot }: { conv: Conversation; bot: BotInfo }) {
 
   return (
     <div className="composer">
-      <button
-        type="button"
-        className="composer-round"
-        aria-label={t("bots.commands")}
-        title={t("bots.commands")}
-        onClick={() => {
-          change(text.startsWith("/") ? "" : "/");
-          ref.current?.focus();
-        }}
-      >
-        <span className="bot-slash">/</span>
-      </button>
+      {bot.commands.length > 0 && (
+        <button
+          type="button"
+          className="composer-round"
+          aria-label={t("bots.commands")}
+          title={t("bots.commands")}
+          onClick={() => {
+            change(text.startsWith("/") ? "" : "/");
+            ref.current?.focus();
+          }}
+        >
+          <span className="bot-slash">/</span>
+        </button>
+      )}
       <div className="composer-field">
         {items.length > 0 && (
           <div className="mention-popup" role="listbox" aria-label={t("bots.commands")}>
