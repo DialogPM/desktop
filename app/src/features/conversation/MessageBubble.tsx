@@ -1,3 +1,4 @@
+import { BotButtons } from "../bots/BotButtons";
 import { startCall } from "../../store/calls";
 import { startGroupCall } from "../../store/groupCalls";
 import { ContactCards } from "./ContactCards";
@@ -455,6 +456,7 @@ export const MessageRow = memo(function MessageRow({ id, first, group, selecting
             <Meta m={m} />
           </div>
         )}
+        {m.buttons && m.buttons.length > 0 && <BotButtons message={m} disabled={selecting} />}
       </>
     );
   }

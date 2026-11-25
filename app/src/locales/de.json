@@ -1499,6 +1499,8 @@
     "info": "Bot-Info",
     "manage": "Diesen Bot verwalten",
     "lookupOpen": "Öffnen",
-    "notice": "Nachrichten mit Bots sind nicht Ende-zu-Ende-verschlüsselt: Das Programm des Bots und der Server können sie lesen. Der Bot sieht deine Kontonummer nicht."
+    "notice": "Nachrichten mit Bots sind nicht Ende-zu-Ende-verschlüsselt: Das Programm des Bots und der Server können sie lesen. Der Bot sieht deine Kontonummer nicht.",
+    "openLinkTitle": "Diesen Link öffnen?",
+    "openLink": "Öffnen"
   }
 }

@@ -83,6 +83,7 @@ forward!(
     bot_open,
     bot_start,
     bot_stop,
+    bot_press,
     bots_list,
     bot_create,
     bot_update,

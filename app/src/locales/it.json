@@ -1511,6 +1511,8 @@
     "info": "Info sul bot",
     "manage": "Gestisci questo bot",
     "lookupOpen": "Apri",
-    "notice": "I messaggi con i bot non sono crittografati end-to-end: il programma del bot e il server possono leggerli. Il bot non vede il tuo numero di account."
+    "notice": "I messaggi con i bot non sono crittografati end-to-end: il programma del bot e il server possono leggerli. Il bot non vede il tuo numero di account.",
+    "openLinkTitle": "Aprire questo link?",
+    "openLink": "Apri"
   }
 }

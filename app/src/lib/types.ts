@@ -279,6 +279,8 @@ export interface Message {
    * carry `local_path` or `thumbnail`; the media is shown only through `openViewOnce`.
    */
   view_once?: ViewOnceState | null;
+  /** A bot's message: the rows of buttons under it. Absent for everything else. */
+  buttons?: BotButton[][];
 }
 
 export type ViewOnceState = "unopened" | "opened" | "expired";
@@ -714,6 +716,13 @@ export interface Mention {
   account_id: string;
   start: number;
   length: number;
+}
+
+/** A button under a bot's message: it tells the bot (`data`) or opens an https link (`url`). */
+export interface BotButton {
+  text: string;
+  data?: string | null;
+  url?: string | null;
 }
 
 /** A command a bot offers after "/". */

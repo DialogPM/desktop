@@ -1499,6 +1499,8 @@
     "info": "Bot bilgisi",
     "manage": "Bu botu yönet",
     "lookupOpen": "Aç",
-    "notice": "Botlarla mesajlar uçtan uca şifreli değildir: botun programı ve sunucu bunları okuyabilir. Bot hesap numaranızı görmez."
+    "notice": "Botlarla mesajlar uçtan uca şifreli değildir: botun programı ve sunucu bunları okuyabilir. Bot hesap numaranızı görmez.",
+    "openLinkTitle": "Bu bağlantı açılsın mı?",
+    "openLink": "Aç"
   }
 }

@@ -353,11 +353,21 @@ function botConversation(b: MockBot): Conversation {
   return c;
 }
 
-function botSays(b: MockBot, text: string, isNew = true) {
+function botSays(b: MockBot, text: string, isNew = true, extra: Partial<Message> = {}) {
   const c = botConversation(b);
   const from = { account_id: b.bot.id, display_name: b.bot.name } as Contact;
-  const m = incoming(c.id, from, text);
+  const m = { ...incoming(c.id, from, text), ...extra };
   addMessage(m, isNew);
+}
+
+/** A picture as a bot sends it (shown like any image attachment). */
+function botPhoto(seed: number): Partial<Message> {
+  return {
+    kind: "image",
+    attachments: [
+      { id: newId("att"), mime: "image/jpeg", file_name: "photo", size: 180_000, width: 960, height: 640, duration_ms: null, waveform: null, thumbnail: null, local_path: photo(seed), download_state: "done", progress: null },
+    ],
+  };
 }
 
 function botNote(b: MockBot, type: string) {
@@ -383,13 +393,20 @@ function seedBotChat() {
   const b = mockBot("bot-meteo");
   b.state = "active";
   botNote(b, "bot_started");
-  botSays(b, BOT_ANSWERS.azi);
+  botSays(b, "*Cod galben de vânt*\nValabil azi, 14:00 – 22:00.", true, { ...botPhoto(3), buttons: [[{ text: "Am văzut", data: "ok" }, { text: "Detalii", url: "https://example.org/avertizari" }]] });
 }
 
 function botAnswer(b: MockBot, text: string) {
   const cmd = /^\/([a-z0-9_]+)/.exec(text.trim())?.[1];
   const answer = cmd ? (BOT_ANSWERS[cmd] ?? `Nu cunosc comanda /${cmd}.`) : b.bot.commands.length ? `Am notat: „${text.trim()}”.` : null;
-  if (answer) later(700, () => b.state === "active" && !b.deleted && botSays(b, answer));
+  if (!answer) return;
+  const extra: Partial<Message> =
+    cmd === "avertizari"
+      ? { ...botPhoto(3), buttons: [[{ text: "Detalii", url: "https://example.org/avertizari" }]] }
+      : cmd === "oras"
+        ? { buttons: [[{ text: "București", data: "oras:bucuresti" }, { text: "Cluj", data: "oras:cluj" }], [{ text: "Alt oraș", data: "oras:alt" }]] }
+        : {};
+  later(700, () => b.state === "active" && !b.deleted && botSays(b, cmd === "avertizari" ? "*Cod galben de vânt*\nValabil azi, 14:00 – 22:00." : answer, true, extra));
 }
 
 /** Returns the contact for a directory entry, creating it when needed. */
@@ -1191,6 +1208,15 @@ export const mockBackend: Backend = {
     b.subs = b.subs.filter((x) => !x.mine);
     b.bot.subscribers = b.subs.length;
     return clone(botConversation(b));
+  },
+  async botPress(req) {
+    await latency();
+    const m = findMessage(req.message_id);
+    const b = mockBot(m.sender_account_id);
+    if (!m.buttons?.flat().some((x) => x.data === req.data)) fail("invalid_input", "this message has no such button");
+    if (b.state !== "active") fail("forbidden", "start the bot first");
+    const city = { "oras:bucuresti": "București", "oras:cluj": "Cluj" }[req.data];
+    later(500, () => botSays(b, city ? `Am setat orașul: *${city}*.` : "Trimite-mi numele orașului."));
   },
   async botsList() {
     await latency();

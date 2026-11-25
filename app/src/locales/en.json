@@ -1499,6 +1499,8 @@
     "info": "Bot info",
     "manage": "Manage this bot",
     "lookupOpen": "Open",
-    "notice": "Messages with bots are not end-to-end encrypted: the bot's program and the server can read them. The bot does not see your account number."
+    "notice": "Messages with bots are not end-to-end encrypted: the bot's program and the server can read them. The bot does not see your account number.",
+    "openLinkTitle": "Open this link?",
+    "openLink": "Open"
   }
 }

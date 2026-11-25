@@ -1499,6 +1499,8 @@
     "info": "Informações do bot",
     "manage": "Gerenciar este bot",
     "lookupOpen": "Abrir",
-    "notice": "As mensagens com bots não são protegidas com criptografia de ponta a ponta: o programa do bot e o servidor podem lê-las. O bot não vê seu número de conta."
+    "notice": "As mensagens com bots não são protegidas com criptografia de ponta a ponta: o programa do bot e o servidor podem lê-las. O bot não vê seu número de conta.",
+    "openLinkTitle": "Abrir este link?",
+    "openLink": "Abrir"
   }
 }

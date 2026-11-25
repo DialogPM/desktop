@@ -1499,6 +1499,8 @@
     "info": "Información del bot",
     "manage": "Administrar este bot",
     "lookupOpen": "Abrir",
-    "notice": "Los mensajes con bots no están cifrados de extremo a extremo: el programa del bot y el servidor pueden leerlos. El bot no ve tu número de cuenta."
+    "notice": "Los mensajes con bots no están cifrados de extremo a extremo: el programa del bot y el servidor pueden leerlos. El bot no ve tu número de cuenta.",
+    "openLinkTitle": "¿Abrir este enlace?",
+    "openLink": "Abrir"
   }
 }

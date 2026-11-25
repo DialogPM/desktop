@@ -257,6 +257,7 @@ export const backend = {
   botOpen: (req: { bot_id: string }) => call<Conversation>("bot_open", req),
   botStart: (req: { bot_id: string }) => call<Conversation>("bot_start", req),
   botStop: (req: { bot_id: string }) => call<Conversation>("bot_stop", req),
+  botPress: (req: { message_id: string; data: string }) => call<void>("bot_press", req),
   botsList: () => call<OwnedBot[]>("bots_list"),
   botCreate: (req: { username: string; name: string; about: string }) => call<BotCreated>("bot_create", req),
   botUpdate: (req: { bot_id: string; name?: string; about?: string; commands?: BotCommand[] }) => call<OwnedBot>("bot_update", req),

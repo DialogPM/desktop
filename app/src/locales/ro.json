@@ -1519,6 +1519,8 @@
     "info": "Despre bot",
     "manage": "Administrează botul",
     "lookupOpen": "Deschide",
-    "notice": "Mesajele cu boții nu sunt criptate integral: programul botului și serverul le pot citi. Botul nu vede numărul tău de cont."
+    "notice": "Mesajele cu boții nu sunt criptate integral: programul botului și serverul le pot citi. Botul nu vede numărul tău de cont.",
+    "openLinkTitle": "Deschizi acest link?",
+    "openLink": "Deschide"
   }
 }

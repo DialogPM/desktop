@@ -1499,6 +1499,8 @@
     "info": "Botinfo",
     "manage": "Deze bot beheren",
     "lookupOpen": "Openen",
-    "notice": "Berichten met bots zijn niet end-to-end versleuteld: het programma van de bot en de server kunnen ze lezen. De bot ziet je accountnummer niet."
+    "notice": "Berichten met bots zijn niet end-to-end versleuteld: het programma van de bot en de server kunnen ze lezen. De bot ziet je accountnummer niet.",
+    "openLinkTitle": "Deze link openen?",
+    "openLink": "Openen"
   }
 }

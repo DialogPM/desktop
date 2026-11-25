@@ -1479,6 +1479,8 @@
     "info": "Thông tin bot",
     "manage": "Quản lý bot này",
     "lookupOpen": "Mở",
-    "notice": "Tin nhắn với bot không được mã hóa đầu cuối: chương trình của bot và máy chủ có thể đọc được. Bot không thấy số tài khoản của bạn."
+    "notice": "Tin nhắn với bot không được mã hóa đầu cuối: chương trình của bot và máy chủ có thể đọc được. Bot không thấy số tài khoản của bạn.",
+    "openLinkTitle": "Mở liên kết này?",
+    "openLink": "Mở"
   }
 }

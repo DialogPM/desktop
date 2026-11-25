@@ -1479,6 +1479,8 @@
     "info": "Info bot",
     "manage": "Kelola bot ini",
     "lookupOpen": "Buka",
-    "notice": "Pesan dengan bot tidak terenkripsi secara end-to-end: program bot dan server dapat membacanya. Bot tidak melihat nomor akun Anda."
+    "notice": "Pesan dengan bot tidak terenkripsi secara end-to-end: program bot dan server dapat membacanya. Bot tidak melihat nomor akun Anda.",
+    "openLinkTitle": "Buka tautan ini?",
+    "openLink": "Buka"
   }
 }

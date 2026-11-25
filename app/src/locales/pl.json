@@ -1539,6 +1539,8 @@
     "info": "Informacje o bocie",
     "manage": "Zarządzaj tym botem",
     "lookupOpen": "Otwórz",
-    "notice": "Wiadomości z botami nie są szyfrowane metodą end-to-end: program bota i serwer mogą je odczytać. Bot nie widzi twojego numeru konta."
+    "notice": "Wiadomości z botami nie są szyfrowane metodą end-to-end: program bota i serwer mogą je odczytać. Bot nie widzi twojego numeru konta.",
+    "openLinkTitle": "Otworzyć ten link?",
+    "openLink": "Otwórz"
   }
 }

@@ -1499,6 +1499,8 @@
     "info": "Infos sur le bot",
     "manage": "Gérer ce bot",
     "lookupOpen": "Ouvrir",
-    "notice": "Les messages avec les bots ne sont pas chiffrés de bout en bout : le programme du bot et le serveur peuvent les lire. Le bot ne voit pas votre numéro de compte."
+    "notice": "Les messages avec les bots ne sont pas chiffrés de bout en bout : le programme du bot et le serveur peuvent les lire. Le bot ne voit pas votre numéro de compte.",
+    "openLinkTitle": "Ouvrir ce lien ?",
+    "openLink": "Ouvrir"
   }
 }
