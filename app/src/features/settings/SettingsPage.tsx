@@ -28,6 +28,7 @@ import { disableAutoUnlock, enableAutoUnlock } from "../lock/RememberPassword";
 import { openCameraCapture } from "./cameraDialog";
 import { ChatsSection } from "./ChatsSection";
 import { DevicesSection } from "./DevicesSection";
+import { BotsSection } from "../bots/BotsSection";
 import { useNotifyPrefs } from "../../lib/notifyPrefs";
 import { ensureNotificationPermission, notificationPermission, showNotification } from "../../lib/platform";
 import { playIncoming } from "../../lib/sounds";
@@ -78,6 +79,9 @@ export function SettingsPage({ section }: { section: SettingsSection }) {
     case "blocked":
       body = <BlockedSection />;
       break;
+    case "bots":
+      // Its own two-column layout (list + detail), not the narrow settings column.
+      return <BotsSection />;
   }
   // The blocked list is a sub-page of Privacy: its back arrow returns there (also on desktop).
   const onBack = section === "blocked" ? () => openSettings("privacy") : mobile ? goBack : undefined;

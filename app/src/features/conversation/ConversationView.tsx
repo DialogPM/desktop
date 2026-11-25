@@ -5,6 +5,7 @@ import { pickedFromFile } from "../../lib/platform";
 import type { Conversation } from "../../lib/types";
 import { useApp } from "../../store/app";
 import { confirmBlock } from "../chats/dialogs";
+import { BotFooter, BotLanding } from "../bots/BotConversation";
 import { ChatHeader } from "./ChatHeader";
 import { Composer } from "./Composer";
 import { MessageList } from "./MessageList";
@@ -47,8 +48,14 @@ export function ConversationView({ conversationId }: { conversationId: string })
       <PinnedBar conv={conv} />
       {conv.kind === "group" && !conv.left && <GroupCallBanner conversationId={conv.id} />}
       {conv.kind === "group" && !conv.left && <JoinRequestsBanner conversationId={conv.id} />}
-      <MessageList conversationId={conv.id} group={conv.kind === "group"} />
-      {block ? (
+      {conv.bot && conv.bot.state === "none" && !conv.bot.deleted ? (
+        <BotLanding conv={conv} bot={conv.bot} />
+      ) : (
+        <MessageList conversationId={conv.id} group={conv.kind === "group"} />
+      )}
+      {conv.bot && !block ? (
+        <BotFooter conv={conv} bot={conv.bot} />
+      ) : block ? (
         <div className="composer-blocked">
           <span>{t(`chat.cannotWrite.${block}`)}</span>
           {block === "blocked" && conv.peer_account_id && (
@@ -62,7 +69,7 @@ export function ConversationView({ conversationId }: { conversationId: string })
       ) : (
         <Composer key={conv.id} conv={conv} />
       )}
-      {!block && !request && (
+      {!block && !request && !conv.bot && (
         <Dropzone.FullScreen
           active
           multiple

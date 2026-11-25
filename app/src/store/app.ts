@@ -32,6 +32,8 @@ export type SettingsSection =
   | "appearance"
   | "language"
   | "about"
+  /** The bots this account created (features/bots). */
+  | "bots"
   /** Blocked contacts, a sub-page of "privacy". */
   | "blocked";
 

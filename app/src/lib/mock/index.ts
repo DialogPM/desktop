@@ -7,6 +7,9 @@ import type { EventPayloads, GroupCallInfo } from "../backend";
 import type {
   AccountInfo,
   Attachment,
+  BotInfo,
+  BotSubscriber,
+  OwnedBot,
   CallSettings,
   MediaRetention,
   DefaultDisappearing,
@@ -231,6 +234,162 @@ function lookup(query: string): DirectoryEntry | null {
     return { account_id: ME_ID, number: account().number, username: u, profile_name: d.profile.name, avatar_path: d.profile.avatar_path };
   }
   return d.directory.find((e) => e.username === u) ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// bots (the real ones: crates/chat-core/src/engine/bots.rs)
+// ---------------------------------------------------------------------------
+
+interface MockBot {
+  bot: OwnedBot;
+  subs: BotSubscriber[];
+  /** Our own chat with it. */
+  state: BotInfo["state"];
+  mine: boolean;
+  deleted: boolean;
+}
+
+const mockToken = () => {
+  const c = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789_-";
+  return Array.from({ length: 43 }, () => c[Math.floor(Math.random() * c.length)]).join("");
+};
+const mockChatId = () => Array.from({ length: 32 }, () => "0123456789abcdef"[Math.floor(Math.random() * 16)]).join("");
+
+const mockBots = new Map<string, MockBot>(
+  (
+    [
+      {
+        bot: { id: "bot-alerte", username: "alerte_server_bot", name: "Alerte server", about: "Îți scrie când un server nu răspunde sau rămâne fără spațiu.", commands: [], created_at: Date.now() - 20 * 86_400_000, disabled: false, subscribers: 1, token: mockToken() },
+        subs: [{ chat_id: mockChatId(), since: Date.now() - 13 * 86_400_000, mine: false }],
+        state: "none",
+        mine: true,
+        deleted: false,
+      },
+      {
+        bot: { id: "bot-comenzi", username: "comenzi_fv_bot", name: "Comenzi magazin", about: "Anunță fiecare comandă nouă de pe site.", commands: [], created_at: Date.now() - 50 * 86_400_000, disabled: false, subscribers: 2, token: null },
+        subs: [
+          { chat_id: mockChatId(), since: Date.now() - 53 * 86_400_000, mine: false },
+          { chat_id: mockChatId(), since: Date.now() - 53 * 86_400_000, mine: false },
+        ],
+        state: "none",
+        mine: true,
+        deleted: false,
+      },
+      {
+        bot: {
+          id: "bot-meteo",
+          username: "meteo_bot",
+          name: "Meteo",
+          about: "Prognoza zilei și avertizări de vreme rea.",
+          commands: [
+            { command: "azi", description: "Prognoza pentru azi" },
+            { command: "maine", description: "Prognoza pentru mâine" },
+            { command: "avertizari", description: "Avertizări în vigoare" },
+            { command: "oras", description: "Schimbă orașul" },
+          ],
+          created_at: Date.now() - 90 * 86_400_000,
+          disabled: false,
+          subscribers: 0,
+          token: null,
+        },
+        subs: [],
+        state: "none",
+        mine: false,
+        deleted: false,
+      },
+    ] satisfies MockBot[]
+  ).map((b) => [b.bot.id, b]),
+);
+
+function mockBot(id: string): MockBot {
+  return mockBots.get(id) ?? fail("not_found", "this bot no longer exists");
+}
+
+function ownBot(id: string): MockBot {
+  const b = mockBot(id);
+  return b.mine ? b : fail("not_found", "this bot no longer exists");
+}
+
+function botInfo(b: MockBot): BotInfo {
+  const { id, username, name, about, commands } = b.bot;
+  return { id, username, name, about, commands: clone(commands), state: b.state, mine: b.mine, deleted: b.deleted };
+}
+
+/** The conversation with a bot, created when missing. */
+function botConversation(b: MockBot): Conversation {
+  const d = data();
+  let c = [...d.conversations.values()].find((x) => x.peer_account_id === b.bot.id);
+  if (!c) {
+    c = {
+      id: `conv-${b.bot.id}`,
+      kind: "direct",
+      title: b.bot.name,
+      avatar_path: null,
+      peer_account_id: b.bot.id,
+      peer_number: null,
+      group_id: null,
+      member_count: null,
+      is_admin: false,
+      left: false,
+      last_message: null,
+      unread_count: 0,
+      unread_mentions: 0,
+      muted_until: null,
+      archived: false,
+      pinned: false,
+      disappearing_seconds: 0,
+      blocked: false,
+      draft: null,
+      updated_at: Date.now(),
+      accepted: true,
+      peer_is_contact: false,
+    };
+    d.conversations.set(c.id, c);
+    d.messages.set(c.id, []);
+  }
+  c.title = b.bot.name;
+  c.bot = botInfo(b);
+  emit("conversation_updated", clone(c));
+  return c;
+}
+
+function botSays(b: MockBot, text: string, isNew = true) {
+  const c = botConversation(b);
+  const from = { account_id: b.bot.id, display_name: b.bot.name } as Contact;
+  const m = incoming(c.id, from, text);
+  addMessage(m, isNew);
+}
+
+function botNote(b: MockBot, type: string) {
+  const c = botConversation(b);
+  const now = Date.now();
+  const m = incoming(c.id, { account_id: "", display_name: "" } as Contact, "");
+  addMessage({ ...m, kind: "system", text: null, sender_account_id: "", sender_name: "", system: { type, actor_name: null, target_names: [], value: null } as SystemEvent, sent_at: now, received_at: now });
+}
+
+const BOT_ANSWERS: Record<string, string> = {
+  start: "*Salut!*\nDe acum primești aici prognoza și avertizările. Scrie / ca să vezi comenzile.",
+  azi: "*Azi, București*\nSoare cu nori trecători, 14° / 6°. Vânt slab din nord-vest.",
+  maine: "*Mâine, București*\nPloaie după-amiază, 11° / 5°. Ia o umbrelă.",
+  avertizari: "Nicio avertizare în vigoare pentru zona ta.",
+  oras: "Trimite-mi numele orașului.",
+};
+
+/** The preview starts with one bot already in the chat list, so a bot row can be seen at once. */
+let botChatSeeded = false;
+function seedBotChat() {
+  if (botChatSeeded) return;
+  botChatSeeded = true;
+  const b = mockBot("bot-meteo");
+  b.state = "active";
+  botNote(b, "bot_started");
+  botSays(b, BOT_ANSWERS.azi);
+}
+
+function botAnswer(b: MockBot, text: string) {
+  const cmd = /^\/([a-z0-9_]+)/.exec(text.trim())?.[1];
+  const answer = cmd ? (BOT_ANSWERS[cmd] ?? `Nu cunosc comanda /${cmd}.`) : b.bot.commands.length ? `Am notat: „${text.trim()}”.` : null;
+  if (answer) later(700, () => b.state === "active" && !b.deleted && botSays(b, answer));
 }
 
 /** Returns the contact for a directory entry, creating it when needed. */
@@ -1001,6 +1160,86 @@ export const mockBackend: Backend = {
     }
     return clone(c);
   },
+  async botFind(req) {
+    await latency();
+    const u = req.username.trim().replace(/^@/, "").toLowerCase();
+    const b = [...mockBots.values()].find((x) => x.bot.username === u && !x.deleted);
+    if (!b) fail("not_found", "no bot with this username");
+    return botInfo(b!);
+  },
+  async botOpen(req) {
+    await latency();
+    return clone(botConversation(mockBot(req.bot_id)));
+  },
+  async botStart(req) {
+    await latency();
+    const b = mockBot(req.bot_id);
+    if (b.deleted) fail("not_found", "this bot no longer exists");
+    const restart = b.state === "stopped";
+    b.state = "active";
+    if (b.mine && !b.subs.some((x) => x.mine)) b.subs.unshift({ chat_id: mockChatId(), since: Date.now(), mine: true });
+    b.bot.subscribers = b.subs.length;
+    botNote(b, restart ? "bot_restarted" : "bot_started");
+    if (!restart) later(600, () => botSays(b, b.mine ? "*Salut!*\nDe acum primești aici notificările acestui bot." : BOT_ANSWERS.start));
+    return clone(botConversation(b));
+  },
+  async botStop(req) {
+    await latency();
+    const b = mockBot(req.bot_id);
+    if (b.state === "active") botNote(b, "bot_stopped");
+    b.state = "stopped";
+    b.subs = b.subs.filter((x) => !x.mine);
+    b.bot.subscribers = b.subs.length;
+    return clone(botConversation(b));
+  },
+  async botsList() {
+    await latency();
+    return clone([...mockBots.values()].filter((b) => b.mine && !b.deleted).map((b) => b.bot));
+  },
+  async botCreate(req) {
+    await latency();
+    const username = req.username.trim().toLowerCase();
+    if (!/^[a-z][a-z0-9_.]{2,29}bot$/.test(username)) fail("invalid_input", "a bot's username has 5-32 characters and ends in \"bot\"");
+    if ([...mockBots.values()].some((b) => b.bot.username === username) || username.startsWith("admin")) fail("conflict", "this username is taken");
+    const token = mockToken();
+    const bot: OwnedBot = { id: newId("bot"), username, name: req.name.trim(), about: req.about.trim(), commands: [], created_at: Date.now(), disabled: false, subscribers: 0, token };
+    mockBots.set(bot.id, { bot, subs: [], state: "none", mine: true, deleted: false });
+    return clone({ bot, token });
+  },
+  async botUpdate(req) {
+    await latency();
+    const b = ownBot(req.bot_id);
+    if (req.name !== undefined) b.bot.name = req.name.trim();
+    if (req.about !== undefined) b.bot.about = req.about.trim();
+    if (req.commands) b.bot.commands = clone(req.commands);
+    if ([...data().conversations.values()].some((c) => c.peer_account_id === b.bot.id)) botConversation(b);
+    return clone(b.bot);
+  },
+  async botResetToken(req) {
+    await latency();
+    const b = ownBot(req.bot_id);
+    b.bot.token = mockToken();
+    return b.bot.token;
+  },
+  async botDelete(req) {
+    await latency();
+    const b = ownBot(req.bot_id);
+    b.deleted = true;
+    b.state = "none";
+    if ([...data().conversations.values()].some((c) => c.peer_account_id === b.bot.id)) botConversation(b);
+  },
+  async botSubscribers(req) {
+    await latency();
+    return clone(ownBot(req.bot_id).subs);
+  },
+  async botSendTest(req) {
+    await latency();
+    const b = ownBot(req.bot_id);
+    const sub = b.subs.find((x) => x.chat_id === req.chat_id);
+    if (!sub) fail("invalid_input", "chat not found");
+    if (!req.text.trim()) fail("invalid_input", "text must not be empty");
+    if (sub!.mine) botSays(b, req.text);
+  },
   async setBlocked(req) {
     await latency();
     const c = contactOf(req.account_id);
@@ -1101,6 +1340,7 @@ export const mockBackend: Backend = {
   // --- conversations ---------------------------------------------------------
   async listConversations() {
     await latency();
+    seedBotChat();
     return clone([...data().conversations.values()]);
   },
   async getConversation(req) {
@@ -1318,6 +1558,15 @@ export const mockBackend: Backend = {
       }
     }
     c.draft = null;
+    const toBot = c.peer_account_id ? mockBots.get(c.peer_account_id) : undefined;
+    if (toBot) {
+      if (toBot.deleted || toBot.state !== "active") fail("forbidden", "start the bot first");
+      if (kind !== "text") fail("invalid_input", "bots receive text messages only");
+      addMessage(m);
+      later(250, () => setStatus(m, "sent"));
+      botAnswer(toBot, m.text ?? "");
+      return clone(m);
+    }
     addMessage(m);
     simulateDelivery(m);
     if (m.view_once) {

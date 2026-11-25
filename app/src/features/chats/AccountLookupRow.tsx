@@ -2,12 +2,17 @@
 // account number or a username: the account is looked up in the server directory.
 
 import { Loader } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../../components/Icon";
 import { OfficialBadge } from "../../components/OfficialBadge";
 import { UserAvatar } from "../../components/UserAvatar";
 import { formatAccountNumber } from "../../lib/format";
+import { api } from "../../lib/api";
+import type { BotInfo } from "../../lib/types";
+import { BotBadge } from "../bots/BotBadge";
+import { openBot } from "../bots/botActions";
+import { looksLikeBotName } from "../bots/botText";
 import { openDirect } from "../../store/actions";
 import { useApp } from "../../store/app";
 import { accountQueryKind, useAccountLookup } from "./accountLookup";
@@ -22,9 +27,55 @@ export function AccountLookupRow({ query, onOpened }: { query: string; onOpened?
   const kind = accountQueryKind(query);
   const [busy, setBusy] = useState(false);
   const myName = useApp((s) => s.profile?.name);
+  // No account has this username: it may be a bot's (their names end in "bot").
+  const botName = kind === "username" && lookup?.state === "done" && !lookup.found && looksLikeBotName(lookup.query) ? lookup.query : null;
+  const [botHit, setBotHit] = useState<BotInfo | null>(null);
+  useEffect(() => {
+    if (!botName) return;
+    let alive = true;
+    api
+      .botFind({ username: botName })
+      .then((b) => alive && setBotHit(b))
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, [botName]);
+  const bot = botName && botHit?.username === botName ? botHit : null;
   if (!lookup || !kind) return null;
   const explicit = kind === "number" || kind === "phone" || query.trim().startsWith("@");
   const found = lookup.state === "done" ? lookup.found : null;
+  if (bot) {
+    return (
+      <div className="lookup">
+        <div className="section-label">{t("lookup.title")}</div>
+        <button
+          type="button"
+          className="row lookup-row"
+          disabled={busy}
+          onClick={async () => {
+            setBusy(true);
+            const opened = await openBot(bot.id);
+            setBusy(false);
+            if (opened) onOpened?.();
+          }}
+        >
+          <UserAvatar name={bot.name} seed={bot.id} size={44} bot />
+          <div className="flex1">
+            <div className="row-title name-badges">
+              <span className="truncate">{bot.name}</span>
+              <BotBadge small />
+            </div>
+            <div className="row-sub truncate mono-num">@{bot.username}</div>
+          </div>
+          <span className="lookup-go">
+            <Icon name="chat" size={15} />
+            {t("bots.lookupOpen")}
+          </span>
+        </button>
+      </div>
+    );
+  }
   if (!explicit && !found) return null;
 
   let body;

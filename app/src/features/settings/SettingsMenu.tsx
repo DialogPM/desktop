@@ -20,6 +20,7 @@ const SECTIONS: { key: MenuSection; icon: IconName }[] = [
   { key: "notifications", icon: "bell" },
   { key: "devices", icon: "devices" },
   { key: "chats", icon: "chat" },
+  { key: "bots", icon: "bot" },
   { key: "appearance", icon: "palette" },
   { key: "language", icon: "lang" },
   { key: "about", icon: "info" },

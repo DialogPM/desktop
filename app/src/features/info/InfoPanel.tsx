@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { PaneHeader } from "../../components/PaneHeader";
 import { useIsMobile } from "../../lib/hooks";
 import { setApp, useApp } from "../../store/app";
+import { BotInfoView } from "../bots/BotInfoView";
 import { ContactInfo } from "./ContactInfo";
 import { GroupInfoView } from "./GroupInfoView";
 import { MediaGallery } from "./MediaGallery";
@@ -39,12 +40,12 @@ export function InfoPanel({ conversationId }: { conversationId: string }) {
   return (
     <>
       <PaneHeader
-        title={<span style={{ fontSize: 16.5 }}>{conv.kind === "group" ? t("group.info") : t("contact.info")}</span>}
+        title={<span style={{ fontSize: 16.5 }}>{conv.bot ? t("bots.info") : conv.kind === "group" ? t("group.info") : t("contact.info")}</span>}
         onBack={close}
         close={!mobile}
       />
       <div className="pane-scroll" style={{ paddingBottom: 24 }}>
-        {conv.kind === "group" ? <GroupInfoView conv={conv} onView={setView} /> : <ContactInfo conv={conv} onView={setView} />}
+        {conv.bot ? <BotInfoView conv={conv} bot={conv.bot} /> : conv.kind === "group" ? <GroupInfoView conv={conv} onView={setView} /> : <ContactInfo conv={conv} onView={setView} />}
       </div>
     </>
   );

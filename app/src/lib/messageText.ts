@@ -92,6 +92,12 @@ export function systemText(s: SystemEvent, t: TFunction): string {
   const targets = names(s.target_names, t);
   const you = s.actor_name === "You";
   switch (s.type) {
+    case "bot_started":
+      return t("system.botStarted");
+    case "bot_restarted":
+      return t("system.botRestarted");
+    case "bot_stopped":
+      return t("system.botStopped");
     case "group_created":
       return t(you ? "system.groupCreatedYou" : "system.groupCreated", { actor, name: isolate(s.value ?? "") });
     case "group_member_added":

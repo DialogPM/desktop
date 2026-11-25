@@ -1,3 +1,4 @@
+import { BotBadge } from "../bots/BotBadge";
 import { useCallSettings } from "../../lib/callSettings";
 import { startCall, useCall } from "../../store/calls";
 import { startGroupCall, useGroupCall, VIDEO_SUGGESTED_MAX } from "../../store/groupCalls";
@@ -131,10 +132,11 @@ export function ChatHeader({ conv }: { conv: Conversation }) {
           onClick={() => setApp({ infoOpen: true })}
           aria-label={conv.kind === "group" ? t("group.info") : t("contact.info")}
         >
-          <UserAvatar name={conv.title} path={conv.avatar_path} seed={conv.id} size={42} group={conv.kind === "group"} />
+          <UserAvatar name={conv.title} path={conv.avatar_path} seed={conv.id} size={42} group={conv.kind === "group"} bot={!!conv.bot} />
           <div style={{ minWidth: 0 }}>
             <div className="chat-head-name">
               <span className="truncate">{conv.title}</span>
+              {conv.bot && <BotBadge small />}
               <OfficialBadge label={official} size={16} />
               {verified && (
                 <span className="shield-mark" aria-label={t("safety.verified")}>
@@ -148,9 +150,13 @@ export function ChatHeader({ conv }: { conv: Conversation }) {
                 </span>
               )}
             </div>
-            <div className="chat-head-status" data-accent={sub.accent}>
-              {sub.text}
-            </div>
+            {conv.bot ? (
+              <div className="chat-head-status bot-handle">@{conv.bot.username}</div>
+            ) : (
+              <div className="chat-head-status" data-accent={sub.accent}>
+                {sub.text}
+              </div>
+            )}
           </div>
         </button>
       )}
@@ -163,7 +169,7 @@ export function ChatHeader({ conv }: { conv: Conversation }) {
           )
         ) : (
           <>
-            {conv.kind === "direct" && conv.peer_account_id && !conv.blocked && (
+            {conv.kind === "direct" && conv.peer_account_id && !conv.blocked && !conv.bot && (
               <Tooltip label={callLabel(t("call.start"))}>
                 <button
                   type="button"
@@ -179,7 +185,7 @@ export function ChatHeader({ conv }: { conv: Conversation }) {
                 </button>
               </Tooltip>
             )}
-            {conv.kind === "direct" && conv.peer_account_id && !conv.blocked && (
+            {conv.kind === "direct" && conv.peer_account_id && !conv.blocked && !conv.bot && (
               <Tooltip label={callLabel(t("call.startVideo"))}>
                 <button
                   type="button"

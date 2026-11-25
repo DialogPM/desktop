@@ -12,6 +12,11 @@ import type {
   AppState,
   Attachment,
   ConnectionState,
+  BotCommand,
+  BotCreated,
+  BotInfo,
+  BotSubscriber,
+  OwnedBot,
   Contact,
   ContactImportResult,
   Conversation,
@@ -247,6 +252,18 @@ export const backend = {
   renameContact: (req: { account_id: string; name: string | null }) =>
     call<Contact>("rename_contact", req),
   setBlocked: (req: { account_id: string; blocked: boolean }) => call<Contact>("set_blocked", req),
+  // Bots (not end-to-end encrypted; see BotInfo).
+  botFind: (req: { username: string }) => call<BotInfo>("bot_find", req),
+  botOpen: (req: { bot_id: string }) => call<Conversation>("bot_open", req),
+  botStart: (req: { bot_id: string }) => call<Conversation>("bot_start", req),
+  botStop: (req: { bot_id: string }) => call<Conversation>("bot_stop", req),
+  botsList: () => call<OwnedBot[]>("bots_list"),
+  botCreate: (req: { username: string; name: string; about: string }) => call<BotCreated>("bot_create", req),
+  botUpdate: (req: { bot_id: string; name?: string; about?: string; commands?: BotCommand[] }) => call<OwnedBot>("bot_update", req),
+  botResetToken: (req: { bot_id: string }) => call<string>("bot_reset_token", req),
+  botDelete: (req: { bot_id: string }) => call<void>("bot_delete", req),
+  botSubscribers: (req: { bot_id: string }) => call<BotSubscriber[]>("bot_subscribers", req),
+  botSendTest: (req: { bot_id: string; chat_id: string; text: string }) => call<void>("bot_send_test", req),
   /** Imports a .vcf or .csv address book file and matches phone numbers on the server. */
   importContacts: (req: { path: string }) => call<ContactImportResult>("import_contacts", req),
   /** Payload of the "add me" QR code: chatapp://add?n=<number>&s=<server_url> */

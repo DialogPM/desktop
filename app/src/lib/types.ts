@@ -149,6 +149,8 @@ export interface Conversation {
   peer_is_contact: boolean;
   /** Direct chats: the peer's verified official badge label (see Contact.official); null for groups. */
   official?: string | null;
+  /** Direct chats whose peer is a bot; null or absent otherwise. */
+  bot?: BotInfo | null;
 }
 
 /** "expired": erased by the media retention (only kind, type, size and, for documents, the name remain). */
@@ -206,6 +208,9 @@ export interface QuotedMessage {
 }
 
 export type SystemEventType =
+  | "bot_started"
+  | "bot_restarted"
+  | "bot_stopped"
   | "group_created"
   | "group_member_added"
   | "group_member_unverified"
@@ -709,4 +714,62 @@ export interface Mention {
   account_id: string;
   start: number;
   length: number;
+}
+
+/** A command a bot offers after "/". */
+export interface BotCommand {
+  command: string;
+  description: string;
+}
+
+/**
+ * A bot as seen by someone talking to it. Bot conversations are not end-to-end encrypted
+ * (the bot's script exchanges plain text with the server) and carry text only. The bot may
+ * write to us only while `state` is "active": the user starts and stops it.
+ */
+export interface BotInfo {
+  id: string;
+  username: string;
+  name: string;
+  about: string;
+  commands: BotCommand[];
+  state: "none" | "active" | "stopped";
+  /** One of our own bots. */
+  mine: boolean;
+  /** Its owner deleted it. */
+  deleted: boolean;
+}
+
+/** One of the bots this account created. */
+export interface OwnedBot {
+  id: string;
+  username: string;
+  name: string;
+  about: string;
+  commands: BotCommand[];
+  created_at: number;
+  /** Disabled by the server operator. */
+  disabled: boolean;
+  /** People who started it and have not stopped it. */
+  subscribers: number;
+  /**
+   * The bot's token, when this device created or reset it. The server keeps only a hash, so
+   * another device cannot show it: there the owner generates a new one.
+   */
+  token?: string | null;
+}
+
+/** A chat one of our bots may write to. The owner knows it by chat id only, like the bot. */
+export interface BotSubscriber {
+  chat_id: string;
+  /** When the chat was started (ms). */
+  since: number;
+  /** Our own chat with the bot. */
+  mine: boolean;
+}
+
+/** A new bot with its token, which is shown once and stored nowhere. */
+export interface BotCreated {
+  bot: OwnedBot;
+  token: string;
 }

@@ -11,6 +11,8 @@ interface Props {
   seed?: string;
   size?: number;
   group?: boolean;
+  /** A bot: its sign instead of a letter or photo. */
+  bot?: boolean;
   style?: CSSProperties;
 }
 
@@ -18,8 +20,8 @@ interface Props {
 const FONT: Record<number, number> = { 28: 11, 38: 13, 40: 13.5, 42: 14.5, 44: 15, 50: 16, 58: 19, 96: 31, 112: 36, 124: 40 };
 
 /** Round avatar: photo when available, otherwise initials on an oklch tint derived from the id. */
-export function UserAvatar({ name, path, seed, size = 44, group, style }: Props) {
-  const src = useMediaSrc(path);
+export function UserAvatar({ name, path, seed, size = 44, group, bot, style }: Props) {
+  const src = useMediaSrc(bot ? null : path);
   const text = initials(name);
   const fontSize = FONT[size] ?? Math.round(size * 0.33 * 2) / 2;
   return (
@@ -29,7 +31,9 @@ export function UserAvatar({ name, path, seed, size = 44, group, style }: Props)
       role="img"
       aria-label={name}
     >
-      {src ? (
+      {bot ? (
+        <Icon name="bot" size={Math.round(size * 0.47)} />
+      ) : src ? (
         <img src={src} alt="" draggable={false} />
       ) : group && (!text.trim() || text === "?" || text === "#") ? (
         <Icon name="users" size={Math.round(size * 0.45)} />

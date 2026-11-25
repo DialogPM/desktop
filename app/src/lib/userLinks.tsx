@@ -13,6 +13,8 @@ import { listen } from "@tauri-apps/api/event";
 import i18n from "../i18n";
 import { errorText, openDirect } from "../store/actions";
 import { useApp } from "../store/app";
+import { openBot } from "../features/bots/botActions";
+import { looksLikeBotName } from "../features/bots/botText";
 import { api, IS_TAURI } from "./api";
 import { useAppLock } from "./appLock";
 import { useSetup } from "./setup";
@@ -46,7 +48,10 @@ async function open(name: string) {
     return;
   }
   if (!found) {
-    warn(t("userLink.notFound", { name: at }));
+    // Not a person: perhaps a bot. Opening it starts nothing: the bot's page asks for "Start".
+    const bot = looksLikeBotName(name) ? await api.botFind({ username: name }).catch(() => null) : null;
+    if (bot) await openBot(bot.id);
+    else warn(t("userLink.notFound", { name: at }));
     return;
   }
   if (found.is_me) {

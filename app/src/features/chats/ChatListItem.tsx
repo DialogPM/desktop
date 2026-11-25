@@ -1,3 +1,4 @@
+import { BotBadge } from "../bots/BotBadge";
 import { IconBan } from "@tabler/icons-react";
 import { memo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -102,7 +103,7 @@ export const ChatListItem = memo(function ChatListItem({ conv, active }: { conv:
         {...long.handlers}
       >
         <span className="chat-row-avatar">
-          <UserAvatar name={conv.title} path={conv.avatar_path} seed={conv.id} size={50} group={conv.kind === "group"} />
+          <UserAvatar name={conv.title} path={conv.avatar_path} seed={conv.id} size={50} group={conv.kind === "group"} bot={!!conv.bot} />
           {conv.disappearing_seconds > 0 && (
             <span className="timer-badge" title={disappearingLabel(conv.disappearing_seconds, t)} aria-label={t("disappearing.title")}>
               <Icon name="timer" size={12} />
@@ -112,6 +113,7 @@ export const ChatListItem = memo(function ChatListItem({ conv, active }: { conv:
         <div className="chat-row-body">
           <div className="chat-row-top">
             <span className="chat-row-name">{conv.title}</span>
+            {conv.bot && <BotBadge small />}
             <OfficialBadge label={official} size={15} />
             {verified && (
               <span className="shield-mark" aria-label={t("safety.verified")}>

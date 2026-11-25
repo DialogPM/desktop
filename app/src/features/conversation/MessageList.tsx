@@ -67,6 +67,8 @@ export function MessageList({ conversationId, group }: { conversationId: string;
   const { t } = useTranslation();
   const locale = useLocale();
   const cm = useApp((s) => s.convMessages[conversationId]);
+  // A bot conversation is the one kind that is not end-to-end encrypted: it must say so.
+  const isBot = useApp((s) => !!s.conversations[conversationId]?.bot);
   const messages = useApp((s) => s.messages);
   const selection = useApp((s) => s.selection);
   const highlightId = useApp((s) => s.highlightId);
@@ -196,9 +198,9 @@ export function MessageList({ conversationId, group }: { conversationId: string;
                 <div className="sys-row" data-e2e="true">
                   <div className="sys-note">
                     <span>
-                      <Icon name="lock" size={13} />
+                      <Icon name={isBot ? "info" : "lock"} size={13} />
                     </span>
-                    <span>{t("chat.e2eNotice")}</span>
+                    <span>{t(isBot ? "bots.notice" : "chat.e2eNotice")}</span>
                   </div>
                 </div>
               </div>

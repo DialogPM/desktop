@@ -265,3 +265,19 @@ html[data-direction][data-theme] {
     --pane-shadow: none;
   }
 }
+
+/* Bots (features/bots): the BOT label, and the code sample of the bot settings. */
+:root {
+  --bot-soft: oklch(0.93 0.035 245);
+  --bot-ink: oklch(0.45 0.12 245);
+  --code-bg: #1e1d1a;
+  --code-fg: #e9e4d8;
+  --warn-ink: #9a4a0e;
+}
+
+html[data-theme="dark"] {
+  --bot-soft: oklch(0.3 0.05 245);
+  --bot-ink: oklch(0.83 0.09 245);
+  --code-bg: #0a0a09;
+  --warn-ink: #f0a36a;
+}
