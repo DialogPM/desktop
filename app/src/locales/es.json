@@ -884,6 +884,20 @@
     "bots": {
       "title": "Bots",
       "hint": "Notificaciones de tus scripts"
+    },
+    "inactive": {
+      "title": "Eliminar la cuenta si está inactiva",
+      "hint": "Si no te conectas desde ningún dispositivo durante este tiempo, tu cuenta se elimina del servidor, junto con tu perfil, nombre de usuario, grupos, bots y copia de seguridad. Tu número de cuenta y tu frase de recuperación pueden recuperar la misma cuenta, pero no lo que se eliminó.",
+      "opt": {
+        "30": "30 días",
+        "60": "60 días",
+        "90": "90 días",
+        "365": "1 año",
+        "730": "2 años",
+        "1095": "3 años",
+        "1825": "5 años",
+        "0": "Nunca"
+      }
     }
   },
   "link": {

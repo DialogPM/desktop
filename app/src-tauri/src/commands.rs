@@ -69,6 +69,7 @@ forward!(
     verify_phone,
     remove_phone,
     set_discoverable,
+    set_inactive_deletion,
     list_devices,
     unlink_device,
     rename_device,

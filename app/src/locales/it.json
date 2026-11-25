@@ -896,6 +896,20 @@
     "bots": {
       "title": "Bot",
       "hint": "Notifiche dai tuoi script"
+    },
+    "inactive": {
+      "title": "Elimina l'account se inattivo",
+      "hint": "Se non ti connetti da nessun dispositivo per tutto questo tempo, il tuo account viene eliminato dal server, insieme a profilo, nome utente, gruppi, bot e backup. Il numero di account e la frase di recupero possono ripristinare lo stesso account, ma non ciò che è stato eliminato.",
+      "opt": {
+        "30": "30 giorni",
+        "60": "60 giorni",
+        "90": "90 giorni",
+        "365": "1 anno",
+        "730": "2 anni",
+        "1095": "3 anni",
+        "1825": "5 anni",
+        "0": "Mai"
+      }
     }
   },
   "link": {

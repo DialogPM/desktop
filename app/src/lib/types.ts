@@ -500,6 +500,11 @@ export interface AccountDetails {
   phone: string | null;
   phone_verified: boolean;
   discoverable_by_phone: boolean;
+  /**
+   * The server deletes the account after this many days without any connection from its
+   * devices (0 = never). null: the server does not delete inactive accounts.
+   */
+  inactive_delete_days: number | null;
   privacy: PrivacySettings;
   /** Encrypted history backup to the server vault (enables history on new devices). */
   backup_enabled: boolean;

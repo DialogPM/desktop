@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PasswordField, TextField, ToggleRow } from "../../components/Field";
 import { Icon, type IconName } from "../../components/Icon";
+import { OptionsDialog } from "../../components/OptionsDialog";
 import { PasswordPairFields } from "../../components/PasswordPairFields";
 import { SeedGrid } from "../../components/SeedGrid";
 import i18n from "../../i18n";
@@ -75,6 +76,8 @@ export function AccountSection() {
 
       <PhoneCard />
 
+      <InactiveDeletionCard />
+
       <button type="button" className="danger-link" onClick={openDeleteAccount}>
         <Icon name="trash" size={17} />
         {t("settings.account.delete")}
@@ -113,6 +116,61 @@ function ThisComputerCard() {
         <ToggleRow icon={<Icon name="devices" size={19} />} label={t("profiles.showOnStart")} sub={t("profiles.showOnStartHint")} on={current.visible} onToggle={() => void toggle()} />
       </div>
     </>
+  );
+}
+
+/** The periods offered by the server (days; 0 = never), in the order shown. */
+const INACTIVE_DELETE_CHOICES = [30, 60, 90, 365, 730, 1095, 1825, 0];
+
+/**
+ * After how long without any connection the server deletes the account (a year unless the
+ * user chooses otherwise). Hidden on servers that do not delete inactive accounts.
+ */
+function InactiveDeletionCard() {
+  const { t } = useTranslation();
+  const days = useApp((s) => s.details?.inactive_delete_days ?? null);
+  if (days === null) return null;
+  const label = (d: number) => t(`settings.inactive.opt.${d}`);
+  const choose = () =>
+    modals.open({
+      title: t("settings.inactive.title"),
+      size: 440,
+      children: (
+        <OptionsDialog
+          options={INACTIVE_DELETE_CHOICES.map((d) => ({ value: String(d), label: label(d) }))}
+          initial={String(days)}
+          description={t("settings.inactive.hint")}
+          onConfirm={(v) =>
+            void attempt(async () => {
+              await api.setInactiveDeletion({ days: Number(v) });
+              await refreshDetails();
+            })
+          }
+        />
+      ),
+    });
+  return (
+    <div className="list-card">
+      <button type="button" className="list-card-row" onClick={choose}>
+        <span className="ic">
+          <Icon name="trash" size={19} />
+        </span>
+        <div className="flex1">
+          <div className="list-card-title">{t("settings.inactive.title")}</div>
+          <div className="list-card-sub" style={{ marginTop: 0 }}>
+            {label(days)}
+          </div>
+        </div>
+        <span className="list-card-chev">
+          <Icon name="chevron" size={17} />
+        </span>
+      </button>
+      <div className="list-card-row" style={{ cursor: "default" }}>
+        <div className="list-card-sub" style={{ marginTop: 0 }}>
+          {t("settings.inactive.hint")}
+        </div>
+      </div>
+    </div>
   );
 }
 

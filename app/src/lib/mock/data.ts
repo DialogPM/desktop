@@ -557,6 +557,7 @@ export function buildDb(): MockDb {
       phone: null,
       phone_verified: false,
       discoverable_by_phone: false,
+      inactive_delete_days: 365,
       privacy: { last_seen: "everyone", read_receipts: true, typing_indicators: true },
       backup_enabled: true,
       totp_enabled: false,

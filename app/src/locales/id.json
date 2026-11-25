@@ -869,6 +869,20 @@
     "bots": {
       "title": "Bot",
       "hint": "Notifikasi dari skrip Anda"
+    },
+    "inactive": {
+      "title": "Hapus akun jika tidak aktif",
+      "hint": "Jika Anda tidak terhubung dari perangkat mana pun selama waktu ini, akun Anda dihapus dari server beserta profil, nama pengguna, grup, bot, dan cadangan. Nomor akun dan frasa pemulihan dapat mengembalikan akun yang sama, tetapi tidak dengan apa yang telah dihapus.",
+      "opt": {
+        "30": "30 hari",
+        "60": "60 hari",
+        "90": "90 hari",
+        "365": "1 tahun",
+        "730": "2 tahun",
+        "1095": "3 tahun",
+        "1825": "5 tahun",
+        "0": "Tidak pernah"
+      }
     }
   },
   "link": {

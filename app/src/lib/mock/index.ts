@@ -959,6 +959,11 @@ export const mockBackend: Backend = {
     if (req.discoverable && !d.details.phone_verified) fail("invalid_input", "Verify a phone number first");
     d.details.discoverable_by_phone = req.discoverable;
   },
+  async setInactiveDeletion(req) {
+    await latency();
+    data().details.inactive_delete_days = req.days;
+    return req.days;
+  },
   async totpSetup() {
     await latency();
     return { secret: "JBSWY3DPEHPK3PXP", uri: `otpauth://totp/${encodeURIComponent(BRAND_NAME)}:demo?secret=JBSWY3DPEHPK3PXP&issuer=${encodeURIComponent(BRAND_NAME)}` };

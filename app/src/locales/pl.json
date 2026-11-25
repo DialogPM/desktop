@@ -914,6 +914,20 @@
     "bots": {
       "title": "Boty",
       "hint": "Powiadomienia z twoich skryptów"
+    },
+    "inactive": {
+      "title": "Usuń konto, gdy jest nieaktywne",
+      "hint": "Jeśli przez ten czas nie połączysz się z żadnego urządzenia, twoje konto zostanie usunięte z serwera razem z profilem, nazwą użytkownika, grupami, botami i kopią zapasową. Numer konta i fraza odzyskiwania pozwalają przywrócić to samo konto, ale nie to, co zostało usunięte.",
+      "opt": {
+        "30": "30 dni",
+        "60": "60 dni",
+        "90": "90 dni",
+        "365": "1 rok",
+        "730": "2 lata",
+        "1095": "3 lata",
+        "1825": "5 lat",
+        "0": "Nigdy"
+      }
     }
   },
   "link": {

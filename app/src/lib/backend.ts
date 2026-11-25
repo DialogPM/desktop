@@ -188,6 +188,7 @@ export const backend = {
   verifyPhone: (req: { phone: string; code: string }) => call<void>("verify_phone", req),
   removePhone: () => call<void>("remove_phone"),
   setDiscoverable: (req: { discoverable: boolean }) => call<void>("set_discoverable", req),
+  setInactiveDeletion: (req: { days: number }) => call<number>("set_inactive_deletion", req),
   /** Sets or removes (null) the public username; errors: "conflict" (taken), "invalid_input". */
   setUsername: (req: { username: string | null }) => call<string | null>("set_username", req),
   /** Starts enabling two-step verification: secret (base32) and otpauth:// URI for the QR. */

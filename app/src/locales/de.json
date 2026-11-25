@@ -884,6 +884,20 @@
     "bots": {
       "title": "Bots",
       "hint": "Benachrichtigungen aus deinen Skripten"
+    },
+    "inactive": {
+      "title": "Konto bei Inaktivität löschen",
+      "hint": "Wenn du dich so lange von keinem Gerät aus verbindest, wird dein Konto vom Server gelöscht, zusammen mit Profil, Benutzername, Gruppen, Bots und Backup. Mit deiner Kontonummer und deiner Wiederherstellungsphrase kannst du dasselbe Konto zurückholen, aber nicht das, was gelöscht wurde.",
+      "opt": {
+        "30": "30 Tage",
+        "60": "60 Tage",
+        "90": "90 Tage",
+        "365": "1 Jahr",
+        "730": "2 Jahre",
+        "1095": "3 Jahre",
+        "1825": "5 Jahre",
+        "0": "Nie"
+      }
     }
   },
   "link": {

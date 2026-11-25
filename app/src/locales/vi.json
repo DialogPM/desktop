@@ -869,6 +869,20 @@
     "bots": {
       "title": "Bot",
       "hint": "Thông báo từ các script của bạn"
+    },
+    "inactive": {
+      "title": "Xóa tài khoản khi không hoạt động",
+      "hint": "Nếu bạn không kết nối từ bất kỳ thiết bị nào trong khoảng thời gian này, tài khoản của bạn sẽ bị xóa khỏi máy chủ cùng với hồ sơ, tên người dùng, nhóm, bot và bản sao lưu. Số tài khoản và cụm từ khôi phục có thể đưa chính tài khoản đó trở lại, nhưng không khôi phục được những gì đã bị xóa.",
+      "opt": {
+        "30": "30 ngày",
+        "60": "60 ngày",
+        "90": "90 ngày",
+        "365": "1 năm",
+        "730": "2 năm",
+        "1095": "3 năm",
+        "1825": "5 năm",
+        "0": "Không bao giờ"
+      }
     }
   },
   "link": {

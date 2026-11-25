@@ -884,6 +884,20 @@
     "bots": {
       "title": "Bots",
       "hint": "Notificações dos seus scripts"
+    },
+    "inactive": {
+      "title": "Excluir a conta se estiver inativa",
+      "hint": "Se você não se conectar de nenhum dispositivo durante esse tempo, sua conta é excluída do servidor, junto com seu perfil, nome de usuário, grupos, bots e backup. O número da conta e a frase de recuperação podem trazer a mesma conta de volta, mas não o que foi excluído.",
+      "opt": {
+        "30": "30 dias",
+        "60": "60 dias",
+        "90": "90 dias",
+        "365": "1 ano",
+        "730": "2 anos",
+        "1095": "3 anos",
+        "1825": "5 anos",
+        "0": "Nunca"
+      }
     }
   },
   "link": {
