@@ -302,6 +302,25 @@
     "markRead": "읽음으로 표시",
     "draft": "임시 저장:",
     "selectMessages": "메시지 선택",
+    "rowMenu": "채팅 옵션",
+    "export": {
+      "action": "채팅 내보내기",
+      "title": "채팅 내보내기: {{name}}",
+      "warning": "내보낸 파일은 암호화되지 않습니다. 파일을 가진 사람은 누구나 이 메시지를 읽을 수 있습니다.",
+      "textOnly": "텍스트만",
+      "textOnlyHint": "각 메시지의 날짜, 시간, 보낸 사람, 내용이 담긴 텍스트 파일입니다.",
+      "withMedia": "텍스트와 미디어",
+      "withMediaHint": "텍스트와 이 기기에 이미 다운로드된 사진, 동영상, 파일이 담긴 ZIP 압축 파일입니다. 한 번 보기 미디어는 절대 포함되지 않습니다.",
+      "confirm": "내보내기",
+      "working": "채팅을 내보내는 중…",
+      "done": "채팅을 내보냈습니다",
+      "doneSkipped": "채팅을 내보냈습니다. 제외된 미디어 파일: {{count}}",
+      "tooLarge": "미디어가 너무 커서 하나의 압축 파일에 담을 수 없습니다(4GB 초과). 텍스트만 내보내세요.",
+      "notIncluded": "포함되지 않음",
+      "header": "{{app}} · 채팅 내보내기: {{name}}",
+      "exportedOn": "내보낸 날짜: {{date}}",
+      "messageCount": "메시지: {{count}}"
+    },
     "tapForInfo": "연락처 정보를 보려면 여기를 클릭하세요",
     "e2eNotice": "메시지는 종단간 암호화됩니다. 이 대화의 참여자 외에는 누구도, 서버조차도 읽을 수 없습니다.",
     "scrollToBottom": "최신 메시지로 이동",
@@ -335,6 +354,7 @@
       "action": "차단",
       "unblock": "차단 해제",
       "unblockName": "{{name}} 님 차단 해제",
+      "blockName": "{{name}} 차단",
       "blocked": "차단됨",
       "title": "{{name}} 님을 차단할까요?",
       "body": "차단된 연락처는 더 이상 나에게 메시지를 보내거나 내 온라인 상태를 볼 수 없습니다. 상대방에게 알림이 가지 않습니다.",
@@ -399,7 +419,20 @@
       "green": "초록",
       "black": "검정",
       "white": "흰색"
-    }
+    },
+    "crop": "자르기",
+    "cropApply": "적용",
+    "size": "굵기: {{name}}",
+    "sizes": {
+      "thin": "가늘게",
+      "medium": "보통",
+      "thick": "굵게"
+    },
+    "aspect": {
+      "free": "자유",
+      "square": "정사각형"
+    },
+    "addText": "텍스트 추가"
   },
   "voice": {
     "record": "음성 메시지 녹음",

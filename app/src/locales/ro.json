@@ -308,6 +308,25 @@
     "markRead": "Marchează ca citită",
     "draft": "Ciornă:",
     "selectMessages": "Selectează mesaje",
+    "rowMenu": "Opțiuni conversație",
+    "export": {
+      "action": "Exportă conversația",
+      "title": "Exportă conversația: {{name}}",
+      "warning": "Fișierul exportat nu este criptat. Oricine îl are poate citi aceste mesaje.",
+      "textOnly": "Doar text",
+      "textOnlyHint": "Un fișier text cu data, ora, expeditorul și textul fiecărui mesaj.",
+      "withMedia": "Text și fișiere media",
+      "withMediaHint": "O arhivă ZIP cu textul și cu pozele, clipurile și fișierele deja descărcate pe acest dispozitiv. Media cu vizualizare unică nu se include niciodată.",
+      "confirm": "Exportă",
+      "working": "Se exportă conversația…",
+      "done": "Conversație exportată",
+      "doneSkipped": "Conversație exportată. Fișiere media lăsate afară: {{count}}",
+      "tooLarge": "Fișierele media sunt prea mari pentru o singură arhivă (peste 4 GB). Exportă doar textul.",
+      "notIncluded": "neinclus",
+      "header": "{{app}} · export de conversație: {{name}}",
+      "exportedOn": "Exportat la {{date}}",
+      "messageCount": "Mesaje: {{count}}"
+    },
     "tapForInfo": "apasă aici pentru informații despre contact",
     "e2eNotice": "Mesajele sunt criptate integral. Nimeni din afara acestei conversații, nici măcar serverul, nu le poate citi.",
     "scrollToBottom": "Derulează la cel mai recent mesaj",
@@ -341,6 +360,7 @@
       "action": "Blochează",
       "unblock": "Deblochează",
       "unblockName": "Deblochează pe {{name}}",
+      "blockName": "Blochează pe {{name}}",
       "blocked": "Blocat",
       "title": "Blochezi pe {{name}}?",
       "body": "Contactele blocate nu îți mai pot trimite mesaje și nu văd când ești online. Nu vor fi anunțate.",
@@ -405,7 +425,20 @@
       "green": "Verde",
       "black": "Negru",
       "white": "Alb"
-    }
+    },
+    "crop": "Decupează",
+    "cropApply": "Aplică",
+    "size": "Grosime: {{name}}",
+    "sizes": {
+      "thin": "Subțire",
+      "medium": "Medie",
+      "thick": "Groasă"
+    },
+    "aspect": {
+      "free": "Liber",
+      "square": "Pătrat"
+    },
+    "addText": "Adaugă text"
   },
   "voice": {
     "record": "Înregistrează mesaj vocal",

@@ -302,6 +302,25 @@
     "markRead": "Đánh dấu đã đọc",
     "draft": "Bản nháp:",
     "selectMessages": "Chọn tin nhắn",
+    "rowMenu": "Tùy chọn cuộc trò chuyện",
+    "export": {
+      "action": "Xuất cuộc trò chuyện",
+      "title": "Xuất cuộc trò chuyện: {{name}}",
+      "warning": "Tệp đã xuất không được mã hóa. Bất kỳ ai có tệp này đều đọc được các tin nhắn.",
+      "textOnly": "Chỉ văn bản",
+      "textOnlyHint": "Một tệp văn bản gồm ngày, giờ, người gửi và nội dung của từng tin nhắn.",
+      "withMedia": "Văn bản và tệp phương tiện",
+      "withMediaHint": "Một tệp ZIP gồm văn bản cùng ảnh, video và tệp đã tải về thiết bị này. Nội dung xem một lần không bao giờ được đưa vào.",
+      "confirm": "Xuất",
+      "working": "Đang xuất cuộc trò chuyện…",
+      "done": "Đã xuất cuộc trò chuyện",
+      "doneSkipped": "Đã xuất cuộc trò chuyện. Số tệp phương tiện bị bỏ qua: {{count}}",
+      "tooLarge": "Tệp phương tiện quá lớn cho một tệp nén (hơn 4 GB). Hãy chỉ xuất văn bản.",
+      "notIncluded": "không kèm theo",
+      "header": "{{app}} · xuất cuộc trò chuyện: {{name}}",
+      "exportedOn": "Xuất lúc {{date}}",
+      "messageCount": "Tin nhắn: {{count}}"
+    },
     "tapForInfo": "nhấp vào đây để xem thông tin liên hệ",
     "e2eNotice": "Tin nhắn được mã hóa đầu cuối. Không ai ngoài cuộc trò chuyện này, kể cả máy chủ, có thể đọc được.",
     "scrollToBottom": "Cuộn tới tin nhắn mới nhất",
@@ -335,6 +354,7 @@
       "action": "Chặn",
       "unblock": "Bỏ chặn",
       "unblockName": "Bỏ chặn {{name}}",
+      "blockName": "Chặn {{name}}",
       "blocked": "Đã chặn",
       "title": "Chặn {{name}}?",
       "body": "Liên hệ bị chặn không thể gửi tin nhắn cho bạn hay thấy khi bạn trực tuyến. Họ sẽ không được thông báo.",
@@ -399,7 +419,20 @@
       "green": "Xanh lá",
       "black": "Đen",
       "white": "Trắng"
-    }
+    },
+    "crop": "Cắt",
+    "cropApply": "Áp dụng",
+    "size": "Độ dày: {{name}}",
+    "sizes": {
+      "thin": "Mảnh",
+      "medium": "Vừa",
+      "thick": "Dày"
+    },
+    "aspect": {
+      "free": "Tự do",
+      "square": "Vuông"
+    },
+    "addText": "Thêm chữ"
   },
   "voice": {
     "record": "Ghi tin nhắn thoại",

@@ -366,6 +366,21 @@ export const backend = {
   /** Copies a decrypted attachment to a user chosen path. */
   saveAttachment: (req: { message_id: string; attachment_id: string; dest_path: string }) =>
     call<void>("save_attachment", req),
+  /**
+   * Writes a conversation to the path the user chose: `text` (the transcript, built by the UI)
+   * as it is, or with `archive` a ZIP holding the transcript (`text_name`) and `media` in a
+   * "media" folder. The file is not encrypted: only on the user's explicit request. View-once
+   * media, deleted or expired messages and media not on this device are left out (counted
+   * in `media_skipped`). Error "invalid_input: export_too_large" past 4 GB.
+   */
+  exportConversation: (req: {
+    conversation_id: string;
+    dest_path: string;
+    text: string;
+    archive?: boolean;
+    text_name?: string;
+    media?: { message_id: string; attachment_id: string; name: string }[];
+  }) => call<{ media_exported: number; media_skipped: number }>("export_conversation", req),
   searchMessages: (req: { query: string; conversation_id?: string; limit?: number }) =>
     call<Message[]>("search_messages", req),
   /** Media gallery of a conversation (images/videos/files). */

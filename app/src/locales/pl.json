@@ -311,6 +311,25 @@
     "markRead": "Oznacz jako przeczytane",
     "draft": "Wersja robocza:",
     "selectMessages": "Zaznacz wiadomości",
+    "rowMenu": "Opcje czatu",
+    "export": {
+      "action": "Eksportuj czat",
+      "title": "Eksport czatu: {{name}}",
+      "warning": "Wyeksportowany plik nie jest zaszyfrowany. Każdy, kto go zdobędzie, może przeczytać te wiadomości.",
+      "textOnly": "Tylko tekst",
+      "textOnlyHint": "Plik tekstowy z datą, godziną, nadawcą i treścią każdej wiadomości.",
+      "withMedia": "Tekst i multimedia",
+      "withMediaHint": "Archiwum ZIP z tekstem oraz zdjęciami, filmami i plikami pobranymi już na to urządzenie. Multimedia jednorazowego wyświetlenia nigdy nie są dołączane.",
+      "confirm": "Eksportuj",
+      "working": "Eksportowanie czatu…",
+      "done": "Czat wyeksportowany",
+      "doneSkipped": "Czat wyeksportowany. Pominięte pliki multimedialne: {{count}}",
+      "tooLarge": "Multimedia są za duże na jedno archiwum (ponad 4 GB). Wyeksportuj sam tekst.",
+      "notIncluded": "nie dołączono",
+      "header": "{{app}} · eksport czatu: {{name}}",
+      "exportedOn": "Wyeksportowano: {{date}}",
+      "messageCount": "Wiadomości: {{count}}"
+    },
     "tapForInfo": "kliknij tutaj, aby zobaczyć informacje o kontakcie",
     "e2eNotice": "Wiadomości są szyfrowane metodą end-to-end. Nikt spoza tego czatu, nawet serwer, nie może ich przeczytać.",
     "scrollToBottom": "Przewiń do najnowszej wiadomości",
@@ -344,6 +363,7 @@
       "action": "Zablokuj",
       "unblock": "Odblokuj",
       "unblockName": "Odblokuj {{name}}",
+      "blockName": "Zablokuj: {{name}}",
       "blocked": "Zablokowany",
       "title": "Zablokować {{name}}?",
       "body": "Zablokowane kontakty nie mogą już wysyłać ci wiadomości ani widzieć, kiedy jesteś online. Nie zostaną o tym powiadomione.",
@@ -408,7 +428,20 @@
       "green": "Zielony",
       "black": "Czarny",
       "white": "Biały"
-    }
+    },
+    "crop": "Przytnij",
+    "cropApply": "Zastosuj",
+    "size": "Grubość: {{name}}",
+    "sizes": {
+      "thin": "Cienka",
+      "medium": "Średnia",
+      "thick": "Gruba"
+    },
+    "aspect": {
+      "free": "Dowolnie",
+      "square": "Kwadrat"
+    },
+    "addText": "Dodaj tekst"
   },
   "voice": {
     "record": "Nagraj wiadomość głosową",

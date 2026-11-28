@@ -308,6 +308,25 @@
     "markRead": "Segna come letta",
     "draft": "Bozza:",
     "selectMessages": "Seleziona messaggi",
+    "rowMenu": "Opzioni chat",
+    "export": {
+      "action": "Esporta chat",
+      "title": "Esporta chat: {{name}}",
+      "warning": "Il file esportato non è cifrato. Chiunque lo ottenga può leggere questi messaggi.",
+      "textOnly": "Solo testo",
+      "textOnlyHint": "Un file di testo con data, ora, mittente e testo di ogni messaggio.",
+      "withMedia": "Testo e file multimediali",
+      "withMediaHint": "Un archivio ZIP con il testo e le foto, i video e i file già scaricati su questo dispositivo. I contenuti visualizzabili una sola volta non vengono mai inclusi.",
+      "confirm": "Esporta",
+      "working": "Esportazione della chat…",
+      "done": "Chat esportata",
+      "doneSkipped": "Chat esportata. File multimediali esclusi: {{count}}",
+      "tooLarge": "I file multimediali sono troppo grandi per un solo archivio (oltre 4 GB). Esporta solo il testo.",
+      "notIncluded": "non incluso",
+      "header": "{{app}} · esportazione chat: {{name}}",
+      "exportedOn": "Esportata il {{date}}",
+      "messageCount": "Messaggi: {{count}}"
+    },
     "tapForInfo": "clicca qui per le info del contatto",
     "e2eNotice": "I messaggi sono crittografati end-to-end. Nessuno al di fuori di questa chat, nemmeno il server, può leggerli.",
     "scrollToBottom": "Vai all'ultimo messaggio",
@@ -341,6 +360,7 @@
       "action": "Blocca",
       "unblock": "Sblocca",
       "unblockName": "Sblocca {{name}}",
+      "blockName": "Blocca {{name}}",
       "blocked": "Bloccato",
       "title": "Bloccare {{name}}?",
       "body": "I contatti bloccati non possono più inviarti messaggi né vedere quando sei online. Non riceveranno alcuna notifica.",
@@ -405,7 +425,20 @@
       "green": "Verde",
       "black": "Nero",
       "white": "Bianco"
-    }
+    },
+    "crop": "Ritaglia",
+    "cropApply": "Applica",
+    "size": "Spessore: {{name}}",
+    "sizes": {
+      "thin": "Sottile",
+      "medium": "Medio",
+      "thick": "Spesso"
+    },
+    "aspect": {
+      "free": "Libero",
+      "square": "Quadrato"
+    },
+    "addText": "Aggiungi testo"
   },
   "voice": {
     "record": "Registra messaggio vocale",

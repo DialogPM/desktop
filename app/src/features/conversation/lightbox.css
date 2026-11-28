@@ -212,3 +212,179 @@
   opacity: 0.5;
   cursor: default;
 }
+
+.annot-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Line thickness choices: a dot of that size. */
+.annot-size {
+  display: block;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Crop mode: a frame over the image, the rest dimmed. */
+.annot-crop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.annot-crop-frame {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+  cursor: move;
+  touch-action: none;
+  /* Rule of thirds. */
+  background-image:
+    linear-gradient(to right, transparent calc(33.33% - 0.5px), rgba(255, 255, 255, 0.35) calc(33.33% - 0.5px), rgba(255, 255, 255, 0.35) calc(33.33% + 0.5px), transparent calc(33.33% + 0.5px), transparent calc(66.66% - 0.5px), rgba(255, 255, 255, 0.35) calc(66.66% - 0.5px), rgba(255, 255, 255, 0.35) calc(66.66% + 0.5px), transparent calc(66.66% + 0.5px)),
+    linear-gradient(to bottom, transparent calc(33.33% - 0.5px), rgba(255, 255, 255, 0.35) calc(33.33% - 0.5px), rgba(255, 255, 255, 0.35) calc(33.33% + 0.5px), transparent calc(33.33% + 0.5px), transparent calc(66.66% - 0.5px), rgba(255, 255, 255, 0.35) calc(66.66% - 0.5px), rgba(255, 255, 255, 0.35) calc(66.66% + 0.5px), transparent calc(66.66% + 0.5px));
+}
+
+.annot-crop-handle {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 0 solid #fff;
+  touch-action: none;
+}
+
+.annot-crop-handle[data-handle="nw"] {
+  left: -3px;
+  top: -3px;
+  border-left-width: 4px;
+  border-top-width: 4px;
+  cursor: nwse-resize;
+}
+
+.annot-crop-handle[data-handle="ne"] {
+  right: -3px;
+  top: -3px;
+  border-right-width: 4px;
+  border-top-width: 4px;
+  cursor: nesw-resize;
+}
+
+.annot-crop-handle[data-handle="sw"] {
+  left: -3px;
+  bottom: -3px;
+  border-left-width: 4px;
+  border-bottom-width: 4px;
+  cursor: nesw-resize;
+}
+
+.annot-crop-handle[data-handle="se"] {
+  right: -3px;
+  bottom: -3px;
+  border-right-width: 4px;
+  border-bottom-width: 4px;
+  cursor: nwse-resize;
+}
+
+.annot-aspect {
+  width: auto;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Sending from the editor: recipient, caption, send. */
+.annot-send {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.annot-recipient {
+  flex: 0 1 auto;
+  max-width: 30%;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(36, 38, 40, 0.92);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.annot-caption {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 6px 0 16px;
+  border-radius: 22px;
+  background: rgba(36, 38, 40, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.annot-caption input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-size: 15px;
+}
+
+.annot-caption input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.annot-emoji {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.annot-emoji:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.annot-send-btn {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+}
+
+.annot-send-btn:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.annot-send-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* The editor covers the app entirely: nothing of the conversation shows through. */
+.lightbox.annot {
+  background: #0b0d0d;
+}

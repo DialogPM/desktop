@@ -305,6 +305,25 @@
     "markRead": "Okundu olarak işaretle",
     "draft": "Taslak:",
     "selectMessages": "Mesajları seç",
+    "rowMenu": "Sohbet seçenekleri",
+    "export": {
+      "action": "Sohbeti dışa aktar",
+      "title": "Sohbeti dışa aktar: {{name}}",
+      "warning": "Dışa aktarılan dosya şifreli değildir. Dosyayı ele geçiren herkes bu mesajları okuyabilir.",
+      "textOnly": "Yalnızca metin",
+      "textOnlyHint": "Her mesajın tarihini, saatini, göndericisini ve metnini içeren bir metin dosyası.",
+      "withMedia": "Metin ve medya",
+      "withMediaHint": "Metni ve bu cihaza önceden indirilmiş fotoğrafları, videoları ve dosyaları içeren bir ZIP arşivi. Tek seferlik medya hiçbir zaman eklenmez.",
+      "confirm": "Dışa aktar",
+      "working": "Sohbet dışa aktarılıyor…",
+      "done": "Sohbet dışa aktarıldı",
+      "doneSkipped": "Sohbet dışa aktarıldı. Dışarıda bırakılan medya dosyaları: {{count}}",
+      "tooLarge": "Medya tek bir arşiv için çok büyük (4 GB’tan fazla). Yalnızca metni dışa aktarın.",
+      "notIncluded": "dahil değil",
+      "header": "{{app}} · sohbet dışa aktarımı: {{name}}",
+      "exportedOn": "Dışa aktarma tarihi: {{date}}",
+      "messageCount": "Mesajlar: {{count}}"
+    },
     "tapForInfo": "kişi bilgisi için buraya tıklayın",
     "e2eNotice": "Mesajlar uçtan uca şifrelidir. Bu sohbetin dışındaki hiç kimse, sunucu bile, onları okuyamaz.",
     "scrollToBottom": "En son mesaja kaydır",
@@ -338,6 +357,7 @@
       "action": "Engelle",
       "unblock": "Engeli kaldır",
       "unblockName": "{{name}} engelini kaldır",
+      "blockName": "{{name}} kişisini engelle",
       "blocked": "Engellendi",
       "title": "{{name}} engellensin mi?",
       "body": "Engellenen kişiler artık size mesaj gönderemez veya çevrimiçi olduğunuzu göremez. Bu konuda bilgilendirilmezler.",
@@ -402,7 +422,20 @@
       "green": "Yeşil",
       "black": "Siyah",
       "white": "Beyaz"
-    }
+    },
+    "crop": "Kırp",
+    "cropApply": "Uygula",
+    "size": "Kalınlık: {{name}}",
+    "sizes": {
+      "thin": "İnce",
+      "medium": "Orta",
+      "thick": "Kalın"
+    },
+    "aspect": {
+      "free": "Serbest",
+      "square": "Kare"
+    },
+    "addText": "Metin ekle"
   },
   "voice": {
     "record": "Sesli mesaj kaydet",

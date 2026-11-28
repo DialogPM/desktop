@@ -302,6 +302,25 @@
     "markRead": "标为已读",
     "draft": "草稿：",
     "selectMessages": "选择消息",
+    "rowMenu": "聊天选项",
+    "export": {
+      "action": "导出聊天",
+      "title": "导出聊天：{{name}}",
+      "warning": "导出的文件未加密。任何拿到它的人都能阅读这些消息。",
+      "textOnly": "仅文本",
+      "textOnlyHint": "一个文本文件，包含每条消息的日期、时间、发送者和内容。",
+      "withMedia": "文本和媒体",
+      "withMediaHint": "一个 ZIP 压缩包，包含文本以及已下载到此设备的照片、视频和文件。阅后即焚的媒体永远不会包含在内。",
+      "confirm": "导出",
+      "working": "正在导出聊天…",
+      "done": "聊天已导出",
+      "doneSkipped": "聊天已导出。未包含的媒体文件：{{count}}",
+      "tooLarge": "媒体文件过大，无法放入一个压缩包（超过 4 GB）。请仅导出文本。",
+      "notIncluded": "未包含",
+      "header": "{{app}} · 聊天导出：{{name}}",
+      "exportedOn": "导出时间：{{date}}",
+      "messageCount": "消息数：{{count}}"
+    },
     "tapForInfo": "点击此处查看联系人信息",
     "e2eNotice": "消息已端到端加密。此聊天之外的任何人，包括服务器，都无法阅读。",
     "scrollToBottom": "滚动到最新消息",
@@ -335,6 +354,7 @@
       "action": "屏蔽",
       "unblock": "取消屏蔽",
       "unblockName": "取消屏蔽 {{name}}",
+      "blockName": "屏蔽 {{name}}",
       "blocked": "已屏蔽",
       "title": "屏蔽 {{name}}？",
       "body": "被屏蔽的联系人无法再向你发送消息，也看不到你的在线状态。对方不会收到通知。",
@@ -399,7 +419,20 @@
       "green": "绿色",
       "black": "黑色",
       "white": "白色"
-    }
+    },
+    "crop": "裁剪",
+    "cropApply": "应用",
+    "size": "粗细：{{name}}",
+    "sizes": {
+      "thin": "细",
+      "medium": "中",
+      "thick": "粗"
+    },
+    "aspect": {
+      "free": "自由",
+      "square": "正方形"
+    },
+    "addText": "添加文字"
   },
   "voice": {
     "record": "录制语音消息",

@@ -1,7 +1,7 @@
 //! Files the user picked in a native dialog, handed to the web UI only as opaque tokens.
 //!
 //! The UI never sees or sends raw file system paths: commands that read a file (attachments,
-//! avatars, contact import) or write one (saving an attachment) accept only tokens issued
+//! avatars, contact import) or write one (saving an attachment, exporting a conversation) accept only tokens issued
 //! here, after the user chose the file. Script injected into the webview therefore cannot
 //! make the app read `~/.ssh/id_rsa` or write into `~/Library/LaunchAgents`.
 
@@ -67,7 +67,7 @@ impl Picked {
             // "" removes the avatar.
             "set_profile" | "create_group" | "update_group" => open(req, "avatar_path", true)?,
             "import_contacts" => open(req, "path", false)?,
-            "save_attachment" => {
+            "save_attachment" | "export_conversation" => {
                 let Some(Value::String(s)) = req.get("dest_path").cloned() else { return Ok(()) };
                 let path = self.save_target(&s).ok_or("invalid_input: dest_path must come from the save dialog")?;
                 req["dest_path"] = Value::String(path.to_string_lossy().into_owned());

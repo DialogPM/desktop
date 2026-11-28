@@ -305,6 +305,25 @@
     "markRead": "Marcar como leído",
     "draft": "Borrador:",
     "selectMessages": "Seleccionar mensajes",
+    "rowMenu": "Opciones del chat",
+    "export": {
+      "action": "Exportar chat",
+      "title": "Exportar chat: {{name}}",
+      "warning": "El archivo exportado no está cifrado. Cualquiera que lo tenga puede leer estos mensajes.",
+      "textOnly": "Solo texto",
+      "textOnlyHint": "Un archivo de texto con la fecha, la hora, el remitente y el texto de cada mensaje.",
+      "withMedia": "Texto y archivos multimedia",
+      "withMediaHint": "Un archivo ZIP con el texto y las fotos, los vídeos y los archivos ya descargados en este dispositivo. Los archivos de una sola visualización nunca se incluyen.",
+      "confirm": "Exportar",
+      "working": "Exportando chat…",
+      "done": "Chat exportado",
+      "doneSkipped": "Chat exportado. Archivos multimedia omitidos: {{count}}",
+      "tooLarge": "Los archivos multimedia son demasiado grandes para un solo archivo ZIP (más de 4 GB). Exporta solo el texto.",
+      "notIncluded": "no incluido",
+      "header": "{{app}} · exportación de chat: {{name}}",
+      "exportedOn": "Exportado el {{date}}",
+      "messageCount": "Mensajes: {{count}}"
+    },
     "tapForInfo": "haz clic aquí para ver la info. del contacto",
     "e2eNotice": "Los mensajes están cifrados de extremo a extremo. Nadie fuera de este chat, ni siquiera el servidor, puede leerlos.",
     "scrollToBottom": "Ir al último mensaje",
@@ -338,6 +357,7 @@
       "action": "Bloquear",
       "unblock": "Desbloquear",
       "unblockName": "Desbloquear a {{name}}",
+      "blockName": "Bloquear a {{name}}",
       "blocked": "Bloqueado",
       "title": "¿Bloquear a {{name}}?",
       "body": "Los contactos bloqueados ya no podrán enviarte mensajes ni ver cuándo estás en línea. No se les notificará.",
@@ -402,7 +422,20 @@
       "green": "Verde",
       "black": "Negro",
       "white": "Blanco"
-    }
+    },
+    "crop": "Recortar",
+    "cropApply": "Aplicar",
+    "size": "Grosor: {{name}}",
+    "sizes": {
+      "thin": "Fino",
+      "medium": "Medio",
+      "thick": "Grueso"
+    },
+    "aspect": {
+      "free": "Libre",
+      "square": "Cuadrado"
+    },
+    "addText": "Añadir texto"
   },
   "voice": {
     "record": "Grabar mensaje de voz",

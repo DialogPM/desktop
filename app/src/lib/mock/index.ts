@@ -1831,6 +1831,22 @@ export const mockBackend: Backend = {
       link.remove();
     }
   },
+  async exportConversation(req) {
+    await latency();
+    conv(req.conversation_id);
+    // The browser preview has no archive writer: the transcript is downloaded either way.
+    if (req.dest_path.startsWith("browser-download:")) {
+      const url = URL.createObjectURL(new Blob([req.text], { type: "text/plain;charset=utf-8" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = req.dest_path.slice("browser-download:".length).replace(/\.zip$/, ".txt");
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+    }
+    return { media_exported: req.media?.length ?? 0, media_skipped: 0 };
+  },
   async searchMessages(req) {
     await latency();
     const q = req.query.toLowerCase();

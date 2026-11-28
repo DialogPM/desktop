@@ -3,7 +3,7 @@
 
 import { Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconArchive, IconArchiveOff, IconBan, IconEraser, IconPinnedOff } from "@tabler/icons-react";
+import { IconArchive, IconArchiveOff, IconBan, IconEraser, IconFileExport, IconPinnedOff } from "@tabler/icons-react";
 import { Icon } from "../../components/Icon";
 import type { TFunction } from "i18next";
 import type { MenuAction } from "../../components/Menus";
@@ -13,8 +13,9 @@ import i18n from "../../i18n";
 import { api } from "../../lib/api";
 import { isMuted } from "../../lib/format";
 import type { Conversation } from "../../lib/types";
-import { attempt, loadMessages, notifyOk, patchConversation, setBlocked } from "../../store/actions";
+import { attempt, loadMessages, notifyOk, openConversation, patchConversation, setBlocked } from "../../store/actions";
 import { getApp, setApp, upsertContact } from "../../store/app";
+import { openExportChat } from "./exportDialog";
 import { RenameContactForm } from "./RenameContactForm";
 import { DISAPPEARING_OPTIONS } from "../../lib/messageText";
 
@@ -209,9 +210,16 @@ export function confirmLeaveGroup(conv: Conversation) {
   });
 }
 
-/** Actions for the chat list context menu. */
+/** Opens the conversation with its details panel (contact or group info). */
+function openInfo(conv: Conversation) {
+  openConversation(conv.id);
+  setApp({ infoOpen: true });
+}
+
+/** Actions for the chat list menu (the arrow on a row, right click, long press). */
 export function listActions(conv: Conversation, t: TFunction): MenuAction[] {
   const muted = isMuted(conv);
+  const group = conv.kind === "group";
   return [
     {
       key: "rename",
@@ -247,23 +255,43 @@ export function listActions(conv: Conversation, t: TFunction): MenuAction[] {
       hidden: conv.unread_count === 0,
       onClick: () => void attempt(() => api.markRead({ conversation_id: conv.id })),
     },
-    conv.kind === "group" && !conv.left
-      ? {
-          key: "clear",
-          label: t("chat.clear.action"),
-          icon: <IconEraser size={18} />,
-          color: "red",
-          dividerBefore: true,
-          onClick: () => confirmClearChat(conv),
-        }
-      : {
-          key: "delete",
-          label: t("chat.delete.action"),
-          icon: <Icon name="trash" size={18} />,
-          color: "red",
-          dividerBefore: true,
-          onClick: () => confirmDeleteChat(conv),
-        },
+    {
+      key: "block",
+      label: conv.blocked ? t("chat.block.unblockName", { name: conv.title }) : t("chat.block.blockName", { name: conv.title }),
+      icon: <IconBan size={18} />,
+      // Not for groups, nor the notes to ourselves; a bot is stopped, not blocked.
+      hidden: !canRename(conv) || !!conv.bot,
+      onClick: () => confirmBlock(conv.peer_account_id!, conv.title, !conv.blocked),
+    },
+    {
+      key: "info",
+      dividerBefore: true,
+      label: group ? t("group.info") : t("contact.info"),
+      icon: <Icon name="info" size={18} />,
+      onClick: () => openInfo(conv),
+    },
+    {
+      key: "export",
+      label: t("chat.export.action"),
+      icon: <IconFileExport size={18} />,
+      onClick: () => openExportChat(conv),
+    },
+    {
+      key: "clear",
+      label: t("chat.clear.action"),
+      icon: <IconEraser size={18} />,
+      color: group && !conv.left ? "red" : undefined,
+      onClick: () => confirmClearChat(conv),
+    },
+    {
+      key: "delete",
+      label: t("chat.delete.action"),
+      icon: <Icon name="trash" size={18} />,
+      color: "red",
+      // An active group can only be cleared: leave it first (from the group's info).
+      hidden: group && !conv.left,
+      onClick: () => confirmDeleteChat(conv),
+    },
   ];
 }
 
@@ -316,10 +344,16 @@ export function headerActions(conv: Conversation, t: TFunction, blocked: boolean
       onClick: () => void patchConversation(conv.id, { archived: !conv.archived }),
     },
     {
+      key: "export",
+      label: t("chat.export.action"),
+      icon: <IconFileExport size={18} />,
+      dividerBefore: true,
+      onClick: () => openExportChat(conv),
+    },
+    {
       key: "clear",
       label: t("chat.clear.action"),
       icon: <IconEraser size={18} />,
-      dividerBefore: true,
       onClick: () => confirmClearChat(conv),
     },
     {

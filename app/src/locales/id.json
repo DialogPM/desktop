@@ -302,6 +302,25 @@
     "markRead": "Tandai sudah dibaca",
     "draft": "Draf:",
     "selectMessages": "Pilih pesan",
+    "rowMenu": "Opsi obrolan",
+    "export": {
+      "action": "Ekspor obrolan",
+      "title": "Ekspor obrolan: {{name}}",
+      "warning": "File hasil ekspor tidak dienkripsi. Siapa pun yang mendapatkannya dapat membaca pesan-pesan ini.",
+      "textOnly": "Hanya teks",
+      "textOnlyHint": "File teks berisi tanggal, waktu, pengirim, dan teks setiap pesan.",
+      "withMedia": "Teks dan media",
+      "withMediaHint": "Arsip ZIP berisi teks serta foto, video, dan file yang sudah diunduh di perangkat ini. Media sekali lihat tidak pernah disertakan.",
+      "confirm": "Ekspor",
+      "working": "Mengekspor obrolan…",
+      "done": "Obrolan diekspor",
+      "doneSkipped": "Obrolan diekspor. File media yang tidak disertakan: {{count}}",
+      "tooLarge": "Media terlalu besar untuk satu arsip (lebih dari 4 GB). Ekspor teksnya saja.",
+      "notIncluded": "tidak disertakan",
+      "header": "{{app}} · ekspor obrolan: {{name}}",
+      "exportedOn": "Diekspor pada {{date}}",
+      "messageCount": "Pesan: {{count}}"
+    },
     "tapForInfo": "klik di sini untuk info kontak",
     "e2eNotice": "Pesan terenkripsi secara end-to-end. Tidak seorang pun di luar chat ini, bahkan server, dapat membacanya.",
     "scrollToBottom": "Gulir ke pesan terbaru",
@@ -335,6 +354,7 @@
       "action": "Blokir",
       "unblock": "Buka blokir",
       "unblockName": "Buka blokir {{name}}",
+      "blockName": "Blokir {{name}}",
       "blocked": "Diblokir",
       "title": "Blokir {{name}}?",
       "body": "Kontak yang diblokir tidak dapat lagi mengirimi Anda pesan atau melihat saat Anda online. Mereka tidak akan diberi tahu.",
@@ -399,7 +419,20 @@
       "green": "Hijau",
       "black": "Hitam",
       "white": "Putih"
-    }
+    },
+    "crop": "Pangkas",
+    "cropApply": "Terapkan",
+    "size": "Ketebalan: {{name}}",
+    "sizes": {
+      "thin": "Tipis",
+      "medium": "Sedang",
+      "thick": "Tebal"
+    },
+    "aspect": {
+      "free": "Bebas",
+      "square": "Persegi"
+    },
+    "addText": "Tambahkan teks"
   },
   "voice": {
     "record": "Rekam pesan suara",

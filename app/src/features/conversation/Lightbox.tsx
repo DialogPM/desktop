@@ -7,8 +7,12 @@ import { UserAvatar } from "../../components/UserAvatar";
 import { formatDateTime } from "../../lib/format";
 import { useLocale } from "../../lib/hooks";
 import { MediaImg } from "../../components/MediaImg";
-import { useApp } from "../../store/app";
+import { resolveMediaSrc } from "../../lib/media";
+import type { PickedFile } from "../../lib/platform";
+import { getApp, useApp } from "../../store/app";
 import { saveAttachment } from "./attachmentActions";
+import { canSendEdited, isEditableImage, sendEditedImage } from "./editedImage";
+import { ImageAnnotator } from "./ImageAnnotator";
 import { isImage, useLightbox } from "./uiStore";
 
 const MIN_ZOOM = 1;
@@ -30,6 +34,8 @@ function LightboxInner() {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const drag = useRef<{ x: number; y: number; ox: number; oy: number } | null>(null);
   const [dragging, setDragging] = useState(false);
+  // The image open in the editor (a decrypted copy in memory; the attachment itself is never touched).
+  const [editing, setEditing] = useState<PickedFile | null>(null);
 
   const images = message ? message.attachments.filter((a) => isImage(a) && a.local_path) : [];
   const current = images[Math.min(index, images.length - 1)];
@@ -49,6 +55,8 @@ function LightboxInner() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // The editor handles its own keys.
+      if (editing) return;
       if (e.key === "Escape") close();
       else if (e.key === "ArrowLeft") go(-1);
       else if (e.key === "ArrowRight") go(1);
@@ -61,6 +69,34 @@ function LightboxInner() {
 
   if (!message || !current) return null;
   const caption = message.text;
+  const editable = isEditableImage(current) && !message.view_once && canSendEdited(message.conversation_id);
+
+  const edit = async () => {
+    // Always a blob: or data: URL, so the canvas can be exported.
+    const url = await resolveMediaSrc(current.local_path!, current.mime, true);
+    if (!url) return;
+    setEditing({ name: current.file_name || "image", mime: current.mime, size: current.size ?? null, url });
+  };
+
+  if (editing) {
+    return (
+      <ImageAnnotator
+        file={editing}
+        onClose={() => setEditing(null)}
+        send={{
+          recipient: getApp().conversations[message.conversation_id]?.title ?? "",
+          onSend: async (edited, text) => {
+            const ok = await sendEditedImage(message, edited, text, t, locale);
+            if (ok) {
+              URL.revokeObjectURL(edited.url);
+              close();
+            }
+            return ok;
+          },
+        }}
+      />
+    );
+  }
 
   return (
     <Portal>
@@ -89,6 +125,13 @@ function LightboxInner() {
               <IconZoomIn size={20} />
             </button>
           </Tooltip>
+          {editable && (
+            <Tooltip label={t("annotate.title")}>
+              <button type="button" className="lightbox-btn" onClick={() => void edit()} aria-label={t("annotate.title")}>
+                <Icon name="edit" size={20} />
+              </button>
+            </Tooltip>
+          )}
           <Tooltip label={t("message.save")}>
             <button type="button" className="lightbox-btn" onClick={() => void saveAttachment(message, current)} aria-label={t("message.save")}>
               <IconDownload size={20} />

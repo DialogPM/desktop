@@ -305,6 +305,25 @@
     "markRead": "Marcar como lida",
     "draft": "Rascunho:",
     "selectMessages": "Selecionar mensagens",
+    "rowMenu": "Opções da conversa",
+    "export": {
+      "action": "Exportar conversa",
+      "title": "Exportar conversa: {{name}}",
+      "warning": "O ficheiro exportado não está cifrado. Quem o tiver pode ler estas mensagens.",
+      "textOnly": "Só texto",
+      "textOnlyHint": "Um ficheiro de texto com a data, a hora, o remetente e o texto de cada mensagem.",
+      "withMedia": "Texto e multimédia",
+      "withMediaHint": "Um arquivo ZIP com o texto e as fotos, os vídeos e os ficheiros já transferidos para este dispositivo. Multimédia de visualização única nunca é incluída.",
+      "confirm": "Exportar",
+      "working": "A exportar a conversa…",
+      "done": "Conversa exportada",
+      "doneSkipped": "Conversa exportada. Ficheiros multimédia deixados de fora: {{count}}",
+      "tooLarge": "Os ficheiros multimédia são demasiado grandes para um só arquivo (mais de 4 GB). Exporta só o texto.",
+      "notIncluded": "não incluído",
+      "header": "{{app}} · exportação de conversa: {{name}}",
+      "exportedOn": "Exportada em {{date}}",
+      "messageCount": "Mensagens: {{count}}"
+    },
     "tapForInfo": "clique aqui para ver os dados do contato",
     "e2eNotice": "As mensagens são protegidas com criptografia de ponta a ponta. Ninguém fora desta conversa, nem mesmo o servidor, pode lê-las.",
     "scrollToBottom": "Rolar até a mensagem mais recente",
@@ -338,6 +357,7 @@
       "action": "Bloquear",
       "unblock": "Desbloquear",
       "unblockName": "Desbloquear {{name}}",
+      "blockName": "Bloquear {{name}}",
       "blocked": "Bloqueado",
       "title": "Bloquear {{name}}?",
       "body": "Contatos bloqueados não podem mais enviar mensagens para você nem ver quando você está online. Eles não serão notificados.",
@@ -402,7 +422,20 @@
       "green": "Verde",
       "black": "Preto",
       "white": "Branco"
-    }
+    },
+    "crop": "Recortar",
+    "cropApply": "Aplicar",
+    "size": "Espessura: {{name}}",
+    "sizes": {
+      "thin": "Fino",
+      "medium": "Médio",
+      "thick": "Grosso"
+    },
+    "aspect": {
+      "free": "Livre",
+      "square": "Quadrado"
+    },
+    "addText": "Adicionar texto"
   },
   "voice": {
     "record": "Gravar mensagem de voz",

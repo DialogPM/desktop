@@ -305,6 +305,25 @@
     "markRead": "Marquer comme lu",
     "draft": "Brouillon :",
     "selectMessages": "Sélectionner des messages",
+    "rowMenu": "Options de la discussion",
+    "export": {
+      "action": "Exporter la discussion",
+      "title": "Exporter la discussion : {{name}}",
+      "warning": "Le fichier exporté n’est pas chiffré. Toute personne qui l’obtient peut lire ces messages.",
+      "textOnly": "Texte seul",
+      "textOnlyHint": "Un fichier texte avec la date, l’heure, l’expéditeur et le texte de chaque message.",
+      "withMedia": "Texte et médias",
+      "withMediaHint": "Une archive ZIP avec le texte et les photos, vidéos et fichiers déjà téléchargés sur cet appareil. Les médias à vue unique ne sont jamais inclus.",
+      "confirm": "Exporter",
+      "working": "Export de la discussion…",
+      "done": "Discussion exportée",
+      "doneSkipped": "Discussion exportée. Fichiers médias non inclus : {{count}}",
+      "tooLarge": "Les médias sont trop volumineux pour une seule archive (plus de 4 Go). Exportez seulement le texte.",
+      "notIncluded": "non inclus",
+      "header": "{{app}} · export de discussion : {{name}}",
+      "exportedOn": "Exporté le {{date}}",
+      "messageCount": "Messages : {{count}}"
+    },
     "tapForInfo": "cliquez ici pour les infos du contact",
     "e2eNotice": "Les messages sont chiffrés de bout en bout. Personne en dehors de cette discussion, pas même le serveur, ne peut les lire.",
     "scrollToBottom": "Aller au dernier message",
@@ -338,6 +357,7 @@
       "action": "Bloquer",
       "unblock": "Débloquer",
       "unblockName": "Débloquer {{name}}",
+      "blockName": "Bloquer {{name}}",
       "blocked": "Bloqué",
       "title": "Bloquer {{name}} ?",
       "body": "Les contacts bloqués ne peuvent plus vous envoyer de messages ni voir quand vous êtes en ligne. Ils n'en seront pas informés.",
@@ -402,7 +422,20 @@
       "green": "Vert",
       "black": "Noir",
       "white": "Blanc"
-    }
+    },
+    "crop": "Rogner",
+    "cropApply": "Appliquer",
+    "size": "Épaisseur : {{name}}",
+    "sizes": {
+      "thin": "Fin",
+      "medium": "Moyen",
+      "thick": "Épais"
+    },
+    "aspect": {
+      "free": "Libre",
+      "square": "Carré"
+    },
+    "addText": "Ajouter du texte"
   },
   "voice": {
     "record": "Enregistrer un message vocal",

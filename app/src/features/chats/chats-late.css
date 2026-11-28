@@ -21,3 +21,55 @@
   color: var(--pane, #fff);
   border: 2px solid var(--pane, #fff);
 }
+
+/* Chat list: the arrow that opens a row's menu, shown while the pointer is over the row
+   (features/chats/ChatListItem.tsx). Touch screens use a long press instead. */
+.chat-row-more {
+  display: none;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin: -3px -4px -3px 0;
+  border-radius: 50%;
+  place-items: center;
+  color: var(--muted);
+}
+
+.chat-row-more svg {
+  transform: rotate(90deg);
+}
+
+.chat-row-more:hover,
+.chat-row[data-menu-open="true"] .chat-row-more {
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+  color: var(--ink);
+}
+
+.chat-row[data-menu-open="true"] .chat-row-more {
+  display: grid;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chat-row:hover .chat-row-more {
+    display: grid;
+  }
+}
+
+/* "Export chat": the note that the exported file is not encrypted (features/chats/exportDialog.tsx). */
+.export-warning {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--warn-ink) 35%, transparent);
+  background: color-mix(in srgb, var(--warn-ink) 9%, transparent);
+  color: var(--warn-ink);
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.export-warning svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}

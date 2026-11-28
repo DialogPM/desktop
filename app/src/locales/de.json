@@ -305,6 +305,25 @@
     "markRead": "Als gelesen markieren",
     "draft": "Entwurf:",
     "selectMessages": "Nachrichten auswählen",
+    "rowMenu": "Chat-Optionen",
+    "export": {
+      "action": "Chat exportieren",
+      "title": "Chat exportieren: {{name}}",
+      "warning": "Die exportierte Datei ist nicht verschlüsselt. Wer sie hat, kann diese Nachrichten lesen.",
+      "textOnly": "Nur Text",
+      "textOnlyHint": "Eine Textdatei mit Datum, Uhrzeit, Absender und Text jeder Nachricht.",
+      "withMedia": "Text und Medien",
+      "withMediaHint": "Ein ZIP-Archiv mit dem Text und den Fotos, Videos und Dateien, die bereits auf dieses Gerät heruntergeladen wurden. Einmal-Medien werden nie aufgenommen.",
+      "confirm": "Exportieren",
+      "working": "Chat wird exportiert…",
+      "done": "Chat exportiert",
+      "doneSkipped": "Chat exportiert. Ausgelassene Mediendateien: {{count}}",
+      "tooLarge": "Die Medien sind zu groß für ein einzelnes Archiv (über 4 GB). Exportiere nur den Text.",
+      "notIncluded": "nicht enthalten",
+      "header": "{{app}} · Chat-Export: {{name}}",
+      "exportedOn": "Exportiert am {{date}}",
+      "messageCount": "Nachrichten: {{count}}"
+    },
     "tapForInfo": "hier klicken für Kontaktinfo",
     "e2eNotice": "Nachrichten sind Ende-zu-Ende-verschlüsselt. Niemand außerhalb dieses Chats, nicht einmal der Server, kann sie lesen.",
     "scrollToBottom": "Zur neuesten Nachricht scrollen",
@@ -338,6 +357,7 @@
       "action": "Blockieren",
       "unblock": "Blockierung aufheben",
       "unblockName": "Blockierung von {{name}} aufheben",
+      "blockName": "{{name}} blockieren",
       "blocked": "Blockiert",
       "title": "{{name}} blockieren?",
       "body": "Blockierte Kontakte können dir keine Nachrichten mehr senden und nicht sehen, wann du online bist. Sie werden nicht benachrichtigt.",
@@ -402,7 +422,20 @@
       "green": "Grün",
       "black": "Schwarz",
       "white": "Weiß"
-    }
+    },
+    "crop": "Zuschneiden",
+    "cropApply": "Anwenden",
+    "size": "Stärke: {{name}}",
+    "sizes": {
+      "thin": "Dünn",
+      "medium": "Mittel",
+      "thick": "Dick"
+    },
+    "aspect": {
+      "free": "Frei",
+      "square": "Quadrat"
+    },
+    "addText": "Text hinzufügen"
   },
   "voice": {
     "record": "Sprachnachricht aufnehmen",

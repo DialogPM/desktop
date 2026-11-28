@@ -305,6 +305,25 @@
     "markRead": "Mark as read",
     "draft": "Draft:",
     "selectMessages": "Select messages",
+    "rowMenu": "Chat options",
+    "export": {
+      "action": "Export chat",
+      "title": "Export chat: {{name}}",
+      "warning": "The exported file is not encrypted. Anyone who gets it can read these messages.",
+      "textOnly": "Text only",
+      "textOnlyHint": "A text file with the date, time, sender and text of each message.",
+      "withMedia": "Text and media",
+      "withMediaHint": "A ZIP archive with the text and the photos, videos and files already downloaded on this device. View-once media is never included.",
+      "confirm": "Export",
+      "working": "Exporting chat…",
+      "done": "Chat exported",
+      "doneSkipped": "Chat exported. Media files left out: {{count}}",
+      "tooLarge": "The media is too large for one archive (over 4 GB). Export the text only.",
+      "notIncluded": "not included",
+      "header": "{{app}} · chat export: {{name}}",
+      "exportedOn": "Exported on {{date}}",
+      "messageCount": "Messages: {{count}}"
+    },
     "tapForInfo": "click here for contact info",
     "e2eNotice": "Messages are end-to-end encrypted. No one outside of this chat, not even the server, can read them.",
     "scrollToBottom": "Scroll to the latest message",
@@ -338,6 +357,7 @@
       "action": "Block",
       "unblock": "Unblock",
       "unblockName": "Unblock {{name}}",
+      "blockName": "Block {{name}}",
       "blocked": "Blocked",
       "title": "Block {{name}}?",
       "body": "Blocked contacts can no longer send you messages or see when you're online. They will not be notified.",
@@ -402,7 +422,20 @@
       "green": "Green",
       "black": "Black",
       "white": "White"
-    }
+    },
+    "crop": "Crop",
+    "cropApply": "Apply",
+    "size": "Thickness: {{name}}",
+    "sizes": {
+      "thin": "Thin",
+      "medium": "Medium",
+      "thick": "Thick"
+    },
+    "aspect": {
+      "free": "Free",
+      "square": "Square"
+    },
+    "addText": "Add text"
   },
   "voice": {
     "record": "Record voice message",

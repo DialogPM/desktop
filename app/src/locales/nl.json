@@ -305,6 +305,25 @@
     "markRead": "Markeren als gelezen",
     "draft": "Concept:",
     "selectMessages": "Berichten selecteren",
+    "rowMenu": "Chatopties",
+    "export": {
+      "action": "Chat exporteren",
+      "title": "Chat exporteren: {{name}}",
+      "warning": "Het geëxporteerde bestand is niet versleuteld. Iedereen die het in handen krijgt, kan deze berichten lezen.",
+      "textOnly": "Alleen tekst",
+      "textOnlyHint": "Een tekstbestand met de datum, de tijd, de afzender en de tekst van elk bericht.",
+      "withMedia": "Tekst en media",
+      "withMediaHint": "Een ZIP-archief met de tekst en de foto’s, video’s en bestanden die al naar dit apparaat zijn gedownload. Media voor eenmalige weergave worden nooit opgenomen.",
+      "confirm": "Exporteren",
+      "working": "Chat wordt geëxporteerd…",
+      "done": "Chat geëxporteerd",
+      "doneSkipped": "Chat geëxporteerd. Weggelaten mediabestanden: {{count}}",
+      "tooLarge": "De media zijn te groot voor één archief (meer dan 4 GB). Exporteer alleen de tekst.",
+      "notIncluded": "niet opgenomen",
+      "header": "{{app}} · chatexport: {{name}}",
+      "exportedOn": "Geëxporteerd op {{date}}",
+      "messageCount": "Berichten: {{count}}"
+    },
     "tapForInfo": "klik hier voor contactinfo",
     "e2eNotice": "Berichten zijn end-to-end versleuteld. Niemand buiten deze chat, zelfs de server niet, kan ze lezen.",
     "scrollToBottom": "Naar het nieuwste bericht scrollen",
@@ -338,6 +357,7 @@
       "action": "Blokkeren",
       "unblock": "Deblokkeren",
       "unblockName": "{{name}} deblokkeren",
+      "blockName": "{{name}} blokkeren",
       "blocked": "Geblokkeerd",
       "title": "{{name}} blokkeren?",
       "body": "Geblokkeerde contacten kunnen je geen berichten meer sturen en niet zien wanneer je online bent. Ze krijgen hier geen melding van.",
@@ -402,7 +422,20 @@
       "green": "Groen",
       "black": "Zwart",
       "white": "Wit"
-    }
+    },
+    "crop": "Bijsnijden",
+    "cropApply": "Toepassen",
+    "size": "Dikte: {{name}}",
+    "sizes": {
+      "thin": "Dun",
+      "medium": "Normaal",
+      "thick": "Dik"
+    },
+    "aspect": {
+      "free": "Vrij",
+      "square": "Vierkant"
+    },
+    "addText": "Tekst toevoegen"
   },
   "voice": {
     "record": "Spraakbericht opnemen",

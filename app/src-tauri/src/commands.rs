@@ -124,6 +124,7 @@ forward!(
     view_once_done,
     download_attachment,
     save_attachment,
+    export_conversation,
     search_messages,
     list_media,
     create_group,

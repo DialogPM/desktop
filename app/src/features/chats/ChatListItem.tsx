@@ -92,6 +92,7 @@ export const ChatListItem = memo(function ChatListItem({ conv, active }: { conv:
         type="button"
         className="chat-row"
         data-active={active}
+        data-menu-open={!!menu}
         onClick={() => {
           if (long.consumeClick()) return;
           openConversation(conv.id);
@@ -125,6 +126,22 @@ export const ChatListItem = memo(function ChatListItem({ conv, active }: { conv:
                 {formatListTime(last.sent_at, locale, t)}
               </span>
             )}
+            {/* Not a <button>: the row is one already. Keyboard users have the context-menu key. */}
+            <span
+              className="chat-row-more"
+              role="button"
+              aria-label={t("chat.menu")}
+              title={t("chat.menu")}
+              aria-haspopup="menu"
+              aria-expanded={!!menu}
+              onClick={(e) => {
+                e.stopPropagation();
+                const r = e.currentTarget.getBoundingClientRect();
+                setMenu({ x: r.left, y: r.bottom + 4 });
+              }}
+            >
+              <Icon name="chevron" size={16} />
+            </span>
           </div>
           <div className="chat-row-bottom">
             {lead}

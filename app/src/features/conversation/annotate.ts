@@ -23,10 +23,17 @@ export const COLORS = [
   { key: "white", value: "#ffffff" },
 ] as const;
 
+/** Line thickness (and text size) choices: a factor applied to `strokeFor` / `fontFor`. */
+export const SIZES = [
+  { key: "thin", factor: 0.5 },
+  { key: "medium", factor: 1 },
+  { key: "thick", factor: 2.4 },
+] as const;
+
 /** Stroke width in image pixels: 0.5% of the width, so it looks alike on small and large images. */
-export const strokeFor = (imageWidth: number) => Math.max(2, Math.round(imageWidth * 0.005));
+export const strokeFor = (imageWidth: number, factor = 1) => Math.max(2, Math.round(imageWidth * 0.005 * factor));
 /** Text size in image pixels. */
-export const fontFor = (imageWidth: number) => Math.max(18, Math.round(imageWidth * 0.022));
+export const fontFor = (imageWidth: number, factor = 1) => Math.max(18, Math.round(imageWidth * 0.022 * factor));
 /** CSS font of the text tool (canvas and the on-screen text field). */
 export const fontCss = (size: number) => `600 ${size}px system-ui, -apple-system, "Segoe UI", sans-serif`;
 
@@ -163,6 +170,134 @@ export function isMeaningful(s: Shape): boolean {
   return s.kind === "rect" || s.kind === "ellipse" || s.kind === "blur" ? dx > 2 && dy > 2 : Math.hypot(dx, dy) > 3;
 }
 
+/** A rectangle in pixels. */
+export interface Rect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/** Moves a shape by (dx, dy). */
+export function translateShape(s: Shape, dx: number, dy: number): Shape {
+  switch (s.kind) {
+    case "pen":
+      return { ...s, points: s.points.map(([x, y]) => [x + dx, y + dy]) };
+    case "text":
+      return { ...s, x: s.x + dx, y: s.y + dy };
+    default:
+      return { ...s, x1: s.x1 + dx, y1: s.y1 + dy, x2: s.x2 + dx, y2: s.y2 + dy };
+  }
+}
+
+/** True when (px, py) falls on a text shape whose rendered width is `textWidth` (image pixels). */
+export function textHit(s: Extract<Shape, { kind: "text" }>, px: number, py: number, textWidth: number): boolean {
+  // Into the text's own frame: origin at its top-left corner, x along the baseline.
+  const a = (-(s.angle ?? 0) * Math.PI) / 180;
+  const dx = px - s.x;
+  const dy = py - s.y;
+  const lx = dx * Math.cos(a) - dy * Math.sin(a);
+  const ly = dx * Math.sin(a) + dy * Math.cos(a);
+  const pad = s.size * 0.25;
+  return lx >= -pad && lx <= textWidth + pad && ly >= -pad && ly <= s.size + pad;
+}
+
+/** Rendered width of a text shape, in image pixels. */
+export function measureText(ctx: CanvasRenderingContext2D, s: Extract<Shape, { kind: "text" }>): number {
+  ctx.save();
+  ctx.font = fontCss(s.size);
+  const w = ctx.measureText(s.text).width;
+  ctx.restore();
+  return w;
+}
+
+// ------------------------------------------------------------------ crop
+
+export type CropHandle = "nw" | "ne" | "sw" | "se" | "move";
+
+/** Crop aspect ratios (width / height); null = free. */
+export const ASPECTS = [
+  { key: "free", value: null },
+  { key: "square", value: 1 },
+  { key: "4:3", value: 4 / 3 },
+  { key: "3:4", value: 3 / 4 },
+  { key: "16:9", value: 16 / 9 },
+] as const;
+
+/** The largest centred rectangle of `aspect` inside a `bw` × `bh` area (the whole area when free). */
+export function aspectRect(bw: number, bh: number, aspect: number | null): Rect {
+  if (!aspect) return { x: 0, y: 0, w: bw, h: bh };
+  let w = bw;
+  let h = w / aspect;
+  if (h > bh) {
+    h = bh;
+    w = h * aspect;
+  }
+  return { x: (bw - w) / 2, y: (bh - h) / 2, w, h };
+}
+
+/**
+ * The crop frame after dragging `handle` by (dx, dy) from `start`, kept inside the `bw` × `bh`
+ * image, at least `min` on each side and, with `aspect`, at that width / height ratio.
+ */
+export function dragCrop(start: Rect, handle: CropHandle, dx: number, dy: number, bw: number, bh: number, aspect: number | null, min = 16): Rect {
+  if (handle === "move") {
+    return { ...start, x: Math.max(0, Math.min(bw - start.w, start.x + dx)), y: Math.max(0, Math.min(bh - start.h, start.y + dy)) };
+  }
+  const left = handle === "nw" || handle === "sw";
+  const top = handle === "nw" || handle === "ne";
+  // The opposite corner stays put.
+  const ax = left ? start.x + start.w : start.x;
+  const ay = top ? start.y + start.h : start.y;
+  const mx = Math.max(0, Math.min(bw, (left ? start.x : start.x + start.w) + dx));
+  const my = Math.max(0, Math.min(bh, (top ? start.y : start.y + start.h) + dy));
+  const maxW = left ? ax : bw - ax;
+  const maxH = top ? ay : bh - ay;
+  let w = Math.min(maxW, Math.max(min, left ? ax - mx : mx - ax));
+  let h = Math.min(maxH, Math.max(min, top ? ay - my : my - ay));
+  if (aspect) {
+    h = w / aspect;
+    if (h > maxH) {
+      h = maxH;
+      w = h * aspect;
+    }
+  }
+  return { x: left ? ax - w : ax, y: top ? ay - h : ay, w, h };
+}
+
+/**
+ * Turns a crop frame drawn on the image as shown (cropped to `crop`, then turned by `rot`) into
+ * a crop of the original, unrotated image.
+ */
+export function cropToSource(frame: Rect, rot: Rotation, crop: Rect): Rect {
+  // A point of the shown image back in the (cropped) source.
+  const back = (x: number, y: number): [number, number] => {
+    switch (rot) {
+      case 90:
+        return [y, crop.h - x];
+      case 180:
+        return [crop.w - x, crop.h - y];
+      case 270:
+        return [crop.w - y, x];
+      default:
+        return [x, y];
+    }
+  };
+  const [ax, ay] = back(frame.x, frame.y);
+  const [bx, by] = back(frame.x + frame.w, frame.y + frame.h);
+  // Whole pixels, inside the previous crop.
+  const x = Math.max(0, Math.min(crop.w - 1, Math.round(Math.min(ax, bx))));
+  const y = Math.max(0, Math.min(crop.h - 1, Math.round(Math.min(ay, by))));
+  const w = Math.max(1, Math.min(crop.w - x, Math.round(Math.abs(bx - ax))));
+  const h = Math.max(1, Math.min(crop.h - y, Math.round(Math.abs(by - ay))));
+  return { x: crop.x + x, y: crop.y + y, w, h };
+}
+
+/** Size of the edited image in pixels: the crop (or the whole image), turned by `rot`. */
+export function outputSize(naturalWidth: number, naturalHeight: number, rot: Rotation, crop: Rect | null): [number, number] {
+  return rotatedSize(crop?.w ?? naturalWidth, crop?.h ?? naturalHeight, rot);
+}
+
 /** Size of the image once rotated. */
 export const rotatedSize = (w: number, h: number, rot: Rotation): [number, number] => (rot % 180 ? [h, w] : [w, h]);
 
@@ -187,13 +322,17 @@ export function rotateShape(s: Shape, dir: 1 | -1, w: number, h: number): Shape 
   }
 }
 
-/** Draws `img` turned by `rot`, filling a `w` × `h` area (the rotated size) at the origin. */
-export function drawRotated(ctx: CanvasRenderingContext2D, img: CanvasImageSource, rot: Rotation, w: number, h: number) {
+/**
+ * Draws `img` (only its `crop` region, when given) turned by `rot`, filling a `w` × `h` area
+ * (the rotated size) at the origin.
+ */
+export function drawRotated(ctx: CanvasRenderingContext2D, img: CanvasImageSource, rot: Rotation, w: number, h: number, crop?: Rect | null) {
   const [iw, ih] = rotatedSize(w, h, rot);
   ctx.save();
   ctx.translate(w / 2, h / 2);
   ctx.rotate((rot * Math.PI) / 180);
-  ctx.drawImage(img, -iw / 2, -ih / 2, iw, ih);
+  if (crop) ctx.drawImage(img, crop.x, crop.y, crop.w, crop.h, -iw / 2, -ih / 2, iw, ih);
+  else ctx.drawImage(img, -iw / 2, -ih / 2, iw, ih);
   ctx.restore();
 }
 
@@ -207,18 +346,19 @@ function toBlob(canvas: HTMLCanvasElement, type: string): Promise<Blob> {
 }
 
 /**
- * Bakes the rotation and the shapes into a fresh image at full size (no metadata of the original
- * survives): a canvas of the rotated size, the image drawn under `ctx.rotate`, then the shapes.
+ * Bakes the crop, the rotation and the shapes into a fresh image at the original's resolution,
+ * never the screen's (no metadata of the original survives): a canvas of the output size, the
+ * image drawn under `ctx.rotate`, then the shapes.
  */
-export function exportAnnotated(img: HTMLImageElement, shapes: Shape[], rot: Rotation, type: string): Promise<Blob> {
-  const [w, h] = rotatedSize(img.naturalWidth, img.naturalHeight, rot);
+export function exportAnnotated(img: HTMLImageElement, shapes: Shape[], rot: Rotation, type: string, crop: Rect | null = null): Promise<Blob> {
+  const [w, h] = outputSize(img.naturalWidth, img.naturalHeight, rot, crop);
   const canvas = document.createElement("canvas");
   canvas.width = w;
   canvas.height = h;
   const ctx = canvas.getContext("2d");
   if (!ctx) return Promise.reject(new Error("canvas unavailable"));
-  drawRotated(ctx, img, rot, w, h);
-  drawShapes(ctx, shapes, 1, img.naturalWidth);
+  drawRotated(ctx, img, rot, w, h, crop);
+  drawShapes(ctx, shapes, 1, w);
   return toBlob(canvas, type);
 }
 
